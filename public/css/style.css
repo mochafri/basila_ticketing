@@ -1,0 +1,102 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bgColor: #f6f6f6;
+  --primaryColor: #dc3545;
+  --secondaryColor: #a1a5ba;
+}
+
+/* navbar style */
+.navbar-header {
+  background-color: var(--primaryColor);
+  height: 70px;
+}
+/* end navbar style */
+
+/* ================= SIDEBAR BASE ================= */
+
+.sidebar {
+  width: 250px;
+  transition: width 0.3s ease;
+  overflow: hidden;
+}
+
+li a {
+    color: var(--secondaryColor);
+}
+
+/* ================= COLLAPSE MODE ================= */
+
+.sidebar.collapsed {
+  width: 80px;
+}
+
+/* Sembunyikan teks saat collapse */
+.sidebar.collapsed h5,
+.sidebar.collapsed small,
+.sidebar.collapsed .menu-item span,
+.sidebar.collapsed .submenu-item,
+.sidebar.collapsed .first-logo {
+  display: none !important;
+}
+
+/* Tampilkan logo kecil saat collapse */
+.sidebar.collapsed .second-logo {
+  display: inline !important;
+}
+
+/* Tengah-kan icon */
+.sidebar.collapsed .menu-item {
+  justify-content: center;
+}
+
+/* Hilangkan padding submenu saat collapse */
+.sidebar.collapsed .collapse {
+  display: none !important;
+}
+
+/* ================= HOVER ================= */
+
+/* Hover parent */
+.sidebar-menu .menu-item:hover {
+  background-color: var(--primaryColor);
+}
+
+.sidebar-menu .menu-item:hover span,
+.sidebar-menu .menu-item:hover iconify-icon {
+  color: #fff;
+}
+
+/* Hover submenu */
+.sidebar-menu .submenu-item:hover {
+  background-color: var(--primaryColor);
+}
+
+.sidebar-menu .submenu-item:hover a {
+  color: #fff;
+}
+
+/* ================= ACTIVE ================= */
+
+/* Active parent */
+.sidebar-menu .menu-item.active {
+  background-color: var(--primaryColor);
+}
+
+.sidebar-menu .menu-item.active span,
+.sidebar-menu .menu-item.active iconify-icon {
+  color: #fff;
+}
+
+/* Active submenu */
+.sidebar-menu .submenu-item.active {
+  background-color: var(--primaryColor);
+}
+
+.sidebar-menu .submenu-item.active a {
+  color: #fff;
+}

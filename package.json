@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/mochafri/basila_ticketing#readme",
   "dependencies": {
+    "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.8"
   }
 }
