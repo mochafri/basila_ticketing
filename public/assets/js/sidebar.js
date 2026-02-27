@@ -13,10 +13,27 @@ toggleButton.addEventListener("click", () => {
   }
 });
 
-// Active untuk parent menu
+const menuItems = document.querySelectorAll(".menu-item");
+
+menuItems.forEach((item) => {
+  item.addEventListener("click", function () {
+    const targetId = this.getAttribute("data-bs-target");
+    const targetCollapse = document.querySelector(targetId);
+
+    // Tutup semua collapse lain
+    document.querySelectorAll(".collapse").forEach((collapse) => {
+      if (collapse !== targetCollapse) {
+        collapse.classList.remove("show");
+      }
+    });
+  });
+});
+
+// =========================
+// ACTIVE PARENT MENU
+// =========================
 document.querySelectorAll(".menu-item").forEach((item) => {
   item.addEventListener("click", function () {
-    // Hapus active dari semua parent
     document.querySelectorAll(".menu-item").forEach((el) => {
       el.classList.remove("active");
     });
@@ -25,28 +42,24 @@ document.querySelectorAll(".menu-item").forEach((item) => {
   });
 });
 
-// Active untuk submenu
+// =========================
+// ACTIVE SUBMENU
+// =========================
 document.querySelectorAll(".submenu-item").forEach((item) => {
   item.addEventListener("click", function (e) {
-    e.stopPropagation(); // supaya parent tidak ikut ke-reset
+    e.stopPropagation();
 
-    // Hapus active dari semua submenu
     document.querySelectorAll(".submenu-item").forEach((el) => {
       el.classList.remove("active");
     });
 
-    // Hapus active parent lain
     document.querySelectorAll(".menu-item").forEach((el) => {
       el.classList.remove("active");
     });
 
-    // Tambahkan active
     this.classList.add("active");
 
-    // Aktifkan parent juga
-    const parentMenu = this.closest("li")
-      .closest("li")
-      .querySelector(".menu-item");
+    const parentMenu = this.closest("ul").previousElementSibling;
     if (parentMenu) {
       parentMenu.classList.add("active");
     }
@@ -77,4 +90,17 @@ sidebar.addEventListener("mouseleave", () => {
   if (isSidebarCollapsed) {
     sidebar.classList.add("collapsed");
   }
+});
+
+// Rotasi ikon panah saat collapse/expand
+document.querySelectorAll(".collapse").forEach((collapseEl) => {
+  collapseEl.addEventListener("show.bs.collapse", function () {
+    const arrow = this.previousElementSibling.querySelector(".arrow-icon");
+    arrow.classList.add("rotate");
+  });
+
+  collapseEl.addEventListener("hide.bs.collapse", function () {
+    const arrow = this.previousElementSibling.querySelector(".arrow-icon");
+    arrow.classList.remove("rotate");
+  });
 });

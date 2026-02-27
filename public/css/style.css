@@ -26,7 +26,7 @@
 }
 
 li a {
-    color: var(--secondaryColor);
+  color: var(--secondaryColor);
 }
 
 /* ================= COLLAPSE MODE ================= */
@@ -106,3 +106,13 @@ li a {
   cursor: pointer;
 }
 /* end sidebarToggle icon */
+
+/* rotate arrow icon */
+.arrow-icon {
+  transition: transform 0.3s ease;
+}
+
+.arrow-icon.rotate {
+  transform: rotate(90deg);
+}
+/* end rotate arrow icon */
