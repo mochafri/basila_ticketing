@@ -100,3 +100,9 @@ li a {
 .sidebar-menu .submenu-item.active a {
   color: #fff;
 }
+
+/* sidebarToggle icon */
+.sidebar-toggle {
+  cursor: pointer;
+}
+/* end sidebarToggle icon */

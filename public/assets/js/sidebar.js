@@ -13,19 +13,6 @@ toggleButton.addEventListener("click", () => {
   }
 });
 
-// Hover expand sementara
-sidebar.addEventListener("mouseenter", () => {
-  if (isSidebarCollapsed) {
-    sidebar.classList.remove("collapsed");
-  }
-});
-
-sidebar.addEventListener("mouseleave", () => {
-  if (isSidebarCollapsed) {
-    sidebar.classList.add("collapsed");
-  }
-});
-
 // Active untuk parent menu
 document.querySelectorAll(".menu-item").forEach((item) => {
   item.addEventListener("click", function () {
@@ -64,4 +51,30 @@ document.querySelectorAll(".submenu-item").forEach((item) => {
       parentMenu.classList.add("active");
     }
   });
+});
+
+const toggleIcon = document.getElementById("sidebarToggleIcon");
+
+toggleIcon.addEventListener("click", function () {
+  const currentIcon = this.getAttribute("icon");
+
+  if (currentIcon === "material-symbols:arrow-back-rounded") {
+    this.setAttribute("icon", "material-symbols:close-rounded");
+  } else {
+    this.setAttribute("icon", "material-symbols:arrow-back-rounded");
+  }
+});
+
+// Hover expand sementara
+sidebar.addEventListener("mouseenter", () => {
+  if (isSidebarCollapsed) {
+    sidebar.classList.remove("collapsed");
+    this.setAttribute("icon", "material-symbols:arrow-back-rounded");
+  }
+});
+
+sidebar.addEventListener("mouseleave", () => {
+  if (isSidebarCollapsed) {
+    sidebar.classList.add("collapsed");
+  }
 });
