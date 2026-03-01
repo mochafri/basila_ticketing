@@ -1,4 +1,4 @@
-<aside class="sidebar text-dark vh-100 position-relative">
+<aside class="sidebar text-dark vh-100 position-relative d-none d-md-block">
     <div class="text-center border-bottom bg-danger d-flex align-items-center justify-content-center"
         style="height: 70px;">
         <a href="/" class="text-decoration-none text-white">
@@ -7,7 +7,7 @@
         </a>
     </div>
 
-    <div class="sidebar-menu-area p-3">
+    <div class="sidebar-menu-area p-3 ">
 
         <!-- IDENTITAS (Hardcode) -->
         <div class="text-center my-4">
@@ -50,7 +50,7 @@
                 <ul class="collapse list-unstyled ps-4 mt-2" id="kelolaTiket">
                     <li>
                         <div class="submenu-item p-2 rounded">
-                            <a href="#" class="text-decoration-none d-block">• Daftar Tiket</a>
+                            <a href="tiket" class="text-decoration-none d-block">• Daftar Tiket</a>
                         </div>
                     </li>
                     <li>

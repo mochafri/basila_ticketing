@@ -7,7 +7,7 @@
 :root {
   --bgColor: #f6f6f6;
   --primaryColor: #dc3545;
-  --secondaryColor: #a1a5ba;
+  --secondaryColor: #9c9c9c;
 }
 
 /* navbar style */
@@ -116,3 +116,32 @@ li a {
   transform: rotate(90deg);
 }
 /* end rotate arrow icon */
+
+/* Style Halaman Daftar Tiket */
+#daftar-tiket .header span {
+  color: var(--secondaryColor);
+}
+
+#daftar-tiket .header .add-btn span{
+  letter-spacing: 1px;
+}
+
+#daftar-tiket .header .btn {
+  background-color: var(--primaryColor);
+}
+
+#daftar-tiket .header .btn span {
+  color: #fff;
+}
+
+#daftar-tiket .card .kodePengajuan, .statusPengajuan{
+  font-size: .7rem;
+  color: var(--secondaryColor);
+}
+
+#daftar-tiket .card .card-body .end-row {
+  font-size: 1em;
+  color: var(--secondaryColor);
+}
+
+/* End style halaman daftar tiket */

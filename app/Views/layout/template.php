@@ -14,8 +14,9 @@
         <?= $this->include('layout/sidebar'); ?>
         <main class="w-100" style="background-color: var(--bgColor); overflow: hidden;">
             <?= $this->include('layout/navbar'); ?>
-
-            <?= $this->renderSection('content'); ?>
+            <div class="main-content p-4" style="overflow-y: auto; height: calc(100vh - 70px);">
+                <?= $this->renderSection('content'); ?>
+            </div>
         </main>
     </div>
 
