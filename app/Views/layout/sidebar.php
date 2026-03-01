@@ -50,12 +50,12 @@
                 <ul class="collapse list-unstyled ps-4 mt-2" id="kelolaTiket">
                     <li>
                         <div class="submenu-item p-2 rounded">
-                            <a href="tiket" class="text-decoration-none d-block">• Daftar Tiket</a>
+                            <a href="<?= site_url('tiket'); ?>" class="text-decoration-none d-block">• Daftar Tiket</a>
                         </div>
                     </li>
                     <li>
                         <div class="submenu-item p-2 rounded">
-                            <a href="#" class="text-decoration-none d-block">• Pengajuan Tiket</a>
+                            <a href="<?= site_url('tiket/create'); ?>" class="text-decoration-none d-block">• Pengajuan Tiket</a>
                         </div>
                     </li>
                 </ul>

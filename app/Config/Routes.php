@@ -7,3 +7,4 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'DashboardController::index');
 $routes->get('tiket','TicketController::index');
+$routes->get('tiket/create','TicketController::create');

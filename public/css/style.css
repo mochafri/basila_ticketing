@@ -145,3 +145,17 @@ li a {
 }
 
 /* End style halaman daftar tiket */
+
+
+/* style halaman pengajuan tiket */
+#pengajuan-tiket .header span {
+  color: var(--secondaryColor);
+}
+
+#pengajuan-tiket .card .card-body .form-label {
+  font-size: .7rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+/* end style halaman pengajuan tiket */

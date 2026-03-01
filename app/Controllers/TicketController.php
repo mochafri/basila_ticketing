@@ -12,4 +12,13 @@ class TicketController extends BaseController
 
         return view('tiket/daftar/index', $data);
     }
+
+    public function create(): string
+    {
+        $data = [
+            'title' => 'Pengajuan Tiket',
+        ];
+
+        return view('tiket/pengajuan/index', $data);
+    }
 }
