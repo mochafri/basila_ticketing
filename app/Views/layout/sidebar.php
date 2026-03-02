@@ -18,53 +18,91 @@
             <small id="sidebar-nim">123456789</small>
         </div>
 
-        <ul class="list-unstyled sidebar-menu">
+        <ul class="list-unstyled sidebar-menu mt-5">
 
             <!-- BERANDA -->
-            <li class="mb-3">
+            <li class="mb-2">
                 <div class="menu-item p-2 rounded d-flex align-items-center gap-2">
-                    <iconify-icon icon="material-symbols:home-outline-rounded" width="20"></iconify-icon>
+                    <iconify-icon icon="hugeicons:home-09" width="20"></iconify-icon>
                     <span>Beranda</span>
                 </div>
             </li>
 
             <!-- KELOLA SURAT -->
-            <li class="mb-3">
+            <!-- KELOLA TIKET -->
+            <li class="mb-2">
 
-                <!-- Parent -->
-                <div class="menu-item side-task p-2 rounded d-flex align-items-center gap-2" data-bs-toggle="collapse"
-                    data-bs-target="#kelolaSurat" role="button">
+                <div class="menu-item side-task p-2 rounded d-flex align-items-center" data-bs-toggle="collapse"
+                    data-bs-target="#kelolaTiket" role="button">
 
-                    <iconify-icon icon="hugeicons:task-01" width="18"></iconify-icon>
-                    <span>Kelola Tugas</span>
+                    <!-- Icon kiri -->
+                    <div class="d-flex align-items-center gap-2">
+                        <iconify-icon icon="hugeicons:ticket-03" width="20"></iconify-icon>
+                        <span>Kelola Tiket</span>
+                    </div>
+
+                    <!-- Arrow kanan -->
+                    <iconify-icon icon="material-symbols:chevron-right-rounded" class="ms-auto arrow-icon">
+                    </iconify-icon>
+
                 </div>
 
-                <!-- Collapse -->
-                <ul class="collapse list-unstyled ps-4 mt-2" id="kelolaSurat">
+                <ul class="collapse list-unstyled ps-4 mt-2" id="kelolaTiket">
                     <li>
                         <div class="submenu-item p-2 rounded">
-                            <a href="#" class="text-decoration-none d-block">&#8226; Dashboard</a>
+                            <a href="#" class="text-decoration-none d-block">• Daftar Tiket</a>
                         </div>
                     </li>
                     <li>
                         <div class="submenu-item p-2 rounded">
-                            <a href="#" class="text-decoration-none d-block">&#8226; Pengajuan</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="submenu-item p-2 rounded">
-                            <a href="#" class="text-decoration-none d-block">&#8226; Persetujuan</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="submenu-item p-2 rounded">
-                            <a href="#" class="text-decoration-none d-block">&#8226; Status</a>
+                            <a href="#" class="text-decoration-none d-block">• Pengajuan Tiket</a>
                         </div>
                     </li>
                 </ul>
 
             </li>
 
+            <!-- MASTER DATA -->
+            <li class="mb-2">
+
+                <div class="menu-item side-task p-2 rounded d-flex align-items-center" data-bs-toggle="collapse"
+                    data-bs-target="#kelolaMasterData" role="button">
+
+                    <!-- Icon kiri -->
+                    <div class="d-flex align-items-center gap-2">
+                        <iconify-icon icon="hugeicons:database" width="20"></iconify-icon>
+                        <span>Master Data</span>
+                    </div>
+
+                    <!-- Arrow kanan -->
+                    <iconify-icon icon="material-symbols:chevron-right-rounded" class="ms-auto arrow-icon">
+                    </iconify-icon>
+
+                </div>
+
+                <ul class="collapse list-unstyled ps-4 mt-2" id="kelolaMasterData">
+                    <li>
+                        <div class="submenu-item p-2 rounded">
+                            <a href="#" class="text-decoration-none d-block">• Data User</a>
+                        </div>
+                    </li>
+                </ul>
+
+            </li>
+            <!-- RIWAYAT -->
+            <li class="mb-2">
+                <div class="menu-item p-2 rounded d-flex align-items-center gap-2">
+                    <iconify-icon icon="hugeicons:transaction-history" width="20"></iconify-icon>
+                    <span>Riwayat</span>
+                </div>
+            </li>
+            <!-- PENGATURAN -->
+            <li class="mb-2">
+                <div class="menu-item p-2 rounded d-flex align-items-center gap-2">
+                    <iconify-icon icon="hugeicons:settings-01" width="20"></iconify-icon>
+                    <span>Pengaturan</span>
+                </div>
+            </li>
         </ul>
 
     </div>

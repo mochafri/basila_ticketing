@@ -8,6 +8,14 @@
   --bgColor: #f6f6f6;
   --primaryColor: #dc3545;
   --secondaryColor: #a1a5ba;
+  --cardPrimaryRed: #e11212;
+  --cardPrimaryGreen: #4ea72d;
+  --cardPrimaryYellow: #ffc000;
+  --cardPrimaryBlue: #0e9ed4;
+  --cardSecondRed:#b00e0e;
+  --cardSecondGreen:#3d8223;
+  --cardSecondYellow:#c79600;
+  --cardSecondBlue:#0b7ba5;
 }
 
 /* navbar style */
@@ -28,6 +36,7 @@
 li a {
     color: var(--secondaryColor);
 }
+
 
 /* ================= COLLAPSE MODE ================= */
 
@@ -100,3 +109,180 @@ li a {
 .sidebar-menu .submenu-item.active a {
   color: #fff;
 }
+
+/* Text */
+.sub-title{
+  color: var(--secondaryColor);
+}
+
+/* Dashboard Start*/
+
+.dashboard-wrapper {
+    background: #f4f6f9;
+}
+
+.title-dashboard {
+    font-size: 28px;
+    letter-spacing: 1px;
+}
+
+.subtitle-dashboard {
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.semester-select {
+    border-radius: 10px;
+    padding: 8px 20px;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    font-weight: 500;
+}
+
+.btn-set-periode {
+    border-radius: 10px;
+    padding: 8px 22px;
+    font-weight: 600;
+    box-shadow: 0 6px 18px rgba(220,53,69,0.3);
+}
+
+.stat-card {
+    border-radius: 22px;
+    padding: 30px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 140px;
+}
+
+.stat-card h1 {
+    font-size: 56px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.stat-card small {
+    font-size: 13px;
+    letter-spacing: 1px;
+}
+
+.bg-warning-custom { background: #f39c12; }
+.bg-success-custom { background: #2ebf91; }
+.bg-dark-custom { background: #3f3f46; }
+.bg-purple { background: #6f42c1; }
+
+
+.card {
+    border-radius: 20px !important;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+.workflow-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 40px;
+    margin-bottom: 30px;
+}
+
+.workflow-line {
+    position: absolute;
+    top: 32px;
+    left: 8%;
+    width: 84%;
+    height: 4px;
+    background: #e5e7eb;
+    z-index: 0;
+    border-radius: 10px;
+}
+
+.workflow-item {
+    position: relative;
+    z-index: 2;
+    width: 80px;
+}
+
+.workflow-step {
+    width: 65px;
+    height: 65px;
+    border-radius: 18px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    margin: 0 auto;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.workflow-label {
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #6b7280;
+}
+
+.btn-lihat {
+    background: linear-gradient(90deg, #111827, #1f2937);
+    color: white;
+    border-radius: 14px;
+    padding: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.btn-lihat:hover {
+    opacity: 0.95;
+    color: white;
+}
+
+.progress-custom {
+    height: 6px;
+    border-radius: 20px;
+    background: #e5e7eb;
+}
+
+.progress-bar {
+    border-radius: 20px;
+}
+
+.icon-box iconify-icon{
+  font-size: 36px;
+}
+
+/* Responsive Dashboard */
+@media (max-width: 768px) {
+
+    .dashboard-wrapper .d-flex.justify-content-between {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 15px;
+    }
+
+    .semester-select {
+        width: 100%;
+    }
+
+    .btn-set-periode {
+        width: 100%;
+    }
+
+        .workflow-wrapper {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .workflow-line {
+        display: none;
+    }
+
+    .workflow-item {
+        width: 70px;
+    }
+
+}
+
+/* Dashboard End */

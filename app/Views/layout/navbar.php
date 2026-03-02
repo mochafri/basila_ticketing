@@ -2,6 +2,9 @@
 
     <div class="container-fluid">
 
+        <iconify-icon id="sidebarToggleIcon" icon="material-symbols:arrow-back-rounded"
+            class="me-3 sidebar-toggle" style="color: white;"></iconify-icon>
+
         <!-- SEARCH (Kiri) -->
         <div class="d-flex align-items-center">
             <input type="text" class="form-control form-control-sm d-none d-lg-block" placeholder="Search"
