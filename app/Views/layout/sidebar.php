@@ -83,7 +83,7 @@
                 <ul class="collapse list-unstyled ps-4 mt-2" id="kelolaMasterData">
                     <li>
                         <div class="submenu-item p-2 rounded">
-                            <a href="#" class="text-decoration-none d-block">• Data User</a>
+                            <a href="<?= site_url('user/'); ?>" class="text-decoration-none d-block">• Data User</a>
                         </div>
                     </li>
                 </ul>
