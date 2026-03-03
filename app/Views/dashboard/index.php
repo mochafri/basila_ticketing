@@ -7,9 +7,9 @@
     <div class="d-flex justify-content-between align-items-center mb-5">
         <div>
             <h2 class="fw-bold title-dashboard">DASHBOARD UTAMA</h2>
-            <p class="text-muted subtitle-dashboard">
+            <span class="text-muted subtitle-dashboard">
                 Monitoring performa layanan dan progres tugas tim Anda.
-            </p>
+            </span>
         </div>
 
         <div class="d-flex align-items-center gap-3">
@@ -27,7 +27,7 @@
     <!-- Card -->
     <div class="row g-4 mb-5">
         <div class="col-md-3">
-            <div class="stat-card bg-danger">
+            <div class="stat-card bg-danger-custom">
                 <div>
                     <div class="icon-box bg-light-danger">
                         <iconify-icon icon="mdi:layers-outline"></iconify-icon>
@@ -63,7 +63,7 @@
         </div>
 
         <div class="col-md-3">
-            <div class="stat-card bg-dark-custom">
+            <div class="stat-card bg-blue-custom">
                 <div>
                     <div class="icon-box bg-light-dark">
                         <iconify-icon icon="mdi:close-circle-outline"></iconify-icon>
@@ -79,7 +79,7 @@
     <div class="row g-4">
         <!-- Status Alur -->
         <div class="col-md-6">
-            <div class="card shadow-sm border-0 rounded-4 p-4 h-100">
+            <div class="card shadow border-0 rounded-4 p-4 h-100">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
                         <h5 class="fw-bold mb-1">STATUS ALUR KERJA</h5>
@@ -109,7 +109,7 @@
                     </div>
 
                     <div class="workflow-item">
-                        <div class="workflow-step bg-primary">
+                        <div class="workflow-step bg-blue-custom">
                             <iconify-icon icon="mdi:briefcase-outline"></iconify-icon>
                         </div>
                         <div class="workflow-label">Task 1</div>
@@ -139,7 +139,7 @@
 
         <!-- Rangkuman Per Kategori-->
         <div class="col-md-6">
-            <div class="card shadow-sm border-0 rounded-4 p-4 h-100">
+            <div class="card shadow border-0 rounded-4 p-4 h-100">
                 <h5 class="fw-bold mb-1">RANGKUMAN PER KATEGORI</h5>
                 <small class="text-muted text-uppercase">
                     Distribusi Layanan Akademik
