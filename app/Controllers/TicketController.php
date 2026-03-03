@@ -6,19 +6,23 @@ class TicketController extends BaseController
 {
     public function index(): string
     {
-        $data = [
+        return view('tiket/daftar/index', [
             'title' => 'Daftar Tiket',
-        ];
-
-        return view('tiket/daftar/index', $data);
+        ]);
     }
 
     public function create(): string
     {
-        $data = [
+        return view('tiket/pengajuan/index', [
             'title' => 'Pengajuan Tiket',
-        ];
+        ]);
+    }
 
-        return view('tiket/pengajuan/index', $data);
+    public function show($id): string
+    {
+        return view('tiket/daftar/detail', [
+            'title' => 'Detail Tiket',
+            'id' => $id
+        ]);
     }
 }

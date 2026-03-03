@@ -28,6 +28,7 @@
                     <div class="row">
                         <div class="col-12">
                             <h5 class="card-title text-uppercase fw-bold py-3">pengajuan registrasi mk terlambat</h5>
+                            <a href="<?= site_url('tiket/1') ?>" class="stretched-link"></a>
                         </div>
                     </div>
                     <div class="row end-row">
