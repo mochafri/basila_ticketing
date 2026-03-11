@@ -5,9 +5,9 @@
 }
 
 :root {
-  --bgColor: #f6f6f6;
+  --bgColor: #f5f7f6;
   --primaryColor: #dc3545;
-  --secondaryColor: #a1a5ba;
+  --secondaryColor: #8d8e94;
   --cardPrimaryRed: #e11212;
   --cardPrimaryGreen: #4ea72d;
   --cardPrimaryYellow: #ffc000;
@@ -16,7 +16,23 @@
   --cardSecondGreen:#3d8223;
   --cardSecondYellow:#c79600;
   --cardSecondBlue:#0b7ba5;
+  --bgformColor: #f9fafc;
 }
+
+/* custom style */
+.custom-small-font {
+  font-size : .8rem;
+}
+
+.custom-secondarycolor {
+    color: var(--secondaryColor);
+}
+
+.custom-text {
+  font-size: .8rem;
+  color: var(--secondaryColor);
+}
+/* end custom style */
 
 /* navbar style */
 .navbar-header {
@@ -473,7 +489,7 @@ li a {
   color: var(--secondaryColor);
 }
 
-#daftar-tiket .header .add-btn span{
+#daftar-tiket .header .add-btn span {
   letter-spacing: 1px;
 }
 
@@ -485,8 +501,9 @@ li a {
   color: #fff;
 }
 
-#daftar-tiket .card .kodePengajuan, .statusPengajuan{
-  font-size: .7rem;
+#daftar-tiket .card .kodePengajuan,
+.statusPengajuan {
+  font-size: 0.7rem;
   color: var(--secondaryColor);
 }
 
@@ -497,16 +514,30 @@ li a {
 
 /* End style halaman daftar tiket */
 
-
 /* style halaman pengajuan tiket */
 #pengajuan-tiket .header span {
   color: var(--secondaryColor);
 }
 
 #pengajuan-tiket .card .card-body .form-label {
-  font-size: .7rem;
+  font-size: 0.7rem;
   font-weight: bold;
   letter-spacing: 1px;
 }
 
+#pengajuan-tiket .form-control,
+#pengajuan-tiket .form-select {
+  padding: 10px 15px;
+  border-radius: 15px;
+  background-color: var(--bgformColor);
+}
+
 /* end style halaman pengajuan tiket */
+
+/* start style halaman detail tiket */
+
+#detail-tiket .card .task-desc p {
+  color: var(--secondaryColor);
+}
+
+/* end style halaman detail tiket */

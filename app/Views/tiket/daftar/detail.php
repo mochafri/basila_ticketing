@@ -1,21 +1,19 @@
 <?= $this->extend('layout/template'); ?>
 
 <?= $this->section('content'); ?>
-<div class="container-fluid">
+<div class="container-fluid" id="detail-tiket">
     <div class="row">
         <div class="col-8">
-            <div class="card">
-                <div class="card-body">
-                    <p>card 1</p>
-                </div>
-            </div>
+            <!-- nanti ini pakai pengkondisian sesuai role -->
+            <?= $this->include('component/detail-tiket/detail-header'); ?>
+            <!-- detail kabag (default) -->
+            <?= $this->include('component/detail-tiket/detail-kabag'); ?>
+            <!-- detail kaur 1 (pak bagas) -->
+            <!-- detail kaur 2 (pak bagas) -->
+             <!-- detail staff (pak bagas) -->
         </div>
         <div class="col-4">
-            <div class="card">
-                <div class="card-body">
-                    <p>card 2</p>
-                </div>
-            </div>
+            <?= $this->include('component/detail-tiket/riwayat'); ?>
         </div>
     </div>
 </div>

@@ -2,20 +2,20 @@
 
 <?= $this->section('content'); ?>
 <div class="container-fluid" id="pengajuan-tiket">
-    <div class="row header">
-        <div class="col-6">
-            <h2 class="text-uppercase fw-bold">Pengajuan Tiket Layanan</h2>
-            <span>Ajukan permohonan layanan yang anda butuhkan dengan mudah dan cepat</span>
-        </div>
-    </div>
     <div class="row">
-        <div class="col-12">
-            <div class="card mt-5 border-0 shadow-sm rounded-4">
-                <div class="card-body">
+        <div class="col-10 mx-auto">
+            <div class="card mt-4 border-0 shadow-lg rounded-4">
+                <div class="card-body p-5">
+                    <div class="row header mb-5">
+                        <div class="col-6">
+                            <h2 class="text-uppercase fw-bold">Pengajuan Tiket Layanan</h2>
+                        </div>
+                    </div>
                     <form class="row g-4 needs-validation" novalidate>
                         <div class="col-md-12">
                             <label for="validationCustom01" class="form-label text-uppercase ">Judul permohonan</label>
-                            <input type="text" class="form-control" id="validationCustom01" value="" required placeholder="Masukkan judul permohonan...">
+                            <input type="text" class="form-control" id="validationCustom01" value="" required
+                                placeholder="Masukkan judul permohonan...">
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
@@ -45,9 +45,11 @@
                             <label for="validationTextarea" class="form-label text-uppercase">
                                 deskripsi</label>
                             <textarea class="form-control" id="validationTextarea"
-                                placeholder="Silahkan jelaskan secara detail kebutuhan layanan yang anda ajukan" required rows="5"></textarea>
+                                placeholder="Silahkan jelaskan secara detail kebutuhan layanan yang anda ajukan"
+                                required rows="5"></textarea>
                             <div class="invalid-feedback">
-                                Jelaskan kebutuhan layanan yang anda ajukan dengan detail agar dapat diproses dengan cepat dan tepat.
+                                Jelaskan kebutuhan layanan yang anda ajukan dengan detail agar dapat diproses dengan
+                                cepat dan tepat.
                             </div>
                         </div>
                         <div class="col-12">

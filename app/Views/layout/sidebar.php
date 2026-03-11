@@ -55,7 +55,8 @@
                     </li>
                     <li>
                         <div class="submenu-item p-2 rounded">
-                            <a href="<?= site_url('tiket/create'); ?>" class="text-decoration-none d-block">• Pengajuan Tiket</a>
+                            <a href="<?= site_url('tiket/create'); ?>" class="text-decoration-none d-block">• Pengajuan
+                                Tiket</a>
                         </div>
                     </li>
                 </ul>
