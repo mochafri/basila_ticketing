@@ -86,6 +86,11 @@
                             <a href="<?= site_url('user/'); ?>" class="text-decoration-none d-block">• Data User</a>
                         </div>
                     </li>
+                    <li>
+                        <div class="submenu-item p-2 rounded">
+                            <a href="<?= site_url('kategori/'); ?>" class="text-decoration-none d-block">• Data Kategori</a>
+                        </div>
+                    </li>
                 </ul>
 
             </li>
