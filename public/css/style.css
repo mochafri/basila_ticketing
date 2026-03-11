@@ -7,7 +7,7 @@
 :root {
   --bgColor: #f5f7f6;
   --primaryColor: #dc3545;
-  --secondaryColor: #a1a5ba;
+  --secondaryColor: #8d8e94;
   --cardPrimaryRed: #e11212;
   --cardPrimaryGreen: #4ea72d;
   --cardPrimaryYellow: #ffc000;
@@ -16,9 +16,23 @@
   --cardSecondGreen:#3d8223;
   --cardSecondYellow:#c79600;
   --cardSecondBlue:#0b7ba5;
-  --secondaryColor: #9c9c9c;
   --bgformColor: #f9fafc;
 }
+
+/* custom style */
+.custom-small-font {
+  font-size : .8rem;
+}
+
+.custom-secondarycolor {
+    color: var(--secondaryColor);
+}
+
+.custom-text {
+  font-size: .8rem;
+  color: var(--secondaryColor);
+}
+/* end custom style */
 
 /* navbar style */
 .navbar-header {
@@ -463,3 +477,11 @@ li a {
 }
 
 /* end style halaman pengajuan tiket */
+
+/* start style halaman detail tiket */
+
+#detail-tiket .card .task-desc p {
+  color: var(--secondaryColor);
+}
+
+/* end style halaman detail tiket */
