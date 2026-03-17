@@ -22,10 +22,11 @@
 
             <!-- BERANDA -->
             <li class="mb-2">
-                <div class="menu-item p-2 rounded d-flex align-items-center gap-2">
+                <a href="/"
+                    class="menu-item p-2 rounded d-flex align-items-center gap-2 text-decoration-none text-dark">
                     <iconify-icon icon="hugeicons:home-09" width="20"></iconify-icon>
                     <span>Beranda</span>
-                </div>
+                </a>
             </li>
 
             <!-- KELOLA SURAT -->
@@ -89,7 +90,8 @@
                     </li>
                     <li>
                         <div class="submenu-item p-2 rounded">
-                            <a href="<?= site_url('kategori/'); ?>" class="text-decoration-none d-block">• Data Kategori</a>
+                            <a href="<?= site_url('kategori/'); ?>" class="text-decoration-none d-block">• Data
+                                Kategori</a>
                         </div>
                     </li>
                 </ul>
