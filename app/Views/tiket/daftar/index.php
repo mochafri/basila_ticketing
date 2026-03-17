@@ -1,7 +1,7 @@
 <?= $this->extend('layout/template'); ?>
 
 <?= $this->section('content'); ?>
-<div class="container-fluid" id="daftar-tiket">
+<div class="container-fluid p-4" id="daftar-tiket">
     <div class="row header">
         <div class="col-6">
             <h2 class="text-uppercase fw-bold">Daftar Tiket Layanan</h2>
