@@ -7,7 +7,7 @@
             <!-- nanti ini pakai pengkondisian sesuai role -->
             <?= $this->include('component/detail-tiket/detail-header'); ?>
             <!-- detail kabag (default) -->
-            <?= $this->include('component/detail-tiket/detail-kabag'); ?>
+            <?= $this->include('component/detail-tiket/detail-body'); ?>
             <!-- detail kaur 1 (pak bagas) -->
             <!-- detail kaur 2 (pak bagas) -->
              <!-- detail staff (pak bagas) -->
