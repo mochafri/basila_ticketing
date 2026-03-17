@@ -9,4 +9,5 @@ $routes->get('/', 'DashboardController::index');
 $routes->get('tiket', 'TicketController::index');
 $routes->get('tiket/create', 'TicketController::create');
 $routes->get('tiket/(:num)', 'TicketController::show/$1');
-$routes->get('user', 'MasterDataController::index');
+$routes->get('/user', 'MasterDataController::user');
+$routes->get('/kategori', 'MasterDataController::kategori');

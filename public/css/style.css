@@ -202,11 +202,10 @@ li a {
     justify-content: space-between;
     align-items: flex-start;
     margin: 40px 0;
-    padding: 50px 60px; /* penting biar lega */
-    
+    padding: 50px 60px;
     background-color: #f3f4f6;
     border-radius: 25px;
-    border: 1.5px dashed #d1d5db; /* garis putus-putus */
+    border: 1.5px dashed #d1d5db; 
 }
 
 .workflow-line {
@@ -406,8 +405,65 @@ li a {
     top: 50%;
     transform: translateY(-50%);
     font-size: 20px;
-    color: black;   /* 🔥 warna icon hitam */
+    color: black;   
     pointer-events: none;
+}
+
+.kategori-card{
+    background: #f4f6f9;
+    border-radius: 22px;
+    padding: 24px;
+    margin-top: 18px;
+}
+
+.kategori-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+}
+
+.kategori-header h6{
+    font-weight:700;
+    font-size:16px;
+    letter-spacing:1px;
+}
+
+.delete-kategori{
+    font-size:20px;
+    color:#b0b4c3;
+    cursor:pointer;
+}
+
+.delete-kategori:hover{
+    color: var(--primaryColor);
+}
+
+.layanan-wrapper{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+}
+
+.layanan-tag{
+    background:#eef1f6;
+    padding:10px 14px;
+    border-radius:14px;
+    font-size:13px;
+    font-weight:500;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.layanan-tag iconify-icon{
+    font-size:16px;
+    color:#9aa0b1;
+    cursor:pointer;
+}
+
+.layanan-tag iconify-icon:hover{
+    color: var(--primaryColor);
 }
 
 /* Master Data End */
