@@ -18,6 +18,7 @@
         <!-- daftar tiket admin -->
        <?= $this->include('component/daftar-tiket/daftar-admin'); ?>\
        <!-- daftar tiket user -->
+        <?= $this->include('component/daftar-tiket/daftar-user'); ?>\
     </div>
 </div>
 <?= $this->endSection(); ?>
