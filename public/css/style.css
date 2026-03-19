@@ -501,6 +501,7 @@ li a {
   color: #fff;
 }
 
+/* user */
 #daftar-tiket .card .kodePengajuan,
 .statusPengajuan {
   font-size: 0.7rem;
@@ -510,6 +511,100 @@ li a {
 #daftar-tiket .card .card-body .end-row {
   font-size: 1em;
   color: var(--secondaryColor);
+}
+/* admin */
+
+.tiket-tabel{
+    border-radius: 24px;
+    overflow: hidden;
+}
+
+.tiket-tabel table{
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.tiket-tabel thead{
+    background: #eef1f5;
+}
+
+.tiket-tabel thead th{
+    font-size: 12px;
+    letter-spacing: 1px;
+    font-weight: 600;
+    color: var(--secondaryColor);
+    padding: 18px 22px;
+    border: none;
+}
+
+.tiket-tabel tbody tr{
+    background: #ffffff;
+}
+
+.tiket-tabel tbody td{
+    padding: 22px;
+    border-top: 1px solid #f1f3f7;
+}
+
+.tiket-tabel tbody td.tiket-id{
+    font-weight: 500;
+    color: var(--secondaryColor);
+}
+
+.tiket-tabel tbody td.tiket-judul{
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #1f2937;
+}
+
+.tiket-tabel tbody td.tiket-kategori{
+    font-weight: 500;
+    text-transform: uppercase;
+    color: var(--secondaryColor);
+}
+
+
+.tiket-tabel tbody td.tiket-tanggal{
+    font-weight: 400;
+    color: var(--secondaryColor);
+}
+
+
+.tiket-status-badge{
+    background: #e9edf3;
+    color: var(--secondaryColor);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.tiket-btn-aksi{
+    width: 38px;
+    height: 38px;
+    background: #eef1f5;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--secondaryColor);
+    text-decoration: none;
+}
+
+.tiket-btn-aksi iconify-icon{
+    font-size: 18px;
+}
+
+.tiket-btn-aksi:hover{
+    background: #e5e9f1;
+}
+
+
+.tiket-kategori-wrapper{
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 /* End style halaman daftar tiket */
