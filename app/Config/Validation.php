@@ -39,18 +39,74 @@ class Validation extends BaseConfig
     ];
 
     public array $kategoriRule = [
-        'nama_kategori' => 'required|string'
+        'nama_kategori' => [
+            'label' => 'Nama Kategori',
+            'rules' => 'required|string|min_length[3]|max_length[100]'
+        ]
     ];
 
     public array $layananRule = [
-        'nama_layanan' => 'required|string',
-        'kategori_id' => 'required|integer'
+        'nama_layanan' => [
+            'label' => 'Nama Layanan',
+            'rules' => 'required|string|min_length[3]|max_length[100]'
+        ],
+        'kategori_id' => [
+            'label' => 'Kategori',
+            'rules' => 'required|integer'
+        ]
     ];
 
     public array $approveRule = [
-        'id' => 'required|integer',
-        'approve' => 'required|string',
-        'assign_to_kabag' => 'required|array'
+        'approve' => [
+            'label' => 'Approve Oleh',
+            'rules' => 'required|string|max_length[100]'
+        ],
+        'assign_to_kabag' => [
+            'label' => 'Assign Kabag',
+            'rules' => 'required'
+        ],
+        'assign_to_kabag.*' => [
+            'label' => 'Kabag',
+            'rules' => 'required|string|max_length[100]'
+        ],
+        'user_id.*' => [
+            'label' => 'User ID',
+            'rules' => 'required|integer'
+        ]
+    ];
+
+    public array $assignTaskRule = [
+        'task_instruction' => [
+            'label' => 'Instruksi Tugas',
+            'rules' => 'required|string|min_length[3]'
+        ],
+        'assign_task_to_staff' => [
+            'label' => 'Staff',
+            'rules' => 'required|string'
+        ],
+    ];
+
+    public array $tiketRule = [
+        'judul' => [
+            'label' => 'Judul',
+            'rules' => 'required|string|min_length[3]|max_length[255]'
+        ],
+        'kategori' => [
+            'label' => 'Kategori',
+            'rules' => 'required|integer'
+        ],
+        'layanan' => [
+            'label' => 'Layanan',
+            'rules' => 'required|integer'
+        ],
+        'deskripsi' => [
+            'label' => 'Deskripsi',
+            'rules' => 'required|string|min_length[5]'
+        ],
+        'lampiran_dokumen' => [
+            'label' => 'Lampiran',
+            'rules' => 'permit_empty|mime_in[lampiran_dokumen,image/png,image/jpeg,application/pdf]|max_size[lampiran_dokumen,10240]'
+        ]
     ];
 
     // --------------------------------------------------------------------
