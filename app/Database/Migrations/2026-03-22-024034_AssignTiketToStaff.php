@@ -15,12 +15,12 @@ class AssignTiketToStaff extends Migration
                 'unsigned' => true,
                 'auto_increment' => true
             ],
-            'approve_by_kabag' => [
+            'assign_task_to_staff' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255',
                 'null' => true
             ],
-            'assign_task_to_staff' => [
+            'task_instruction' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255',
                 'null' => true

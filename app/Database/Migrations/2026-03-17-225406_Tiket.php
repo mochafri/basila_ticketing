@@ -51,6 +51,11 @@ class Tiket extends Migration
                 'type' => 'BOOLEAN',
                 'default' => false,
             ],
+            'approve_by' => [
+                'type' => 'VARCHAR',
+                'constraint' => '255',
+                'null' => true
+            ],
             'tiket_status' => [
                 'type' => 'ENUM',
                 'constraint' => ['Waiting', 'Open', 'In Progress', 'Closed', 'Rejected'],
