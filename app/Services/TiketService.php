@@ -4,16 +4,19 @@ namespace App\Services;
 
 use App\Models\Tiket;
 use App\Models\AssignTiket;
+use App\Models\AssignTask;
 
 class TiketService
 {
     protected $tiketModel;
-    protected $assignTiket;
+    protected $assignTiketModel;
+    protected $assignTaskStaff;
 
     public function __construct()
     {
         $this->tiketModel = new Tiket();
-        $this->assignTiket = new AssignTiket();
+        $this->assignTiketModel = new AssignTiket();
+        $this->assignTaskStaff = new AssignTask();
     }
 
     // Bagian get + detail tiket 
@@ -80,18 +83,33 @@ class TiketService
     }
 
     // Update data tiket approve by kaur
-    public function approveTiket(array $data)
+    public function approveTiket(array $data, $id)
     {
         $db = \Config\Database::connect();
-        $db->transStart();
 
-        foreach ($data as $kabag) {
+        $tiket = $this->tiketModel->find($id);
 
+        if (!$tiket) {
+            return [
+                'status' => 'fail',
+                'message' => 'Tiket tidak ada'
+            ];
         }
 
-        $this->tiketModel->update($data['id'], [
-            'tiket_status' => 'Open'
+        $db->transStart();
+
+        $this->tiketModel->update($id, [
+            'tiket_status' => 'Open',
+            'approve_by' => $data['approve']
         ]);
+
+        foreach ($data['assign_to_kabag'] as $index => $kabag) {
+            $this->assignTiketModel->insert([
+                'assign_task_to_kabag' => $kabag,
+                'user_id_kabag' => $data['user_id'][$index] ?? null,
+                'fk_tiket' => $id
+            ]);
+        }
 
         $db->transComplete();
 
@@ -125,7 +143,7 @@ class TiketService
         ];
     }
 
-    public function rejectTiket($id)
+    public function rejectTiket($id, array $data)
     {
         log_message('info', 'PARAM SLUG: ' . $id);
         $tiket = $this->tiketModel->find($id);
@@ -139,7 +157,8 @@ class TiketService
         }
 
         $update = $this->tiketModel->update($id, [
-            'tiket_status' => 'Rejected'
+            'tiket_status' => 'Rejected',
+            'catatan' => $data['catatan']
         ]);
 
         return [
@@ -149,4 +168,36 @@ class TiketService
     }
 
     // Update data tiket approve by kabag to staff
+    public function assignToStaff($id, array $data)
+    {
+        $db = \Config\Database::connect();
+
+        $idTiket = $this->assignTiketModel->select('fk_tiket')->find($id);
+
+        $db->transStart();
+
+        $this->assignTaskStaff->insert([
+            'task_instruction' => $data['task_instruction'],
+            'assign_task_to_staff' => $data['assign_task_to_staff'],
+            'fk_assign_tiket' => $id
+        ]);
+
+        $this->tiketModel->update($idTiket ,[
+            'tiket_status' => 'In Progress'
+        ]);
+
+        $db->transComplete();
+
+        if ($db->transStatus() === false) {
+            return [
+                'status' => 'failed',
+                'message' => 'Gagal assign ke staff'
+            ];
+        }
+
+        return [
+            'status' => 'success',
+            'message' => 'Berhasil assign ke staff'
+        ];
+    }
 }
