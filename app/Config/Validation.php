@@ -34,8 +34,23 @@ class Validation extends BaseConfig
      * @var array<string, string>
      */
     public array $templates = [
-        'list'   => 'CodeIgniter\Validation\Views\list',
+        'list' => 'CodeIgniter\Validation\Views\list',
         'single' => 'CodeIgniter\Validation\Views\single',
+    ];
+
+    public array $kategoriRule = [
+        'nama_kategori' => 'required|string'
+    ];
+
+    public array $layananRule = [
+        'nama_layanan' => 'required|string',
+        'kategori_id' => 'required|integer'
+    ];
+
+    public array $approveRule = [
+        'id' => 'required|integer',
+        'approve' => 'required|string',
+        'assign_to_kabag' => 'required|array'
     ];
 
     // --------------------------------------------------------------------
