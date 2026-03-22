@@ -6,14 +6,14 @@ use CodeIgniter\Model;
 
 class AssignTask extends Model
 {
-    protected $table            = 'assigntasks';
+    protected $table            = 'assign_to_staff';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'approve_by_kabag', 'assign_task_to_staff', 'task_status', 'taks_dokumen',
+        'task_instruction', 'assign_task_to_staff', 'task_status', 'taks_dokumen', 'fk_assign_tiket'
     ];
 
     protected bool $allowEmptyInserts = false;
