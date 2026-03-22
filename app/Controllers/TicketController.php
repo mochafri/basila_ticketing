@@ -52,22 +52,15 @@ class TicketController extends BaseController
 
     public function createTiket()
     {
-        $tiketRule = [
-            'judul' => 'required|string',
-            'kategori' => 'required|integer',
-            'layanan' => 'required|integer',
-            'deskripsi' => 'required|string',
-            'lampiran_dokumen' => 'permit_empty|mime_in[lampiran_dokumen,image/png,image/jpeg,application/pdf]|max_size[lampiran_dokumen,10240]'
-        ];
+        $data = $this->request->getPost();
 
-        if (!$this->validate($tiketRule)) {
+        if (!$this->validateData($data, 'tiketRule')) {
             return $this->response->setStatusCode(422)->setJSON([
                 'message' => 'Failed request',
                 'errors' => $this->validator->getErrors()
             ]);
         }
 
-        $data = $this->request->getPost();
         $file = $this->request->getFile('lampiran_dokumen');
 
         $result = service('tiket')->create($data, $file);
@@ -77,7 +70,7 @@ class TicketController extends BaseController
         return $this->response->setStatusCode($statusCode)->setJSON($result);
     }
 
-    public function approveTiket()
+    public function approveTiket($slug)
     {
         $data = $this->request->getPost();
 
@@ -90,9 +83,10 @@ class TicketController extends BaseController
                 ]);
         }
 
-        $result = service('tiket')->approveTiket($data);
+        $result = service('tiket')->approveTiket($data, $slug);
+        $statusCode = $result['status'] === 'success' ? 200 : 500;
 
-        return $this->response->setStatusCode(200)->setJSON($result);
+        return $this->response->setStatusCode($statusCode)->setJSON($result);
     }
 
     public function rejectTiket($slug)
@@ -110,5 +104,25 @@ class TicketController extends BaseController
         $statusCode = $result['status'] === 'success' ? 201 : 422;
 
         return response()->setStatusCode($statusCode)->setJSON($result);
+    }
+
+    // assign tiket to staff
+    public function asssignTiket($slug)
+    {
+        $data = $this->request->getPost();
+
+        if (!$this->validateData($data, 'assignTaskRule')) {
+            return $this->response
+                ->setStatusCode(422)
+                ->setJSON([
+                    'status' => 'failed',
+                    'message' => $this->validator->getErrors()
+                ]);
+        }
+
+        $result = service('tiket')->assignToStaff($slug ,$data);
+        $statusCode = $result['status'] === 'success' ? 200 : 500;
+
+        return $this->response->setStatusCode($statusCode)->setJSON($result);
     }
 }
