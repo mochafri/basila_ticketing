@@ -23,3 +23,7 @@ $routes->get('file/(:any)', 'TicketController::getFile/$1');
 // Coba endPoint reject sama eskalasi
 $routes->post('/reject-tiket/(:num)', 'TicketController::rejectTiket/$1');
 $routes->post('/escalated-tiket/(:num)', 'TicketController::escalated/$1');
+$routes->post('/approve-tiket/(:num)', 'TicketController::approveTiket/$1');
+
+// Assign task ke staff
+$routes->post('/assign-staff/(:num)', 'TicketController::asssignTiket/$1');
