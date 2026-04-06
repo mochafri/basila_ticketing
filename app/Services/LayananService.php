@@ -16,23 +16,28 @@ class LayananService
         $this->kategoriModel = new Kategori();
     }
 
-    public function getLayanan($id)
+    public function getLayanan()
+    {
+        return $this->layananModel->findAll();
+    }
+    
+    public function getLayananById($id)
     {
         $check = $this->layananModel
             ->find($id);
 
-        $getData =  $this->layananModel
+        $getData = $this->layananModel
             ->select('id, per_kategori_layanan')
             ->where('fk_kategori', $id)
             ->findAll();
-        
+
         return $check ? [
             'status' => 'success',
             'data' => $getData
         ] : [
             'status' => 'fail',
             'message' => 'Kategori tidak ada'
-        ]; 
+        ];
     }
 
     public function create(array $data)

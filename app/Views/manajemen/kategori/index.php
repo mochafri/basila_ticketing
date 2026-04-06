@@ -22,8 +22,8 @@
                 <h5 class="fw-bold mb-4">KATEGORI MANAGEMENT</h5>
 
                 <div class="d-flex gap-3 mb-4">
-                    <input type="text" class="form-control custom-input" placeholder="NAMA KATEGORI BARU">
-                    <button class="btn btn-danger btn-master">
+                    <input type="text" class="kategori form-control custom-input" placeholder="NAMA KATEGORI BARU">
+                    <button class="btn-kategori btn btn-danger btn-master">
                         <iconify-icon icon="mdi:plus"></iconify-icon>
                         TAMBAH
                     </button>
@@ -31,57 +31,57 @@
 
                 <small class="label-list">DAFTAR KATEGORI AKTIF:</small>
 
-                <div class="kategori-card">
+                <?php foreach ($kategori as $data): ?>
+                    <div class="kategori-card">
 
-                    <div class="kategori-header">
-                        <h6>REGISTRASI</h6>
-                        <iconify-icon icon="mdi:close" class="delete-kategori"></iconify-icon>
+                        <div class="kategori-header">
+                            <h6><?= $data['kategori_layanan'] ?></h6>
+                            <iconify-icon icon="mdi:close" class="delete-kategori"></iconify-icon>
+                        </div>
+
+                        <div class="layanan-wrapper">
+                            <?php $listLayanan = $group[$data['id']] ?? null; ?>
+                            <?php if (!empty($listLayanan)): ?>
+                                <?php foreach ($listLayanan as $ly): ?>
+                                    <div class="layanan-tag">
+                                        <?= $ly['per_kategori_layanan'] ?>
+                                        <iconify-icon icon="mdi:close"></iconify-icon>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <div class="layanan-tag">
+                                    <i>Tidak ada data layanan</i>
+                                </div>
+                            <?php endif; ?>
+                        </div>
                     </div>
-
-                    <div class="layanan-wrapper">
-
-                        <div class="layanan-tag">
-                            REGISTRASI MATA KULIAH
-                            <iconify-icon icon="mdi:close"></iconify-icon>
-                        </div>
-
-                        <div class="layanan-tag">
-                            REGISTRASI ULANG
-                            <iconify-icon icon="mdi:close"></iconify-icon>
-                        </div>
-
-                        <div class="layanan-tag">
-                            CUTI AKADEMIK
-                            <iconify-icon icon="mdi:close"></iconify-icon>
-                        </div>
-
-                    </div>
-
-                </div>
+                <?php endforeach; ?>
             </div>
         </div>
 
 
-        <!-- USER MANAGEMENT -->
+        <!-- LAYANAN MANAGEMENT -->
         <div class="col-md-6">
             <div class="card master-card p-4 h-100">
 
                 <h5 class="fw-bold mb-4">LAYANAN MANAGEMENT</h5>
 
                 <div class="mb-3">
-                    <input type="text" class="form-control custom-input" placeholder="NAMA LAYANAN BARU">
+                    <input type="text" class="layanan form-control custom-input" placeholder="NAMA LAYANAN BARU">
                 </div>
 
                 <div class="d-flex gap-3 mb-4">
                     <div class="select-wrapper w-100">
-                        <select class="form-select custom-input">
+                        <select class="select-kategori form-select custom-input">
                             <option selected disabled>PILIH KATEGORI</option>
-                            <option>REGISTRASI</option>
+                            <?php foreach ($kategori as $data): ?>
+                                <option value="<?= $data['id'] ?>"><?= $data['kategori_layanan'] ?></option>
+                            <?php endforeach; ?>
                         </select>
                         <iconify-icon icon="solar:alt-arrow-down-outline" class="select-icon"></iconify-icon>
                     </div>
 
-                    <button class="btn btn-danger btn-master">
+                    <button class="btn-layanan btn btn-danger btn-master">
                         <iconify-icon icon="mdi:plus"></iconify-icon>
                         TAMBAH
                     </button>

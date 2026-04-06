@@ -1,6 +1,8 @@
 // Consume endpoint/API on js
 
-const tokenCSRF = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+const tokenCSRF = document
+    .querySelector('meta[name="X-CSRF-TOKEN"]')
+    .getAttribute('content');
 
 export async function postKategori(namaKategori) {
     const res = await fetch('/create-kategori', {
@@ -20,7 +22,7 @@ export async function postKategori(namaKategori) {
 }
 
 export async function postLayanan(namaLayanan, idKategori) {
-    await fetch('/create-layanan', {
+    const res = await fetch('/create-layanan', {
         method: 'POST',
         headers: {
             'Content-Type': 'Application/json',
@@ -31,6 +33,10 @@ export async function postLayanan(namaLayanan, idKategori) {
             kategori_id: idKategori
         })
     });
+
+    if (res) {
+        console.log('berhasil');
+    }
 }
 
 export async function postTiket(judul, kategori, layanan, deskripsi, dokumenLampiran) {
@@ -55,9 +61,14 @@ export async function postTiket(judul, kategori, layanan, deskripsi, dokumenLamp
     }
 }
 
-export async function getLayanan(id) {
+export async function getLayananById(id) {
     const res = await fetch(`/get-layanan/${id}`);
     const data = await res.json();
 
     return data;
+}
+
+export async function getLayanan(id) {
+    const res = await fetch(`/layanan/${id}}`);
+    const data = await res.json();
 }

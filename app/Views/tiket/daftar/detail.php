@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-8">
             <!-- nanti ini pakai pengkondisian sesuai role -->
-            <?= $this->include('component/detail-tiket/detail-header'); ?>
+            <?= $this->include('component/detail-tiket/detail-header', $detail); ?>
             <!-- detail kabag (default) -->
             <?= $this->include('component/detail-tiket/detail-body'); ?>
             <!-- detail kaur 1 (pak bagas) -->

@@ -1,27 +1,27 @@
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 :root {
-  --bgColor: #f5f7f6;
-  --primaryColor: #dc3545;
-  --secondaryColor: #8d8e94;
-  --cardPrimaryRed: #e11212;
-  --cardPrimaryGreen: #4ea72d;
-  --cardPrimaryYellow: #ffc000;
-  --cardPrimaryBlue: #0e9ed4;
-  --cardSecondRed:#b00e0e;
-  --cardSecondGreen:#3d8223;
-  --cardSecondYellow:#c79600;
-  --cardSecondBlue:#0b7ba5;
-  --bgformColor: #f9fafc;
+    --bgColor: #f5f7f6;
+    --primaryColor: #dc3545;
+    --secondaryColor: #8d8e94;
+    --cardPrimaryRed: #e11212;
+    --cardPrimaryGreen: #4ea72d;
+    --cardPrimaryYellow: #ffc000;
+    --cardPrimaryBlue: #0e9ed4;
+    --cardSecondRed: #b00e0e;
+    --cardSecondGreen: #3d8223;
+    --cardSecondYellow: #c79600;
+    --cardSecondBlue: #0b7ba5;
+    --bgformColor: #f9fafc;
 }
 
 /* custom style */
 .custom-small-font {
-  font-size : .8rem;
+    font-size: .8rem;
 }
 
 .custom-secondarycolor {
@@ -29,35 +29,46 @@
 }
 
 .custom-text {
-  font-size: .8rem;
-  color: var(--secondaryColor);
+    font-size: .8rem;
+    color: var(--secondaryColor);
 }
+
 /* end custom style */
+
+/* alert style */
+.alert {
+    transform: translateY(-100%);
+    opacity: 0;
+    transition: transform 0.4s ease, opacity 0.3s ease;
+}
+
+/* end alert style */
 
 /* navbar style */
 .navbar-header {
-  background-color: var(--primaryColor);
-  height: 70px;
+    background-color: var(--primaryColor);
+    height: 70px;
 }
+
 /* end navbar style */
 
 /* ================= SIDEBAR BASE ================= */
 
 .sidebar {
-  width: 250px;
-  transition: width 0.3s ease;
-  overflow: hidden;
+    width: 250px;
+    transition: width 0.3s ease;
+    overflow: hidden;
 }
 
 li a {
-  color: var(--secondaryColor);
+    color: var(--secondaryColor);
 }
 
 
 /* ================= COLLAPSE MODE ================= */
 
 .sidebar.collapsed {
-  width: 80px;
+    width: 80px;
 }
 
 /* Sembunyikan teks saat collapse */
@@ -66,69 +77,78 @@ li a {
 .sidebar.collapsed .menu-item span,
 .sidebar.collapsed .submenu-item,
 .sidebar.collapsed .first-logo {
-  display: none !important;
+    display: none !important;
 }
 
 /* Tampilkan logo kecil saat collapse */
 .sidebar.collapsed .second-logo {
-  display: inline !important;
+    display: inline !important;
 }
 
 /* Tengah-kan icon */
 .sidebar.collapsed .menu-item {
-  justify-content: center;
+    justify-content: center;
 }
 
 /* Hilangkan padding submenu saat collapse */
 .sidebar.collapsed .collapse {
-  display: none !important;
+    display: none !important;
 }
+
+/* ================= SHOW TRANSITION ================= */
+
+.alert.show {
+    transform: translateY(-80%);
+    opacity: 1;
+}
+
+/* ================= END TRANSITION ================= */
 
 /* ================= HOVER ================= */
 
 /* Hover parent */
 .sidebar-menu .menu-item:hover {
-  background-color: var(--primaryColor);
+    background-color: var(--primaryColor);
 }
 
 .sidebar-menu .menu-item:hover span,
 .sidebar-menu .menu-item:hover iconify-icon {
-  color: #fff;
+    color: #fff;
 }
 
 /* Hover submenu */
 .sidebar-menu .submenu-item:hover {
-  background-color: var(--primaryColor);
+    background-color: var(--primaryColor);
 }
 
 .sidebar-menu .submenu-item:hover a {
-  color: #fff;
+    color: #fff;
 }
 
 /* ================= ACTIVE ================= */
 
 /* Active parent */
 .sidebar-menu .menu-item.active {
-  background-color: var(--primaryColor);
+    background-color: var(--primaryColor);
 }
 
 .sidebar-menu .menu-item.active span,
 .sidebar-menu .menu-item.active iconify-icon {
-  color: #fff;
+    color: #fff;
 }
 
 /* Active submenu */
 .sidebar-menu .submenu-item.active {
-  background-color: var(--primaryColor);
+    background-color: var(--primaryColor);
 }
 
 .sidebar-menu .submenu-item.active a {
-  color: #fff;
+    color: #fff;
 }
 
 /* Text */
-.sub-title{
-  color: var(--secondaryColor);
+.sub-title {
+    color: var(--secondaryColor);
 }
 
 /* Dashboard Start*/
@@ -151,7 +171,7 @@ li a {
     border-radius: 10px;
     padding: 8px 20px;
     border: none;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     font-weight: 500;
 }
 
@@ -159,7 +179,7 @@ li a {
     border-radius: 10px;
     padding: 8px 22px;
     font-weight: 600;
-    box-shadow: 0 6px 18px rgba(220,53,69,0.3);
+    box-shadow: 0 6px 18px rgba(220, 53, 69, 0.3);
 }
 
 .stat-card {
@@ -167,7 +187,7 @@ li a {
     padding: 30px;
     color: white;
     display: flex;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     justify-content: space-between;
     align-items: center;
     min-height: 140px;
@@ -184,16 +204,30 @@ li a {
     letter-spacing: 1px;
 }
 
-.bg-warning-custom { background: var(--cardPrimaryYellow); }
-.bg-danger-custom {background: var(--cardPrimaryRed);}
-.bg-success-custom { background: var(--cardPrimaryGreen); }
-.bg-blue-custom { background: var(--cardPrimaryBlue); }
-.bg-purple { background: #6f42c1; }
+.bg-warning-custom {
+    background: var(--cardPrimaryYellow);
+}
+
+.bg-danger-custom {
+    background: var(--cardPrimaryRed);
+}
+
+.bg-success-custom {
+    background: var(--cardPrimaryGreen);
+}
+
+.bg-blue-custom {
+    background: var(--cardPrimaryBlue);
+}
+
+.bg-purple {
+    background: #6f42c1;
+}
 
 
 .card {
     border-radius: 20px !important;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
 }
 
 .workflow-wrapper {
@@ -205,7 +239,7 @@ li a {
     padding: 50px 60px;
     background-color: #f3f4f6;
     border-radius: 25px;
-    border: 1.5px dashed #d1d5db; 
+    border: 1.5px dashed #d1d5db;
 }
 
 .workflow-line {
@@ -239,7 +273,7 @@ li a {
     justify-content: center;
     font-size: 22px;
     margin: 0 auto;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
 .workflow-label {
@@ -273,8 +307,8 @@ li a {
     border-radius: 20px;
 }
 
-.icon-box iconify-icon{
-  font-size: 36px;
+.icon-box iconify-icon {
+    font-size: 36px;
 }
 
 /* Responsive Dashboard */
@@ -294,7 +328,7 @@ li a {
         width: 100%;
     }
 
-        .workflow-wrapper {
+    .workflow-wrapper {
         flex-wrap: wrap;
         justify-content: center;
         gap: 20px;
@@ -340,7 +374,7 @@ li a {
     display: flex;
     align-items: center;
     gap: 8px;
-    box-shadow: 0 8px 20px rgba(220,53,69,0.3);
+    box-shadow: 0 8px 20px rgba(220, 53, 69, 0.3);
 }
 
 .label-list {
@@ -389,6 +423,7 @@ li a {
 .icon-delete:hover {
     color: var(--primaryColor);
 }
+
 .select-wrapper {
     position: relative;
 }
@@ -405,64 +440,64 @@ li a {
     top: 50%;
     transform: translateY(-50%);
     font-size: 20px;
-    color: black;   
+    color: black;
     pointer-events: none;
 }
 
-.kategori-card{
+.kategori-card {
     background: #f4f6f9;
     border-radius: 22px;
     padding: 24px;
     margin-top: 18px;
 }
 
-.kategori-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:18px;
+.kategori-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
 }
 
-.kategori-header h6{
-    font-weight:700;
-    font-size:16px;
-    letter-spacing:1px;
+.kategori-header h6 {
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 1px;
 }
 
-.delete-kategori{
-    font-size:20px;
-    color:#b0b4c3;
-    cursor:pointer;
+.delete-kategori {
+    font-size: 20px;
+    color: #b0b4c3;
+    cursor: pointer;
 }
 
-.delete-kategori:hover{
+.delete-kategori:hover {
     color: var(--primaryColor);
 }
 
-.layanan-wrapper{
-    display:flex;
-    flex-wrap:wrap;
-    gap:12px;
+.layanan-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
 }
 
-.layanan-tag{
-    background:#eef1f6;
-    padding:10px 14px;
-    border-radius:14px;
-    font-size:13px;
-    font-weight:500;
-    display:flex;
-    align-items:center;
-    gap:8px;
+.layanan-tag {
+    background: #eef1f6;
+    padding: 10px 14px;
+    border-radius: 14px;
+    font-size: 13px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.layanan-tag iconify-icon{
-    font-size:16px;
-    color:#9aa0b1;
-    cursor:pointer;
+.layanan-tag iconify-icon {
+    font-size: 16px;
+    color: #9aa0b1;
+    cursor: pointer;
 }
 
-.layanan-tag iconify-icon:hover{
+.layanan-tag iconify-icon:hover {
     color: var(--primaryColor);
 }
 
@@ -470,65 +505,68 @@ li a {
 
 /* sidebarToggle icon */
 .sidebar-toggle {
-  cursor: pointer;
+    cursor: pointer;
 }
+
 /* end sidebarToggle icon */
 
 /* rotate arrow icon */
 .arrow-icon {
-  transition: transform 0.3s ease;
+    transition: transform 0.3s ease;
 }
 
 .arrow-icon.rotate {
-  transform: rotate(90deg);
+    transform: rotate(90deg);
 }
+
 /* end rotate arrow icon */
 
 /* Style Halaman Daftar Tiket */
 #daftar-tiket .header span {
-  color: var(--secondaryColor);
+    color: var(--secondaryColor);
 }
 
 #daftar-tiket .header .add-btn span {
-  letter-spacing: 1px;
+    letter-spacing: 1px;
 }
 
 #daftar-tiket .header .btn {
-  background-color: var(--primaryColor);
+    background-color: var(--primaryColor);
 }
 
 #daftar-tiket .header .btn span {
-  color: #fff;
+    color: #fff;
 }
 
 /* user */
 #daftar-tiket .card .kodePengajuan,
 .statusPengajuan {
-  font-size: 0.7rem;
-  color: var(--secondaryColor);
+    font-size: 0.7rem;
+    color: var(--secondaryColor);
 }
 
 #daftar-tiket .card .card-body .end-row {
-  font-size: 1em;
-  color: var(--secondaryColor);
+    font-size: 1em;
+    color: var(--secondaryColor);
 }
+
 /* admin */
 
-.tiket-tabel{
+.tiket-tabel {
     border-radius: 24px;
     overflow: hidden;
 }
 
-.tiket-tabel table{
+.tiket-tabel table {
     border-collapse: separate;
     border-spacing: 0;
 }
 
-.tiket-tabel thead{
+.tiket-tabel thead {
     background: #eef1f5;
 }
 
-.tiket-tabel thead th{
+.tiket-tabel thead th {
     font-size: 12px;
     letter-spacing: 1px;
     font-weight: 600;
@@ -537,40 +575,40 @@ li a {
     border: none;
 }
 
-.tiket-tabel tbody tr{
+.tiket-tabel tbody tr {
     background: #ffffff;
 }
 
-.tiket-tabel tbody td{
+.tiket-tabel tbody td {
     padding: 22px;
     border-top: 1px solid #f1f3f7;
 }
 
-.tiket-tabel tbody td.tiket-id{
+.tiket-tabel tbody td.tiket-id {
     font-weight: 500;
     color: var(--secondaryColor);
 }
 
-.tiket-tabel tbody td.tiket-judul{
+.tiket-tabel tbody td.tiket-judul {
     font-weight: 700;
     text-transform: uppercase;
     color: #1f2937;
 }
 
-.tiket-tabel tbody td.tiket-kategori{
+.tiket-tabel tbody td.tiket-kategori {
     font-weight: 500;
     text-transform: uppercase;
     color: var(--secondaryColor);
 }
 
 
-.tiket-tabel tbody td.tiket-tanggal{
+.tiket-tabel tbody td.tiket-tanggal {
     font-weight: 400;
     color: var(--secondaryColor);
 }
 
 
-.tiket-status-badge{
+.tiket-status-badge {
     background: #e9edf3;
     color: var(--secondaryColor);
     padding: 6px 14px;
@@ -580,7 +618,7 @@ li a {
     letter-spacing: 1px;
 }
 
-.tiket-btn-aksi{
+.tiket-btn-aksi {
     width: 38px;
     height: 38px;
     background: #eef1f5;
@@ -592,16 +630,16 @@ li a {
     text-decoration: none;
 }
 
-.tiket-btn-aksi iconify-icon{
+.tiket-btn-aksi iconify-icon {
     font-size: 18px;
 }
 
-.tiket-btn-aksi:hover{
+.tiket-btn-aksi:hover {
     background: #e5e9f1;
 }
 
 
-.tiket-kategori-wrapper{
+.tiket-kategori-wrapper {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -611,20 +649,20 @@ li a {
 
 /* style halaman pengajuan tiket */
 #pengajuan-tiket .header span {
-  color: var(--secondaryColor);
+    color: var(--secondaryColor);
 }
 
 #pengajuan-tiket .card .card-body .form-label {
-  font-size: 0.7rem;
-  font-weight: bold;
-  letter-spacing: 1px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    letter-spacing: 1px;
 }
 
 #pengajuan-tiket .form-control,
 #pengajuan-tiket .form-select {
-  padding: 10px 15px;
-  border-radius: 15px;
-  background-color: var(--bgformColor);
+    padding: 10px 15px;
+    border-radius: 15px;
+    background-color: var(--bgformColor);
 }
 
 /* end style halaman pengajuan tiket */
@@ -632,7 +670,7 @@ li a {
 /* start style halaman detail tiket */
 
 #detail-tiket .card .task-desc p {
-  color: var(--secondaryColor);
+    color: var(--secondaryColor);
 }
 
 /* end style halaman detail tiket */

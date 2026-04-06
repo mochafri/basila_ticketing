@@ -5,6 +5,5 @@ document.addEventListener('DOMContentLoaded', () => {
         const namaKategori = document.querySelector('.kategori').value;
         
         await postKategori(namaKategori);
-        location.reload();
     });
 }); 

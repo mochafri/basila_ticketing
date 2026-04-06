@@ -2,9 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Services\KategoriService;
-use App\Services\LayananService;
-
 class MasterDataController extends BaseController
 {
     public function user()
@@ -18,18 +15,26 @@ class MasterDataController extends BaseController
 
     public function kategori()
     {
+        $layanan = service('layanan')->getLayanan();
+        $group = [];
+
+        foreach($layanan as $ly){
+            $group[$ly['fk_kategori']][] = $ly;
+        }   
+
         return view('manajemen/kategori/index', [
             'title' => 'Data Kategori',
-            'kategori' => service('kategori')->getKategori()
+            'kategori' => service('kategori')->getKategori(),
+            'group' => $group
         ]);
     }
 
     public function createKategori()
     {
-        // Set method request for client to send form
+        # Set method request for client to send form
         $request = $this->request->getJSON(true);
 
-        // Check validation request
+        # Check validation request
         if (!$this->validateData($request, 'kategoriRule')) {
             return $this->response
                 ->setStatusCode(422)
@@ -38,10 +43,10 @@ class MasterDataController extends BaseController
                 ]);
         }
 
-        // Call function with instance on construct
+        # Call function with instance on construct
         $result = service('kategori')->create($request);
 
-        // Set status code berdasarkan return function
+        # Set status code berdasarkan return function
         $statusCode = $result['status'] === 'success' ? 200 : 500;
 
         return $this->response->setStatusCode($statusCode)->setJSON($result);
@@ -50,6 +55,7 @@ class MasterDataController extends BaseController
     public function createLayanan()
     {
         $request = $this->request->getJSON(true);
+        log_message('info', json_encode($request));
 
         if (!$this->validateData($request, 'layananRule')) {
             return $this->response->setStatusCode(422)->setJSON([

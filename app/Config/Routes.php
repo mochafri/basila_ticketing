@@ -14,16 +14,21 @@ $routes->get('/user', 'MasterDataController::user');
 $routes->get('/kategori', 'MasterDataController::kategori');
 $routes->post('/create-kategori', 'MasterDataController::createKategori');
 $routes->post('/create-layanan', 'MasterDataController::createLayanan');
-$routes->post('/create-tiket', 'TicketController::createTiket');
 $routes->get('/get-layanan/(:num)', 'TicketController::getLayananByID/$1');
 
-// Get File from writePath in server
-$routes->get('file/(:any)', 'TicketController::getFile/$1');
+# Ambil file dari local server
+$routes->get('tiket/file/(:any)', 'TicketController::getFile/$1');
 
-// Coba endPoint reject sama eskalasi
+# EndPoint buat tiket baru 
+$routes->post('/tiket/baru', 'TicketController::createTiket');
+
+# Coba endPoint reject sama eskalasi
 $routes->post('/reject-tiket/(:num)', 'TicketController::rejectTiket/$1');
 $routes->post('/escalated-tiket/(:num)', 'TicketController::escalated/$1');
 $routes->post('/approve-tiket/(:num)', 'TicketController::approveTiket/$1');
 
-// Assign task ke staff
+# Assign task ke staff
 $routes->post('/assign-staff/(:num)', 'TicketController::asssignTiket/$1');
+
+# End point layanan
+$routes->post('/layanan/(:num)', 'MasterController:getLayanan/$1');

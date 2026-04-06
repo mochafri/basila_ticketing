@@ -7,6 +7,7 @@
     <title><?= $title; ?></title>
     <link href="<?= base_url('assets/bootstrap/bootstrap.min.css') ?>" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
+    <?= csrf_meta() ?>
 </head>
 
 <body>
@@ -23,7 +24,11 @@
 
     <script src="<?= base_url('assets/js/sidebar.js') ?>"></script>
     <script src="<?= base_url('assets/bootstrap/bootstrap.bundle.min.js') ?>"></script>
+    <script type="module" src="<?= base_url('assets/js/inputKategori.js') ?>"></script>
+    <script type="module" src="<?= base_url('assets/js/inputLayanan.js') ?>"></script>
+    <script type="module" src="<?= base_url('assets/js/tambahTiket.js') ?>"></script>
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
 </body>
+<?= $this->renderSection('script') ?>
 
 </html>

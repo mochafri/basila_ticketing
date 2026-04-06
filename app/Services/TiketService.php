@@ -19,7 +19,7 @@ class TiketService
         $this->assignTaskStaff = new AssignTask();
     }
 
-    // Bagian get + detail tiket 
+    # Bagian get all data tiket
     public function getDataTiket()
     {
         return $this->tiketModel
@@ -33,6 +33,7 @@ class TiketService
             ->findAll();
     }
 
+    # Bagian get detail tiket
     public function showTiket($id)
     {
         return $this->tiketModel
@@ -48,7 +49,7 @@ class TiketService
             ->find($id);
     }
 
-    // Create data tiket
+    # Create data tiket
     public function create(array $data, $file)
     {
         $filePath = null;

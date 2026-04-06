@@ -22,7 +22,7 @@ class TicketController extends BaseController
 
     public function getLayananByID($slug)
     {
-        $result = service('layanan')->getLayanan($slug);
+        $result = service('layanan')->getLayananById($slug);
 
         $statusCode = $result['status'] === 'success' ? 201 : 422;
         return response()->setStatusCode($statusCode)->setJSON($result);
@@ -36,7 +36,7 @@ class TicketController extends BaseController
         ]);
     }
 
-    // Buat dpet akses ke file dokumen yg udh diupload
+    # Buat dpet akses ke file dokumen yg udh diupload
     public function getFile($fileName)
     {
         $fullPath = WRITEPATH . 'uploads/tiket/' . $fileName;
@@ -65,9 +65,11 @@ class TicketController extends BaseController
 
         $result = service('tiket')->create($data, $file);
 
-        $statusCode = $result['status'] === 'success' ? 200 : 500;
-
-        return $this->response->setStatusCode($statusCode)->setJSON($result);
+        if ($result === 'success') {
+            return redirect()->back()->with('success', 'Berhasil membuat tiket.');
+        } else {
+            return redirect()->back()->with('success', 'Gagal membuat tiket.');
+        }
     }
 
     public function approveTiket($slug)
@@ -106,7 +108,7 @@ class TicketController extends BaseController
         return response()->setStatusCode($statusCode)->setJSON($result);
     }
 
-    // assign tiket to staff
+    # assign tiket to staff
     public function asssignTiket($slug)
     {
         $data = $this->request->getPost();
@@ -120,7 +122,7 @@ class TicketController extends BaseController
                 ]);
         }
 
-        $result = service('tiket')->assignToStaff($slug ,$data);
+        $result = service('tiket')->assignToStaff($slug, $data);
         $statusCode = $result['status'] === 'success' ? 200 : 500;
 
         return $this->response->setStatusCode($statusCode)->setJSON($result);

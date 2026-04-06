@@ -16,9 +16,9 @@
     </div>
     <div class="row">
         <!-- daftar tiket admin -->
-       <?= $this->include('component/daftar-tiket/daftar-admin'); ?>\
-       <!-- daftar tiket user -->
-        <?= $this->include('component/daftar-tiket/daftar-user'); ?>\
+        <?= $this->include('component/daftar-tiket/daftar-admin', $tiket); ?>
+        <!-- daftar tiket user -->
+        <?= $this->include('component/daftar-tiket/daftar-user', $tiket); ?>
     </div>
 </div>
 <?= $this->endSection(); ?>
