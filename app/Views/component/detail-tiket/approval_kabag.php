@@ -8,21 +8,22 @@
                 <label
                     class="flex-fill p-4 bg-white d-flex justify-content-between align-items-center rounded-3 shadow-sm">
                     <span>pak bagas</span>
-                    <input type="radio" name="delegasi1">
+                    <input type="radio" name="user_id[]" value="2"> 
                 </label>
                 <label
                     class="flex-fill p-4 bg-white d-flex justify-content-between align-items-center rounded-3 shadow-sm">
                     <span>bu farida</span>
-                    <input type="radio" name="delegasi1">
+                    <input type="radio" name="user_id[]" value="2"> 
                 </label>
             </div>
             <div class="d-flex gap-2 flex-wrap mt-4">
-                <button type="button" class="btn btn-success flex-fill p-4 text-uppercase fw-bold rounded-4">setujui &
+                <button type="button" class="btn btn-approve btn-success flex-fill p-4 text-uppercase fw-bold rounded-4">setujui
+                    &
                     tugaskan</button>
                 <button type="button"
-                    class="btn btn-primary flex-fill p-4 text-uppercase fw-bold rounded-4">eskalasi</button>
-                <button type="button"
-                    class="btn btn-danger flex-fill p-4 text-uppercase fw-bold rounded-4">tolak</button>
+                    class="btn btn-escalated btn-primary flex-fill p-4 text-uppercase fw-bold rounded-4">eskalasi</button>
+                <button 
+                    class="btn btn-reject btn-danger flex-fill p-4 text-uppercase fw-bold rounded-4">tolak</button>
             </div>
         </div>
     </div>
@@ -41,8 +42,10 @@
     <div class="flex-grow-1 gap-2 d-flex flex-column">
         <p class="m-0 fw-bold custom-small-font">konfirmasi penyelesaian</p>
         <div class="d-flex flex-wrap gap-2">
-            <button class="btn btn-success flex-fill text-uppercase fw-bold rounded-3 custom-small-font py-3 px-4">tutup tiket (selesai)</button>
-            <button class="btn btn-danger flex-fill text-uppercase fw-bold rounded-3 custom-small-font py-3 px-4">tolak hasil akhir</button>
+            <button class="btn btn-success flex-fill text-uppercase fw-bold rounded-3 custom-small-font py-3 px-4">tutup
+                tiket (selesai)</button>
+            <button class="btn btn-danger flex-fill text-uppercase fw-bold rounded-3 custom-small-font py-3 px-4">tolak
+                hasil akhir</button>
         </div>
     </div>
 </div>

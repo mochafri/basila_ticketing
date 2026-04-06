@@ -74,7 +74,7 @@ class TicketController extends BaseController
 
     public function approveTiket($slug)
     {
-        $data = $this->request->getPost();
+        $data = $this->request->getJSON(true);
 
         if (!$this->validateData($data, 'approveRule')) {
             return $this->response

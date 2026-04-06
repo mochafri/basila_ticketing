@@ -39,27 +39,27 @@ export async function postLayanan(namaLayanan, idKategori) {
     }
 }
 
-export async function postTiket(judul, kategori, layanan, deskripsi, dokumenLampiran) {
-    const formData = new FormData();
+// export async function postTiket(judul, kategori, layanan, deskripsi, dokumenLampiran) {
+//     const formData = new FormData();
 
-    formData.append('judul', judul);
-    formData.append('kategori', kategori);
-    formData.append('layanan', parseInt(layanan));
-    formData.append('deskripsi', deskripsi);
-    formData.append('lampiran_dokumen', dokumenLampiran);
+//     formData.append('judul', judul);
+//     formData.append('kategori', kategori);
+//     formData.append('layanan', parseInt(layanan));
+//     formData.append('deskripsi', deskripsi);
+//     formData.append('lampiran_dokumen', dokumenLampiran);
 
-    const res = await fetch('/create-tiket', {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': tokenCSRF
-        },
-        body: formData
-    });
+//     const res = await fetch('/create-tiket', {
+//         method: 'POST',
+//         headers: {
+//             'X-CSRF-TOKEN': tokenCSRF
+//         },
+//         body: formData
+//     });
 
-    if (res) {
-        console.log('berhasil');
-    }
-}
+//     if (res) {
+//         console.log('berhasil');
+//     }
+// }
 
 export async function getLayananById(id) {
     const res = await fetch(`/get-layanan/${id}`);
@@ -68,7 +68,36 @@ export async function getLayananById(id) {
     return data;
 }
 
-export async function getLayanan(id) {
-    const res = await fetch(`/layanan/${id}}`);
-    const data = await res.json();
+export async function reject(id) {
+    await fetch(`/reject-tiket/${id}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'Application/json',
+            'X-CSRF-TOKEN': tokenCSRF
+        }
+    });
+}
+
+export async function escalated(id) {
+    await fetch(`/escalated-tiket/${id}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'Application/json',
+            'X-CSRF-TOKEN': tokenCSRF
+        }
+    });
+}
+
+export async function approveTiket(id, userId, nama) {
+    return fetch(`/approve-tiket/${id}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            user_id: [userId], 
+            assign_to_kabag: [nama],
+            approve: 'buk fira'
+        })
+    });
 }

@@ -83,7 +83,7 @@ class TiketService
         ];
     }
 
-    // Update data tiket approve by kaur
+    # Update data tiket approve by kaur
     public function approveTiket(array $data, $id)
     {
         $db = \Config\Database::connect();
@@ -144,7 +144,7 @@ class TiketService
         ];
     }
 
-    public function rejectTiket($id, array $data)
+    public function rejectTiket($id)
     {
         log_message('info', 'PARAM SLUG: ' . $id);
         $tiket = $this->tiketModel->find($id);
@@ -159,7 +159,7 @@ class TiketService
 
         $update = $this->tiketModel->update($id, [
             'tiket_status' => 'Rejected',
-            'catatan' => $data['catatan']
+            // 'catatan' => $data['catatan']
         ]);
 
         return [
@@ -168,7 +168,7 @@ class TiketService
         ];
     }
 
-    // Update data tiket approve by kabag to staff
+    # Update data tiket approve by kabag to staff
     public function assignToStaff($id, array $data)
     {
         $db = \Config\Database::connect();

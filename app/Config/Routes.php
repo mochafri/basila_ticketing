@@ -22,7 +22,7 @@ $routes->get('tiket/file/(:any)', 'TicketController::getFile/$1');
 # EndPoint buat tiket baru 
 $routes->post('/tiket/baru', 'TicketController::createTiket');
 
-# Coba endPoint reject sama eskalasi
+# Coba endPoint approve reject sama eskalasi
 $routes->post('/reject-tiket/(:num)', 'TicketController::rejectTiket/$1');
 $routes->post('/escalated-tiket/(:num)', 'TicketController::escalated/$1');
 $routes->post('/approve-tiket/(:num)', 'TicketController::approveTiket/$1');
