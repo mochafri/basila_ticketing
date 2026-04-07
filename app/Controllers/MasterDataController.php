@@ -69,4 +69,13 @@ class MasterDataController extends BaseController
 
         return $this->response->setStatusCode($statusCode)->setJSON($result);
     }
+
+    public function deleteKategori($id)
+    {
+        $result = service('kategori')->delete($id);
+
+        $statusCode = $result['status'] === 'success' ? 200 : 500;
+
+        return $this->response->setStatusCode($statusCode)->setJSON($result);
+    }
 }
