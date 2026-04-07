@@ -22,7 +22,8 @@
                 <h5 class="fw-bold mb-4">KATEGORI MANAGEMENT</h5>
 
                 <div class="d-flex gap-3 mb-4">
-                    <input type="text" class="kategori form-control custom-input" placeholder="NAMA KATEGORI BARU">
+                    <input type="text" class="kategori form-control custom-input" placeholder="NAMA KATEGORI BARU"
+                        id="inputKategori">
                     <button class="btn-kategori btn btn-danger btn-master">
                         <iconify-icon icon="mdi:plus"></iconify-icon>
                         TAMBAH
@@ -36,7 +37,8 @@
 
                         <div class="kategori-header">
                             <h6><?= $data['kategori_layanan'] ?></h6>
-                            <iconify-icon icon="mdi:close" class="delete-kategori"></iconify-icon>
+                            <iconify-icon icon="mdi:close" class="delete-kategori btn-delete"
+                                data-id="<?= $data['id'] ?>"></iconify-icon>
                         </div>
 
                         <div class="layanan-wrapper">
@@ -67,7 +69,8 @@
                 <h5 class="fw-bold mb-4">LAYANAN MANAGEMENT</h5>
 
                 <div class="mb-3">
-                    <input type="text" class="layanan form-control custom-input" placeholder="NAMA LAYANAN BARU">
+                    <input type="text" class="layanan form-control custom-input" id="inputLayanan"
+                        placeholder="NAMA LAYANAN BARU">
                 </div>
 
                 <div class="d-flex gap-3 mb-4">
@@ -75,7 +78,8 @@
                         <select class="select-kategori form-select custom-input">
                             <option selected disabled>PILIH KATEGORI</option>
                             <?php foreach ($kategori as $data): ?>
-                                <option value="<?= $data['id'] ?>"><?= $data['kategori_layanan'] ?></option>
+                                <option class="select-kategori" value="<?= $data['id'] ?>"><?= $data['kategori_layanan'] ?>
+                                </option>
                             <?php endforeach; ?>
                         </select>
                         <iconify-icon icon="solar:alt-arrow-down-outline" class="select-icon"></iconify-icon>
@@ -92,4 +96,7 @@
 
     </div>
 </div>
+<script>
+    const BASE_URL = "<?= base_url() ?>";
+</script>
 <?= $this->endSection(); ?>

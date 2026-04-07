@@ -22,6 +22,8 @@
     </div>
 
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="<?= base_url('assets/js/sweetalertcustom.js'); ?>"></script>
     <script src="<?= base_url('assets/js/sidebar.js') ?>"></script>
     <script src="<?= base_url('assets/bootstrap/bootstrap.bundle.min.js') ?>"></script>
     <script type="module" src="<?= base_url('assets/js/inputKategori.js') ?>"></script>

@@ -15,6 +15,7 @@ $routes->get('/kategori', 'MasterDataController::kategori');
 $routes->post('/create-kategori', 'MasterDataController::createKategori');
 $routes->post('/create-layanan', 'MasterDataController::createLayanan');
 $routes->get('/get-layanan/(:num)', 'TicketController::getLayananByID/$1');
+$routes->delete('master-data/delete-kategori/(:num)', 'MasterDataController::deleteKategori/$1');
 
 # Ambil file dari local server
 $routes->get('tiket/file/(:any)', 'TicketController::getFile/$1');
