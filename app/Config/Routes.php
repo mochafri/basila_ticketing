@@ -6,7 +6,7 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 
-$routes->get('/', 'DashboardController::index');
+$routes->get('/dashboard', 'DashboardController::index');
 $routes->get('tiket', 'TicketController::index');
 $routes->get('tiket/create', 'TicketController::create');
 $routes->get('tiket/(:num)', 'TicketController::show/$1');
@@ -20,7 +20,24 @@ $routes->get('/get-layanan/(:num)', 'TicketController::getLayananByID/$1');
 $routes->get('tiket/file/(:any)', 'TicketController::getFile/$1');
 
 # EndPoint buat tiket baru 
-$routes->post('/tiket/baru', 'TicketController::createTiket');
+$routes->post('/auth/', 'TicketController::createTiket');
+
+#EndPoint login pages
+$routes->get('/', 'AuthController::signIn');
+$routes->get('/signin', 'AuthController::signIn');
+$routes->get('/signup', 'AuthController::signUp');
+$routes->get('/forgot-password', 'AuthController::forgotPassword');
+$routes->get('/role-option', 'RoleOptionController::index');
+
+
+#EndPoint login Process
+$routes->post('/auth/signin', 'AuthController::processSignIn');
+$routes->post('/auth/signup', 'AuthController::processSignUp');
+$routes->post('/auth/forgot-password', 'AuthController::processForgotPassword');
+$routes->post('/role-choice', 'RoleOptionController::chooseRole');
+
+#Endpoint logout
+$routes->get('/logout', 'AuthController::logout');
 
 # Coba endPoint approve reject sama eskalasi
 $routes->post('/reject-tiket/(:num)', 'TicketController::rejectTiket/$1');

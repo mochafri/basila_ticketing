@@ -22,7 +22,7 @@
 
             <!-- BERANDA -->
             <li class="mb-2">
-                <a href="/"
+                <a href="/dashboard"
                     class="menu-item p-2 rounded d-flex align-items-center gap-2 text-decoration-none text-dark">
                     <iconify-icon icon="hugeicons:home-09" width="20"></iconify-icon>
                     <span>Beranda</span>
