@@ -83,4 +83,13 @@ class Services extends BaseService
 
         return new \App\Services\RiwayatService();
     }
+    
+    public static function dashboard($getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('dashboard');
+        }
+
+        return new \App\Services\DashboardService();
+    }
 }

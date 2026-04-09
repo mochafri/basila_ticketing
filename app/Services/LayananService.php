@@ -23,15 +23,13 @@ class LayananService
     
     public function getLayananById($id)
     {
-        $check = $this->layananModel
-            ->find($id);
 
         $getData = $this->layananModel
             ->select('id, per_kategori_layanan')
             ->where('fk_kategori', $id)
             ->findAll();
 
-        return $check ? [
+        return $getData ? [
             'status' => 'success',
             'data' => $getData
         ] : [

@@ -10,6 +10,10 @@ class DashboardController extends BaseController
             'title' => 'Dashboard',
         ];
         
-        return view('dashboard/index', $data);
+        return view('dashboard/index', [
+            'title' => 'Dashboard',
+            'totalTiket' => service('dashboard')->countTiket(),
+            'onProgress' => service('dashboard')->getTiketOnProgress(),
+        ]);
     }
 }

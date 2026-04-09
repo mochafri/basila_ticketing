@@ -22,6 +22,7 @@ class TicketController extends BaseController
 
     public function getLayananByID($slug)
     {
+        log_message('info', 'PARAM SLUG: ' . $slug);
         $result = service('layanan')->getLayananById($slug);
 
         $statusCode = $result['status'] === 'success' ? 201 : 422;
@@ -89,7 +90,7 @@ class TicketController extends BaseController
         if ($result['status'] === 'success') {
             return $this->response->setStatusCode(200)->setJSON($result);
         } else {
-            return $this->response->setStatusCode(400)->setJSON($result);
+            return redirect()->back()->with('failed', 'Gagal membuat tiket.');
         }
     }
 
