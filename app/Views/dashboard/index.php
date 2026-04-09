@@ -34,7 +34,7 @@
                     </div>
                     <small>TOTAL TIKET</small>
                 </div>
-                <h1>1</h1>
+                <h1><?= $totalTiket ?></h1>
             </div>
         </div>
 
@@ -44,9 +44,13 @@
                     <div class="icon-box bg-light-warning">
                         <iconify-icon icon="mdi:clock-outline"></iconify-icon>
                     </div>
-                    <small>DALAM PROSES</small>
+                    <select name="status" id="status" class="bg-transparent border-0 text-white text-uppercase custom-small-font shadow-sm py-2 px-1" style="letter-spacing: 0.15rem;">
+                        <option value="waiting" class="text-dark">Waiting</option>
+                        <option value="open" class="text-dark">Open</option>
+                        <option value="in_progress" class="text-dark">In Progress</option>
+                    </select>
                 </div>
-                <h1>1</h1>
+                <h1><?= $onProgress ?></h1>
             </div>
         </div>
 
