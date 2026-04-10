@@ -16,31 +16,37 @@ class UserModel extends Model
 
     // ================= TIMESTAMP =================
     protected $useTimestamps = true;
-    protected $createdField  = 'created_at';
-    protected $updatedField  = 'updated_at';
+    protected $createdField = 'created_at';
+    protected $updatedField = 'updated_at';
 
     // ================= CAST =================
-    protected $casts = [
+    protected array $casts = [
         'id' => 'integer',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
 
-    // ================= HIDE PASSWORD =================
-    protected $afterFind = ['hidePassword'];
-
     protected function hidePassword(array $data)
     {
-        // single row
-        if (isset($data['data']['password'])) {
-            unset($data['data']['password']);
+        if (!isset($data['data'])) {
+            return $data;
         }
 
-        // multiple rows
-        if (isset($data['data']) && is_array($data['data'])) {
+        // single row
+        if (is_array($data['data'])) {
+            // kalau associative array (single row)
+            if (isset($data['data']['password'])) {
+                unset($data['data']['password']);
+            }
+
+            // kalau multiple rows
             foreach ($data['data'] as &$row) {
-                if (isset($row['password'])) {
+                if (is_array($row) && isset($row['password'])) {
                     unset($row['password']);
+                }
+
+                if (is_object($row) && isset($row->password)) {
+                    unset($row->password);
                 }
             }
         }
