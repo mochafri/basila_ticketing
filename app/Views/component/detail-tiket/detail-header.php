@@ -19,7 +19,7 @@
     <div class="card-body p-5 d-flex flex-column gap-4 task-desc">
         <p class="fs-5 fw-medium"><?= $detail['deskripsi_permohonan'] ?></p>
         <span class="text-uppercase custom-text">dokumen pendukung:</span>
-        <a href="<?= base_url('tiket/file/' . $detail['dokumen_lampiran']) ?>" target="_blank"
+        <a href="<?= base_url('tiket/file/users/' . $detail['dokumen_lampiran']) ?>" target="_blank"
             class="btn btn-light col-3 d-flex align-items-center gap-2 justify-content-center">
             <iconify-icon icon="fluent:document-20-regular"></iconify-icon>
             <span class="custom-small-font">

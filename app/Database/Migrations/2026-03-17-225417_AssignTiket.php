@@ -15,15 +15,20 @@ class AssignTiket extends Migration
                 'unsigned' => true,
                 'auto_increment' => true
             ],
-            'assign_task_to_kabag' => [
+            'kaur_name' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255',
                 'null' => true
             ],
-            'user_id_kabag' =>  [
+            'nip_kaur' =>  [
                 'type'  => 'INT',
                 'constraint'  =>  5,
                 'unsigned'  =>  true
+            ],
+            'flag' => [
+                'type' => 'VARCHAR',
+                'constraint' => '255',
+                'null' => true
             ],
             'fk_tiket' => [
                 'type' => 'INT',

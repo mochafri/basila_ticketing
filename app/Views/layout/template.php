@@ -28,8 +28,9 @@
     <script type="module" src="<?= base_url('assets/js/inputLayanan.js') ?>"></script>
     <script type="module" src="<?= base_url('assets/js/tambahTiket.js') ?>"></script>
     <script type="module" src="<?= base_url('assets/js/approveKaur.js') ?>"></script>
+    <script type="module" src="<?= base_url('assets/js/approveKabag.js') ?>"></script>
+    <script type="module" src="<?= base_url('assets/js/staff.js') ?>"></script>
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
 </body>
 <?= $this->renderSection('script') ?>
-
 </html>

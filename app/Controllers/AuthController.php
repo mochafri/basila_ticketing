@@ -2,17 +2,8 @@
 
 namespace App\Controllers;
 
-use App\Services\AuthService;
-
 class AuthController extends BaseController
 {
-    protected $service;
-
-    public function __construct()
-    {
-        $this->service = new AuthService();
-        helper(['form', 'url']);
-    }
     public function signIn(): string
     {
         $data = [
@@ -22,10 +13,8 @@ class AuthController extends BaseController
         return view('auth/signIn/index', $data);
     }
 
-    // ================= LOGIN PROCESS =================
     public function processSignIn()
     {
-        // VALIDATION (pengganti $request->validate)
         $rules = [
             'username' => 'required',
             'password' => 'required'
@@ -43,14 +32,13 @@ class AuthController extends BaseController
         ];
 
         try {
-            $service = $this->service->login($data);
+            $service = service('auth')->login($data);
 
-            // SESSION (pengganti session([...]))
             session()->set([
                 'roles' => $service['data_role'],
                 'token' => $service['token'],
                 'username' => $service['profile']['fullname'] ?? 'Admin',
-                'user_identifier' => $service['profile']['numberid'] ?? rand(10000000, 99999999),
+                'user_identifier' => $service['profile']['numberid'] ?? '1987654321',
                 'profilephoto' => $service['profile']['photo'] ?? null,
                 'isLoggedIn' => true
             ]);
@@ -83,8 +71,8 @@ class AuthController extends BaseController
 
     public function logout()
     {
-        session()->destroy(); // hapus semua session
-        return redirect()->to('/signin'); // arahkan ke login
+        session()->destroy(); 
+        return redirect()->to('/signin'); 
     }
 
 }

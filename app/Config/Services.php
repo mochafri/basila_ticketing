@@ -56,4 +56,22 @@ class Services extends BaseService
 
         return new \App\Services\TiketService();
     }
+
+    public static function auth($getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('auth');
+        }
+
+        return new \App\Services\AuthService();
+    }
+
+    public static function kaurstaff($getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('kaurstaff');
+        }
+
+        return new \App\Services\KaurStaffService();
+    }
 }

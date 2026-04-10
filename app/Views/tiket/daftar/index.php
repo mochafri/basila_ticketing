@@ -16,9 +16,18 @@
     </div>
     <div class="row">
         <!-- daftar tiket admin -->
-        <?= $this->include('component/daftar-tiket/daftar-admin', $tiket); ?>
+        <?php if (
+            session('role_name') === 'SUPERADMIN' ||
+            session('role_name') === 'KEPALA URUSAN ADMINISTRASI AKADEMIK' ||
+            session('role_name') === 'PEGAWAI' ||
+            session('role_name') === 'ADMIN AKADEMIK'
+        ): ?>
+            <?= $this->include('component/daftar-tiket/daftar-admin', $tiket); ?>
+        <?php endif; ?>
         <!-- daftar tiket user -->
-        <?= $this->include('component/daftar-tiket/daftar-user', $tiket); ?>
+        <?php if (session('role_name') == 'MAHASISWA'): ?>
+            <?= $this->include('component/daftar-tiket/daftar-user', $tiket); ?>
+        <?php endif; ?>
     </div>
 </div>
 <?= $this->endSection(); ?>

@@ -5,18 +5,6 @@
     <div class="row">
         <div class="col-10 mx-auto">
             <div class="card mt-4 border-0 shadow-lg rounded-4">
-                <!-- Created Tiket succesed -->
-                <?php if (session()->getFlashdata('success')): ?>
-                    <div class="alert mb-4">
-                        <div class="d-flex align-items-center gap-3">
-                            <iconify-icon icon="hugeicons:plus-sign" class="text-white btn btn-success"></iconify-icon>
-                            <p class="m-0 fw-bold custom-small-font">
-                                <?= session()->getFlashdata('success') ?>
-                            </p>
-                        </div>
-                    </div>
-                <?php endif; ?>
-
                 <!-- Tambahin aja disini 1 lagi buat gagal membuat tiket nya -->
                 <div class="card-body p-5">
                     <div class="row header mb-5">
@@ -24,9 +12,7 @@
                             <h2 class="text-uppercase fw-bold">Pengajuan Tiket Layanan</h2>
                         </div>
                     </div>
-                    <form class="row g-4 needs-validation" action="/tiket/baru" method="post"
-                        enctype="multipart/form-data" novalidate>
-                        <?= csrf_field() ?>
+                    <div class="row g-4 needs-validation">
                         <div class="col-md-12">
                             <label for="validationCustom01" class="form-label text-uppercase ">Judul permohonan</label>
                             <input type="text" name="judul" class="form-control" id="validationCustom01" value=""
@@ -89,32 +75,12 @@
                             </div>
                         </div>
                         <div class="col-12">
-                            <button class="btn btn-danger" type="submit">Submit form</button>
+                            <button class="btn btn-danger btn-submit" type="button">Submit form</button>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<?= $this->endSection() ?>
-<?= $this->section('script') ?>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const alert = document.querySelector('.alert');
-
-        if (!alert)
-            return;
-
-        // slide in
-        setTimeout(() => {
-            alert.classList.add('show')
-        }, 200);
-
-        // slide out
-        setTimeout(() => {
-            alert.classList.remove('show');
-        }, 3000);
-    });
-</script>
 <?= $this->endSection() ?>
