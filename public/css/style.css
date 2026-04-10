@@ -255,12 +255,87 @@ li a {
     .auth-left {
         display: none;
     }
+
     .auth-right {
         width: 100%;
     }
 }
 
 /* Auth End */
+
+/* Role Option Start */
+
+.role-btn {
+    background-color: #ffffff;
+    border-color: #e5e7eb !important;
+    transition: all 0.3s ease;
+}
+
+.role-icon-wrapper {
+    width: 48px;
+    height: 48px;
+    background-color: #ffe4e6;
+    color: #e11d48;
+    transition: all 0.3s ease;
+}
+
+.role-arrow {
+    color: #9ca3af;
+    transition: all 0.3s ease;
+    transform: translateX(0);
+}
+
+.role-title,
+.role-subtitle {
+    transition: all 0.3s ease;
+}
+
+.role-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(225, 29, 72, 0.15) !important;
+    border-color: #e11d48 !important;
+    background: linear-gradient(135deg, #e11d48, #be123c);
+}
+
+.role-btn:hover .role-icon-wrapper {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+}
+
+.role-btn:hover .role-title {
+    color: #ffffff !important;
+}
+
+.role-btn:hover .role-subtitle {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.role-btn:hover .role-arrow {
+    color: #ffffff;
+    transform: translateX(4px);
+}
+
+/* Role Option End */
+
+/* transition form penyelesaian start */
+
+.smooth-collapse {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 1s cubic-bezier(0.19, 1, 0.22, 1), opacity 1s cubic-bezier(0.19, 1, 0.22, 1);
+    opacity: 0;
+}
+
+.smooth-collapse.show {
+    grid-template-rows: 1fr;
+    opacity: 1;
+}
+
+.smooth-collapse-inner {
+    overflow: hidden;
+}
+
+/* transition form penyelesaian end */
 
 /* Dashboard Start*/
 

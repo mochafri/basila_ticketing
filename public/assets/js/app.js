@@ -39,27 +39,25 @@ export async function postLayanan(namaLayanan, idKategori) {
     }
 }
 
-// export async function postTiket(judul, kategori, layanan, deskripsi, dokumenLampiran) {
-//     const formData = new FormData();
+export async function postTiket(judul, kategori, layanan, deskripsi, dokumenLampiran) {
+    const formData = new FormData();
 
-//     formData.append('judul', judul);
-//     formData.append('kategori', kategori);
-//     formData.append('layanan', parseInt(layanan));
-//     formData.append('deskripsi', deskripsi);
-//     formData.append('lampiran_dokumen', dokumenLampiran);
+    formData.append('judul', judul);
+    formData.append('kategori', kategori);
+    formData.append('layanan', parseInt(layanan));
+    formData.append('deskripsi', deskripsi);
+    if(dokumenLampiran) formData.append('lampiran_dokumen', dokumenLampiran);
 
-//     const res = await fetch('/create-tiket', {
-//         method: 'POST',
-//         headers: {
-//             'X-CSRF-TOKEN': tokenCSRF
-//         },
-//         body: formData
-//     });
+    const res = await fetch('/create-tiket', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': tokenCSRF
+        },
+        body: formData
+    });
 
-//     if (res) {
-//         console.log('berhasil');
-//     }
-// }
+    return await res.json();
+}
 
 export async function getLayananById(id) {
     const res = await fetch(`/get-layanan/${id}`);
@@ -69,35 +67,123 @@ export async function getLayananById(id) {
 }
 
 export async function reject(id) {
-    await fetch(`/reject-tiket/${id}`, {
+    const res = await fetch(`/reject-tiket/${id}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'Application/json',
             'X-CSRF-TOKEN': tokenCSRF
         }
     });
+    return await res.json();
 }
 
 export async function escalated(id) {
-    await fetch(`/escalated-tiket/${id}`, {
+    const res = await fetch(`/escalated-tiket/${id}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'Application/json',
             'X-CSRF-TOKEN': tokenCSRF
         }
     });
+    return await res.json();
 }
 
 export async function approveTiket(id, userId, nama) {
-    return fetch(`/approve-tiket/${id}`, {
+    const res = await fetch(`/approve-tiket/${id}`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': tokenCSRF
         },
         body: JSON.stringify({
-            user_id: [userId], 
-            assign_to_kabag: [nama],
+            user_id: userId, 
+            assign_to_kaur: nama,
             approve: 'buk fira'
         })
     });
+    return await res.json();
+}
+
+export async function approveKaur(id) {
+    const res = await fetch(`/approve-task/${id}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': tokenCSRF
+        }
+    });
+    return await res.json();
+}
+
+export async function assignToStaff(id, instruksi, namaStaff, nipStaff) {
+    const res = await fetch(`/assign-staff/${id}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': tokenCSRF
+        },
+        body: JSON.stringify({
+            task_instruction: instruksi,
+            assign_task_to_staff: namaStaff,
+            user_id: nipStaff
+        })
+    });
+    return await res.json();
+}
+
+export async function uploadTask(id, dokumenTask, laporanTask) {
+    const formData = new FormData();
+    formData.append('laporan_task', laporanTask);
+    
+    if (dokumenTask) {
+        formData.append('dokumen_task', dokumenTask);
+    }
+
+    const res = await fetch(`/upload-task/${id}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': tokenCSRF
+        },
+        body: formData
+    });
+    return await res.json();
+}
+
+export async function verifikasiTugasTask(id) {
+    const res = await fetch(`/verifikasi-tugas/${id}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': tokenCSRF
+        }
+    });
+    return res;
+}
+
+export async function revisiTugasTask(id) {
+    const res = await fetch(`/revisi-tugas/${id}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': tokenCSRF
+        }
+    });
+    return res;
+}
+
+export async function selesaikanTugasKaur(id) {
+    const res = await fetch(`/selesaikan-tugas-kaur/${id}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': tokenCSRF
+        }
+    });
+    return await res.json();
+}
+
+export async function closeTicket(id) {
+    const res = await fetch(`/tutup-tiket/${id}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': tokenCSRF
+        }
+    });
+    return await res.json();
 }

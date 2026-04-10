@@ -13,7 +13,7 @@ class AssignTask extends Model
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'task_instruction', 'assign_task_to_staff', 'task_status', 'taks_dokumen', 'fk_assign_tiket'
+        'task_instruction', 'assign_task_to_staff', 'task_status', 'taks_dokumen', 'fk_assign_tiket', 'nip_staff', 'catatan_laporan_penyelesaian'
     ];
 
     protected bool $allowEmptyInserts = false;

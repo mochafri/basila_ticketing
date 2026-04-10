@@ -30,16 +30,22 @@ class TicketController extends BaseController
 
     public function show($slug): string
     {
+        $nip = session('user_identifier');
+
         return view('tiket/daftar/detail', [
             'title' => 'Detail Tiket',
-            'detail' => service('tiket')->showTiket($slug)
+            'detail' => service('tiket')->showTiket($slug),
+            'kaur' => service('kaurstaff')->getKaur(),
+            'staff' => service('kaurstaff')->getStaff($nip),
+            'taskStaff' => service('tiket')->getTaskStaff($slug, $nip),
+            'taskStaffOnKaur' => service('tiket')->getTaskKaurByTiket($slug),
         ]);
     }
 
     # Buat dpet akses ke file dokumen yg udh diupload
-    public function getFile($fileName)
+    public function getFileUsers($fileName)
     {
-        $fullPath = WRITEPATH . 'uploads/tiket/' . $fileName;
+        $fullPath = WRITEPATH . 'uploads/tiket/users/' . $fileName;
 
         if (!file_exists($fullPath)) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
@@ -50,6 +56,20 @@ class TicketController extends BaseController
             ->setBody(file_get_contents($fullPath));
     }
 
+    public function getFileAdmin($fileName)
+    {
+        $fullPath = WRITEPATH . 'uploads/tiket/admin/' . $fileName;
+
+        if (!file_exists($fullPath)) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        return $this->response
+            ->setHeader('Content-Type', mime_content_type($fullPath))
+            ->setBody(file_get_contents($fullPath));
+    }
+
+    # Fungsi untuk membuat tiket baru
     public function createTiket()
     {
         $data = $this->request->getPost();
@@ -65,13 +85,14 @@ class TicketController extends BaseController
 
         $result = service('tiket')->create($data, $file);
 
-        if ($result === 'success') {
-            return redirect()->back()->with('success', 'Berhasil membuat tiket.');
+        if ($result['status'] === 'success') {
+            return $this->response->setStatusCode(200)->setJSON($result);
         } else {
-            return redirect()->back()->with('success', 'Gagal membuat tiket.');
+            return $this->response->setStatusCode(400)->setJSON($result);
         }
     }
 
+    # controller buat kaur
     public function approveTiket($slug)
     {
         $data = $this->request->getJSON(true);
@@ -93,7 +114,6 @@ class TicketController extends BaseController
 
     public function rejectTiket($slug)
     {
-        log_message('info', 'PARAM SLUG: ' . $slug);
         $result = service('tiket')->rejectTiket($slug);
         $statusCode = $result['status'] === 'success' ? 201 : 422;
 
@@ -108,10 +128,19 @@ class TicketController extends BaseController
         return response()->setStatusCode($statusCode)->setJSON($result);
     }
 
-    # assign tiket to staff
+    # assign tiket to staff / controller buat kabag
+    public function approveTask($slug)
+    {
+        $user_identifier = session('user_identifier');
+        $result = service('tiket')->approveTask($slug);
+
+        $statusCode = $result['status'] === 'success' ? 201 : 422;
+        return response()->setStatusCode($statusCode)->setJSON($result);
+    }
+
     public function asssignTiket($slug)
     {
-        $data = $this->request->getPost();
+        $data = $this->request->getJSON(true);
 
         if (!$this->validateData($data, 'assignTaskRule')) {
             return $this->response
@@ -122,8 +151,63 @@ class TicketController extends BaseController
                 ]);
         }
 
-        $result = service('tiket')->assignToStaff($slug, $data);
+        $user_identifier = session('user_identifier');
+        $result = service('tiket')->assignToStaff($slug, $data, $user_identifier);
         $statusCode = $result['status'] === 'success' ? 200 : 500;
+
+        return $this->response->setStatusCode($statusCode)->setJSON($result);
+    }
+
+    public function uploadTask($slug)
+    {
+        $data = $this->request->getPost();
+        $file = $this->request->getFile('dokumen_task');
+
+        if (!$this->validateData($data, 'uploadTaskRule')) {
+            return $this->response
+                ->setStatusCode(422)
+                ->setJSON([
+                    'status' => 'failed',
+                    'message' => $this->validator->getErrors()
+                ]);
+        }
+
+        $result = service('tiket')->updateTask($slug, $data, $file);
+        $statusCode = $result['status'] === 'success' ? 200 : 500;
+
+        return $this->response->setStatusCode($statusCode)->setJSON($result);
+    }
+
+    public function verifikasiTask($taskId)
+    {
+        $result = service('tiket')->verifikasiTask($taskId);
+        $statusCode = $result['status'] === 'success' ? 200 : 500;
+
+        return $this->response->setStatusCode($statusCode)->setJSON($result);
+    }
+
+    public function revisiTask($taskId)
+    {
+        $result = service('tiket')->revisiTask($taskId);
+        $statusCode = $result['status'] === 'success' ? 200 : 500;
+
+        return $this->response->setStatusCode($statusCode)->setJSON($result);
+    }
+
+    public function selesaikanTugasKaur($slug)
+    {
+        $nipKaur = session('user_identifier');
+        $result = service('tiket')->selesaikanTugasKaur($slug, $nipKaur);
+
+        $statusCode = $result['status'] === 'success' ? 200 : 400;
+
+        return $this->response->setStatusCode($statusCode)->setJSON($result);
+    }
+
+    public function closeTicket($slug)
+    {
+        $result = service('tiket')->tutupTiket($slug);
+        $statusCode = $result['status'] === 'success' ? 200 : 400;
 
         return $this->response->setStatusCode($statusCode)->setJSON($result);
     }

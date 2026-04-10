@@ -15,6 +15,11 @@ class AssignTiketToStaff extends Migration
                 'unsigned' => true,
                 'auto_increment' => true
             ],
+            'nip_staff' => [
+                'type' => 'VARCHAR',
+                'constraint' => '255',
+                'null' => false
+            ],
             'assign_task_to_staff' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255',
@@ -27,10 +32,20 @@ class AssignTiketToStaff extends Migration
             ],
             'task_status' => [
                 'type' => 'ENUM',
-                'constraint' => ['In Progress', 'Revisi', 'Finish'],
-                'default' => 'In Progress'
+                'constraint' => ['Sedang Pengerjaan', 'Menunggu Approve', 'Revisi', 'Selesai'],
+                'default' => 'Sedang Pengerjaan'
             ],
             'taks_dokumen' => [
+                'type' => 'VARCHAR',
+                'constraint' => '255',
+                'null' => false
+            ],
+            'catatan_revisi' => [
+                'type' => 'VARCHAR',
+                'constraint' => '255',
+                'null' => false
+            ],
+            'catatan_laporan_penyelesaian' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255',
                 'null' => false

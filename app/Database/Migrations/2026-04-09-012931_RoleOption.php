@@ -4,7 +4,7 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class MappingKabag extends Migration
+class RoleOption extends Migration
 {
     public function up()
     {
@@ -14,22 +14,19 @@ class MappingKabag extends Migration
                 'unsigned' => true,
                 'auto_increment' => true
             ],
-            'nip_kaur' => [
-                'type'=> 'VARCHAR',
-                'constraint' => '255'
-            ],
-            'nama_kaur' => [
+            'role_name' => [
                 'type' => 'VARCHAR',
-                'constraint' => '255'
-            ],
+                'constraint' => '100',
+                'unique' => true
+            ]
         ]);
 
         $this->forge->addKey('id', true);
-        $this->forge->createTable('kaurs');
+        $this->forge->createTable('roles');
     }
 
     public function down()
     {
-        $this->forge->dropTable('kaurs');
+        $this->forge->dropTable('roles');
     }
 }
