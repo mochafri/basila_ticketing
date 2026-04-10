@@ -2,8 +2,8 @@
 
     <div class="container-fluid">
 
-        <iconify-icon id="sidebarToggleIcon" icon="material-symbols:arrow-back-rounded"
-            class="me-3 sidebar-toggle" style="color: white;"></iconify-icon>
+        <iconify-icon id="sidebarToggleIcon" icon="material-symbols:arrow-back-rounded" class="me-3 sidebar-toggle"
+            style="color: white;"></iconify-icon>
 
         <!-- SEARCH (Kiri) -->
         <div class="d-flex align-items-center">
@@ -24,9 +24,70 @@
                 <iconify-icon icon="material-symbols-light:language" width="20"></iconify-icon>
             </button>
 
-            <!-- User -->
-            <img src="<?= base_url('assets/images/user.png') ?>" width="35" height="35"
-                class="rounded-circle d-none d-md-block" id="logo" style="object-fit:cover;">
+            <div class="position-relative">
+
+                <!-- FOTO USER -->
+                <img src="<?= session()->get('profilephoto') ?? base_url('assets/images/user.png') ?>" width="35"
+                    height="35" class="rounded-circle d-none d-md-block" style="object-fit: cover; cursor: pointer;"
+                    id="profileToggle">
+
+                <!-- DROPDOWN -->
+                <div id="dropdownProfile" class="position-absolute end-0 mt-2 bg-white rounded shadow p-3 d-none"
+                    style="width: 250px; z-index: 999;">
+
+                    <!-- HEADER -->
+                    <div class="p-3 rounded bg-light mb-3 d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center gap-2">
+
+                            <div>
+                                <h6 class="mb-0 text-dark">
+                                    <?= session()->get('username') ?? 'Username' ?>
+                                </h6>
+                                <?= session()->get('role_name') ?? 'Role' ?>
+                            </div>
+
+                        </div>
+
+                        <button id="closeDropdown" class="btn btn-sm text-danger">
+                            ✕
+                        </button>
+                    </div>
+
+                    <!-- MENU -->
+                    <ul class="list-unstyled mb-0">
+
+                        <li>
+                            <a href="<?= site_url('profile') ?>"
+                                class="d-flex align-items-center gap-2 py-2 text-dark text-decoration-none">
+                                <iconify-icon icon="solar:user-linear"></iconify-icon>
+                                My Profile
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="<?= site_url('setting') ?>"
+                                class="d-flex align-items-center gap-2 py-2 text-dark text-decoration-none">
+                                <iconify-icon icon="icon-park-outline:setting-two"></iconify-icon>
+                                Setting
+                            </a>
+                        </li>
+
+                        <li>
+                            <form action="<?= site_url('logout') ?>" method="post">
+                                <?= csrf_field() ?>
+                                <button type="submit"
+                                    class="btn btn-link text-start w-100 p-0 py-2 text-danger d-flex align-items-center gap-2 text-decoration-none">
+                                    <iconify-icon icon="lucide:power"></iconify-icon>
+                                    Log Out
+                                </button>
+                            </form>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
 
             <!-- Sidebar Toggle (PALING KANAN) -->
             <button type="button" class="sidebar-toggle btn btn-sm btn-outline-light d-lg-none">
@@ -36,5 +97,24 @@
         </div>
 
     </div>
+
+    <script>
+        document.getElementById('profileToggle').addEventListener('click', function () {
+            document.getElementById('dropdownProfile').classList.toggle('d-none');
+        });
+
+        document.getElementById('closeDropdown').addEventListener('click', function () {
+            document.getElementById('dropdownProfile').classList.add('d-none');
+        });
+
+        document.addEventListener('click', function (e) {
+            const dropdown = document.getElementById('dropdownProfile');
+            const toggle = document.getElementById('profileToggle');
+
+            if (!toggle.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.classList.add('d-none');
+            }
+        });
+    </script>
 
 </nav>

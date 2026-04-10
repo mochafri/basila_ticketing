@@ -14,7 +14,7 @@
     <!-- Left -->
     <div class="auth-left">
         <div class="auth-left-content">
-            <img src="<?= base_url('assets/basila_images/telu.png'); ?>" width="500">
+            <img src="<?= base_url('assets/img/telu.png'); ?>" width="500">
         </div>
     </div>
 
@@ -23,7 +23,7 @@
         <div class="auth-box">
 
             <a href="<?= site_url('/'); ?>">
-                <img src="<?= base_url('assets/basila_images/basila_color.png'); ?>" width="100">
+                <img src="<?= base_url('assets/img/basila_color.png') ?>" width="140" alt="logo">
             </a>
 
             <h4>Masuk ke akun anda</h4>
@@ -55,7 +55,7 @@
                         <iconify-icon icon="solar:lock-password-outline"></iconify-icon>
                     </span>
                     <input type="password" name="password" id="password" placeholder="Password">
-                    <span class="toggle-password" data-toggle="#password">👁</span>
+                    <span class="toggle-password" data-toggle="#password"></span>
                 </div>
 
                 <!-- Forgot -->
