@@ -37,16 +37,35 @@
                 <h1>1</h1>
             </div>
         </div>
-
         <div class="col-md-3">
-            <div class="stat-card bg-warning-custom">
-                <div>
+            <div class="stat-card stat-card-progress bg-warning-custom">
+
+                <div class="progress-left">
                     <div class="icon-box bg-light-warning">
                         <iconify-icon icon="mdi:clock-outline"></iconify-icon>
                     </div>
                     <small>DALAM PROSES</small>
                 </div>
-                <h1>1</h1>
+
+                <div class="progress-center">
+                    <div class="progress-row">
+                        <span>Open</span>
+                        <strong>1</strong>
+                    </div>
+                    <div class="progress-row">
+                        <span>Waiting</span>
+                        <strong>0</strong>
+                    </div>
+                    <div class="progress-row">
+                        <span>Progress</span>
+                        <strong>0</strong>
+                    </div>
+                </div>
+
+                <div class="progress-total">
+                    <h1>1</h1>
+                </div>
+
             </div>
         </div>
 

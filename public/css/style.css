@@ -262,6 +262,66 @@ li a {
 
 /* Auth End */
 
+/* role option start */
+
+.body-role {
+    background-color: #f3f4f6;
+}
+
+.role-wrapper {
+    padding: 40px;
+}
+
+.role-card {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.role-icon {
+    width: 80px;
+    height: 80px;
+    background: #ffffff; 
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 
+        0 10px 25px rgba(0,0,0,0.08),
+        0 2px 6px rgba(0,0,0,0.05);
+}
+
+.role-icon i {
+    color: #e60042;
+    font-size: 34px;
+}
+
+.role-title {
+    font-size: 18px;
+    font-weight: 500; 
+    color: #334155;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+}
+
+.btn-pill-role {
+    border-radius: 999px;
+    padding: 6px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    background: linear-gradient(90deg, #ff2d55, #e60042);
+    color: #fff;
+    border: none;
+    box-shadow: 0 4px 10px rgba(230, 0, 66, 0.25);
+    transition: all 0.2s ease;
+}
+
+.btn-pill-role:hover {
+    background: linear-gradient(90deg, #e60042, #cc003a);
+}
+
+/* role option end */
+
 /* Dashboard Start*/
 
 .dashboard-wrapper {
@@ -301,7 +361,7 @@ li a {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     justify-content: space-between;
     align-items: center;
-    min-height: 140px;
+    height: 150px;
 }
 
 .stat-card h1 {
@@ -313,6 +373,60 @@ li a {
 .stat-card small {
     font-size: 13px;
     letter-spacing: 1px;
+}
+.stat-card-progress {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 150px;
+    gap: 20px;
+}
+
+/* LEFT */
+.progress-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.progress-left small {
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+/* CENTER */
+.progress-center {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.progress-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: white;
+}
+
+.progress-row strong {
+    font-size: 14px;
+}
+
+/* RIGHT (TOTAL) */
+.progress-total h1 {
+    font-size: 60px;
+    font-weight: 700;
+    margin: 0;
+}
+.progress-row span {
+    text-align: left;
+}
+
+.progress-row strong {
+    text-align: right;
+    min-width: 20px;
 }
 
 .bg-warning-custom {

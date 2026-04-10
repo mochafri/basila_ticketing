@@ -1,42 +1,63 @@
 <?= $this->extend('layout/auth'); ?>
-
 <?= $this->section('content'); ?>
 
-<div class="w-full max-w-4xl p-6 mx-auto">
-    <h1 class="text-xl font-semibold text-center text-gray-800 mb-6">
-        Pilih Role
-    </h1>
+<div class="container py-5">
 
-    <?php if (session()->get('roles')): ?>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    <!-- Logo -->
+    <div class="text-center mb-4">
+        <img src="<?= base_url('assets/img/basila_color.png') ?>" width="140" alt="logo">
+    </div>
 
-            <?php foreach (session()->get('roles') as $data): ?>
-                <form method="post" action="<?= site_url('role-choice'); ?>">
-                    <?= csrf_field(); ?>
+    <!-- Subtitle -->
+    <p class="text-center text-muted mb-5 subtitle-role">
+        Pilihlah user group yang terdaftar pada akun anda <br>
+        untuk menentukan hak akses pada aplikasi
+        <span class="text-danger fw-semibold">BASILA</span>
+    </p>
 
-                    <input type="hidden" name="role_name" value="<?= esc($data['role']); ?>">
-                    <input type="hidden" name="role_id" value="<?= esc($data['id']); ?>">
+    <!-- Role List -->
+    <div class="row">
+        <div class="col-md-6">
 
-                    <button type="submit"
-                        class="w-full h-24 bg-white border border-gray-200 rounded-lg p-4 
-                               hover:bg-gray-50 text-left flex items-center gap-3">
+            <?php if (session()->get('roles')): ?>
+                <?php foreach (session()->get('roles') as $data): ?>
 
-                        <div class="text-blue-500 text-xl shrink-0">👤</div>
+                    <div class="role-card mb-4">
 
-                        <p class="text-gray-800 font-medium truncate w-full">
-                            <?= esc($data['role']); ?>
-                        </p>
+                        <!-- Icon -->
+                        <div class="role-icon">
+                                <iconify-icon icon="mynaui:smile-ghost-solid" width="50" height="50"
+                                    style="color: #E60042;"></iconify-icon>
+                        </div>
 
-                    </button>
-                </form>
-            <?php endforeach; ?>
+                        <!-- Text + Button -->
+                        <div>
+                            <div class="role-title text-uppercase">
+                                <?= esc($data['role']); ?>
+                            </div>
+
+                            <form method="post" action="<?= site_url('role-choice'); ?>">
+                                <?= csrf_field(); ?>
+
+                                <input type="hidden" name="role_name" value="<?= esc($data['role']); ?>">
+                                <input type="hidden" name="role_id" value="<?= esc($data['id']); ?>">
+
+                                <button type="submit" class="btn-pill-role mt-1">
+                                    Pilih User Group
+                                </button>
+                            </form>
+                        </div>
+
+                    </div>
+
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p class="text-muted">Data role tidak ditemukan</p>
+            <?php endif; ?>
 
         </div>
-    <?php else: ?>
-        <p class="text-center text-gray-500">
-            Data role tidak ditemukan
-        </p>
-    <?php endif; ?>
+    </div>
+
 </div>
 
 <?= $this->endSection(); ?>

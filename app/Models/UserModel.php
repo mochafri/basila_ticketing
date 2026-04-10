@@ -20,11 +20,6 @@ class UserModel extends Model
     protected $updatedField  = 'updated_at';
 
     // ================= CAST =================
-    protected $casts = [
-        'id' => 'integer',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-    ];
 
     // ================= HIDE PASSWORD =================
     protected $afterFind = ['hidePassword'];

@@ -13,12 +13,12 @@ class AuthController extends BaseController
         $this->service = new AuthService();
         helper(['form', 'url']);
     }
-     public function signIn(): string
+    public function signIn(): string
     {
         $data = [
             'title' => 'SignIn',
         ];
-        
+
         return view('auth/signIn/index', $data);
     }
 
@@ -64,21 +64,27 @@ class AuthController extends BaseController
         }
     }
 
-     public function signUp(): string
+    public function signUp(): string
     {
         $data = [
             'title' => 'SignIn',
         ];
-        
+
         return view('auth/signUp/index', $data);
     }
-     public function forgotPassword(): string
+    public function forgotPassword(): string
     {
         $data = [
             'title' => 'ForgotPassword',
         ];
-        
+
         return view('auth/forgotPassword/index', $data);
+    }
+
+    public function logout()
+    {
+        session()->destroy(); // hapus semua session
+        return redirect()->to('/signin'); // arahkan ke login
     }
 
 }
