@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use CodeIgniter\HTTP\CURLRequest;
 use Config\Services;
 use App\Models\UserModel;
 
@@ -10,11 +9,13 @@ class AuthService
 {
     protected $client;
     protected $get_role;
+    protected $user;
 
     public function __construct()
     {
         $this->client = Services::curlrequest();
         $this->get_role = env('URL_OPTION_ROLE');
+        $this->user = new UserModel();
     }
 
     // ================= MAIN LOGIN =================
@@ -53,13 +54,38 @@ class AuthService
                 ]);
                 $profile = json_decode($response_profile->getBody(), true);
 
-                // GET ROLE
+                // GET ROLE DARI API
                 $response_role = $this->client->get($this->get_role, [
                     'headers' => [
                         'Authorization' => 'Bearer ' . $token
                     ]
                 ]);
-                $role = json_decode($response_role->getBody(), true);
+                $api_roles = json_decode($response_role->getBody(), true);
+                if (!is_array($api_roles)) $api_roles = [];
+
+                // GET ROLE FROM LOCAL DATABASE
+                $db = \Config\Database::connect();
+                $local_roles = $db->table('roles')->get()->getResultArray();
+
+                $local_roles_mapped = array_map(function ($r) {
+                    return [
+                        'id' => $r['id'],
+                        'role' => $r['role_name']
+                    ];
+                }, $local_roles);
+
+                // Gabungkan role API dan DB lokal
+                $merged_roles = array_merge($api_roles, $local_roles_mapped);
+
+                // Hilangkan duplikat berdasarkan ID
+                $role = [];
+                $seen_ids = [];
+                foreach ($merged_roles as $r) {
+                    if (isset($r['id']) && !in_array($r['id'], $seen_ids)) {
+                        $role[] = $r;
+                        $seen_ids[] = $r['id'];
+                    }
+                }
 
                 return [
                     'data_role' => $role,
@@ -76,44 +102,34 @@ class AuthService
     public function loginLocal(array $data)
     {
         if (ENVIRONMENT === 'development') {
-
-            $userModel = new UserModel();
-
-            $user = $userModel->where('username', $data['username'])->first();
+            $user = $this->user->where('username', $data['username'])->first();
 
             if (!$user || !password_verify($data['password'], $user['password'])) {
                 throw new \Exception('Username atau password tidak valid.');
             }
 
-            // Ambil token
-            $getToken = env('URL_TOKEN');
+            // GET ROLE FROM LOCAL DATABASE ONLY
+            $db = \Config\Database::connect();
+            $local_roles = $db->table('roles')->get()->getResultArray();
 
-            $response = $this->client->get($getToken);
-
-            if ($response->getStatusCode() == 200) {
-                $token = (string) $response->getBody();
-
-                // GET ROLE
-                $response_role = $this->client->get($this->get_role, [
-                    'headers' => [
-                        'Authorization' => 'Bearer ' . $token
-                    ]
-                ]);
-
-                $data_role = json_decode($response_role->getBody(), true);
-
+            $local_roles_mapped = array_map(function ($r) {
                 return [
-                    'data_role' => $data_role,
-                    'token' => $token,
-                    'profile' => [
-                        'fullname' => $user['username'],
-                        'numberid' => rand(10000000, 99999999),
-                        'photo' => null
-                    ]
+                    'id' => $r['id'],
+                    'role' => $r['role_name']
                 ];
-            }
+            }, $local_roles);
+
+            return [
+                'data_role' => $local_roles_mapped,
+                'token' => 'local_token_' . rand(100000, 999999), // Dummy token lokal
+                'profile' => [
+                    'fullname' => $user['username'],
+                    'numberid' => $user['nip'] ?? null,
+                    'photo' => null
+                ]
+            ];
         }
 
-        throw new \Exception('Gagal login lokal.');
+        throw new \Exception('Gagal login lokal. Pastikan file .env mode development.');
     }
 }

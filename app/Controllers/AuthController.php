@@ -2,30 +2,19 @@
 
 namespace App\Controllers;
 
-use App\Services\AuthService;
-
 class AuthController extends BaseController
 {
-    protected $service;
-
-    public function __construct()
-    {
-        $this->service = new AuthService();
-        helper(['form', 'url']);
-    }
-     public function signIn(): string
+    public function signIn(): string
     {
         $data = [
             'title' => 'SignIn',
         ];
-        
+
         return view('auth/signIn/index', $data);
     }
 
-    // ================= LOGIN PROCESS =================
     public function processSignIn()
     {
-        // VALIDATION (pengganti $request->validate)
         $rules = [
             'username' => 'required',
             'password' => 'required'
@@ -43,14 +32,13 @@ class AuthController extends BaseController
         ];
 
         try {
-            $service = $this->service->login($data);
+            $service = service('auth')->login($data);
 
-            // SESSION (pengganti session([...]))
             session()->set([
                 'roles' => $service['data_role'],
                 'token' => $service['token'],
                 'username' => $service['profile']['fullname'] ?? 'Admin',
-                'user_identifier' => $service['profile']['numberid'] ?? rand(10000000, 99999999),
+                'user_identifier' => $service['profile']['numberid'] ?? '1987654321',
                 'profilephoto' => $service['profile']['photo'] ?? null,
                 'isLoggedIn' => true
             ]);
@@ -64,21 +52,21 @@ class AuthController extends BaseController
         }
     }
 
-     public function signUp(): string
+    public function signUp(): string
     {
         $data = [
             'title' => 'SignIn',
         ];
-        
+
         return view('auth/signUp/index', $data);
     }
-     public function forgotPassword(): string
+
+    public function forgotPassword(): string
     {
         $data = [
             'title' => 'ForgotPassword',
         ];
-        
+
         return view('auth/forgotPassword/index', $data);
     }
-
 }
