@@ -42,6 +42,25 @@
     transition: transform 0.4s ease, opacity 0.3s ease;
 }
 
+.alert-custom {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fecaca;
+    color: #991b1b;
+    padding: 12px 20px;
+    border-radius: 10px;
+}
+
+.alert-error {
+    background: #fee2e2;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    color: #b91c1c;
+}
+
 /* end alert style */
 
 /* navbar style */
@@ -151,6 +170,158 @@ li a {
     color: var(--secondaryColor);
 }
 
+/* Auth Start */
+
+
+.auth-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.auth-left {
+    width: 50%;
+    background: linear-gradient(135deg, #e11d48, #7f1d1d);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-left-content img {
+    max-width: 80%;
+}
+
+.auth-right {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+}
+
+.auth-box {
+    width: 100%;
+    max-width: 400px;
+}
+
+.auth-box h4 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #777;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 12px 12px 40px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+.auth-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    cursor: pointer;
+    transform: translateY(-50%);
+}
+
+.btn-login {
+    width: 100%;
+    padding: 12px;
+    background: #e11d48;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .auth-left {
+        display: none;
+    }
+    .auth-right {
+        width: 100%;
+    }
+}
+
+/* Auth End */
+
+/* role option start */
+
+.body-role {
+    background-color: #f3f4f6;
+}
+
+.role-wrapper {
+    padding: 40px;
+}
+
+.role-card {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.role-icon {
+    width: 80px;
+    height: 80px;
+    background: #ffffff; 
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 
+        0 10px 25px rgba(0,0,0,0.08),
+        0 2px 6px rgba(0,0,0,0.05);
+}
+
+.role-icon i {
+    color: #e60042;
+    font-size: 34px;
+}
+
+.role-title {
+    font-size: 18px;
+    font-weight: 500; 
+    color: #334155;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+}
+
+.btn-pill-role {
+    border-radius: 999px;
+    padding: 6px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    background: linear-gradient(90deg, #ff2d55, #e60042);
+    color: #fff;
+    border: none;
+    box-shadow: 0 4px 10px rgba(230, 0, 66, 0.25);
+    transition: all 0.2s ease;
+}
+
+.btn-pill-role:hover {
+    background: linear-gradient(90deg, #e60042, #cc003a);
+}
+
+/* role option end */
+
 /* Dashboard Start*/
 
 .dashboard-wrapper {
@@ -190,7 +361,7 @@ li a {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     justify-content: space-between;
     align-items: center;
-    min-height: 140px;
+    height: 150px;
 }
 
 .stat-card h1 {
@@ -202,6 +373,60 @@ li a {
 .stat-card small {
     font-size: 13px;
     letter-spacing: 1px;
+}
+.stat-card-progress {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 150px;
+    gap: 20px;
+}
+
+/* LEFT */
+.progress-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.progress-left small {
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+/* CENTER */
+.progress-center {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.progress-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: white;
+}
+
+.progress-row strong {
+    font-size: 14px;
+}
+
+/* RIGHT (TOTAL) */
+.progress-total h1 {
+    font-size: 60px;
+    font-weight: 700;
+    margin: 0;
+}
+.progress-row span {
+    text-align: left;
+}
+
+.progress-row strong {
+    text-align: right;
+    min-width: 20px;
 }
 
 .bg-warning-custom {

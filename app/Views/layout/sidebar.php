@@ -10,19 +10,35 @@
     <div class="sidebar-menu-area p-3 ">
 
         <!-- IDENTITAS (Hardcode) -->
-        <div class="text-center my-4">
-            <img src="<?= base_url('assets/images/user.png') ?>" class="rounded-circle mb-3" width="120" height="120"
-                id="logo" style="object-fit:cover;">
+        <div class="text-center my-4 d-flex flex-column align-items-center gap-2">
 
-            <h5 class="text-uppercase" id="sidebar-name">John Doe</h5>
-            <small id="sidebar-nim">123456789</small>
-        </div>
+    <img src="<?= session()->get('profilephoto') ?? base_url('assets/images/user.png') ?>"
+        class="rounded-circle"
+        width="120"
+        height="120"
+        style="object-fit: cover; object-position: top;"
+        alt="profile"
+        id="logo">
+
+    <div class="w-100 d-flex flex-column align-items-center">
+        <h5 class="text-uppercase text-truncate"
+            style="max-width: 80%;"
+            id="sidebar-name">
+            <?= session()->get('username') ?? 'Username' ?>
+        </h5>
+
+        <small id="sidebar-nim">
+            <?= session()->get('nim') ?? 'NIM' ?>
+        </small>
+    </div>
+
+</div>
 
         <ul class="list-unstyled sidebar-menu mt-5">
 
             <!-- BERANDA -->
             <li class="mb-2">
-                <a href="/"
+                <a href="/dashboard"
                     class="menu-item p-2 rounded d-flex align-items-center gap-2 text-decoration-none text-dark">
                     <iconify-icon icon="hugeicons:home-09" width="20"></iconify-icon>
                     <span>Beranda</span>
