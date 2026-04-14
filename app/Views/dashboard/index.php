@@ -34,47 +34,32 @@
                     </div>
                     <small>TOTAL TIKET</small>
                 </div>
-                <h1>1</h1>
-                <h1>1</h1>
+                <h1><?= $totalTiket ?? 0 ?></h1>
             </div>
         </div>
 
         <div class="col-md-3">
-            <div class="stat-card bg-warning-custom">
-                <div>
+            <div class="stat-card bg-warning-custom stat-card-progress px-3">
+                <div class="progress-left">
                     <div class="icon-box bg-light-warning">
                         <iconify-icon icon="mdi:clock-outline"></iconify-icon>
                     </div>
-                    <select name="status" id="status"
-                        class="bg-transparent border-0 text-white text-uppercase custom-small-font shadow-sm py-2 px-1"
-                        style="letter-spacing: 0.15rem;">
-                        <option value="waiting" class="text-dark">Waiting</option>
-                        <option value="open" class="text-dark">Open</option>
-                        <option value="in_progress" class="text-dark">In Progress</option>
-                    </select>
+                    <small>DALAM PROSES</small>
                 </div>
-                <h1>1</h1>
-                <h1><?= $onProgress ?></h1>
-
                 <div class="progress-center">
                     <div class="progress-row">
                         <span>Open</span>
-                        <strong>0</strong>
+                        <strong><?= $onOpen ?? 0 ?></strong>
                     </div>
                     <div class="progress-row">
                         <span>Waiting</span>
-                        <strong>0</strong>
+                        <strong><?= $onWaiting ?? 0 ?></strong>
                     </div>
                     <div class="progress-row">
                         <span>Progress</span>
-                        <strong></strong>
+                        <strong><?= $onProgress ?? 0 ?></strong>
                     </div>
                 </div>
-
-                <div class="progress-total">
-                    <h1>0</h1>
-                </div>
-
             </div>
         </div>
 
@@ -86,8 +71,7 @@
                     </div>
                     <small>TIKET SELESAI</small>
                 </div>
-                <h1>0</h1>
-                <h1>0</h1>
+                <h1><?= $closedTiket ?? 0 ?></h1>
             </div>
         </div>
 
@@ -99,8 +83,7 @@
                     </div>
                     <small>TIKET DITOLAK</small>
                 </div>
-                <h1>0</h1>
-                <h1>0</h1>
+                <h1><?= $rejectTiket ?? 0 ?></h1>
             </div>
         </div>
     </div>

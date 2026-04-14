@@ -14,6 +14,10 @@ class DashboardController extends BaseController
             'title' => 'Dashboard',
             'totalTiket' => service('dashboard')->countTiket(),
             'onProgress' => service('dashboard')->getTiketOnProgress(),
+            'onWaiting' => service('dashboard')->getTiketOnWaiting(),
+            'onOpen' => service('dashboard')->getTiketOnOpen(),
+            'closedTiket' => service('dashboard')->getTiketClosed(),
+            'rejectTiket' => service('dashboard')->getTiketReject(),
         ]);
     }
 }
