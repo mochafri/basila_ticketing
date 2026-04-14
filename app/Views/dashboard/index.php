@@ -34,7 +34,7 @@
                     </div>
                     <small>TOTAL TIKET</small>
                 </div>
-                <h1><?= $totalTiket ?></h1>
+                <h1>1</h1>
             </div>
         </div>
 
@@ -51,6 +51,26 @@
                     </select>
                 </div>
                 <h1><?= $onProgress ?></h1>
+
+                <div class="progress-center">
+                    <div class="progress-row">
+                        <span>Open</span>
+                        <strong>0</strong>
+                    </div>
+                    <div class="progress-row">
+                        <span>Waiting</span>
+                        <strong>0</strong>
+                    </div>
+                    <div class="progress-row">
+                        <span>Progress</span>
+                        <strong></strong>
+                    </div>
+                </div>
+
+                <div class="progress-total">
+                    <h1>0</h1>
+                </div>
+
             </div>
         </div>
 

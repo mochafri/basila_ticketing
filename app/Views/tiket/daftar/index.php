@@ -2,7 +2,7 @@
 
 <?= $this->section('content'); ?>
 <div class="container-fluid p-4" id="daftar-tiket">
-    <div class="row header">
+    <div class="row header mb-5">
         <div class="col-6">
             <h2 class="text-uppercase fw-bold">Daftar Tiket Layanan</h2>
             <span>Manajemen dan pantau status seluruh permohonan aktif anda</span>

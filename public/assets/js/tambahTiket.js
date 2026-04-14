@@ -18,23 +18,53 @@ document.addEventListener('DOMContentLoaded', () => {
             const file = dokumenLampiran.files ? dokumenLampiran.files[0] : null;
 
             if (!judul || !kategori || !layanan || !deskripsi) {
-                alert("Mohon lengkapi semua isian terlebih dahulu.");
+                Swal.fire({
+                    icon: "warning",
+                    title: "Peringatan!",
+                    text: "Mohon lengkapi semua isian terlebih dahulu."
+                });
                 btnSubmit.innerHTML = 'Submit form';
                 btnSubmit.disabled = false;
                 return;
             }
 
-            const res = await postTiket(judul, kategori, layanan, deskripsi, file);
-            
-            if (res.status === 'success') {
-                alert(res.message);
-                window.location.href = '/tiket'; // Lempar ke halaman daftar tiket
-            } else {
-                alert(res.message || 'Gagal menambahkan tiket.');
-            }
-
-            btnSubmit.innerHTML = 'Submit form';
-            btnSubmit.disabled = false;
+            Swal.fire({
+                title: "Apakah Anda yakin?",
+                text: "Anda akan membuat tiket baru dengan data ini.",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya, ajukan!",
+                cancelButtonText: "Batal"
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    const res = await postTiket(judul, kategori, layanan, deskripsi, file);
+                    
+                    if (res.status === 'success') {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Berhasil!",
+                            text: res.message,
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => {
+                            window.location.href = '/tiket';
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Gagal!",
+                            text: res.message || "Gagal menambahkan tiket."
+                        });
+                        btnSubmit.innerHTML = 'Submit form';
+                        btnSubmit.disabled = false;
+                    }
+                } else {
+                    btnSubmit.innerHTML = 'Submit form';
+                    btnSubmit.disabled = false;
+                }
+            });
         });
     }
 
