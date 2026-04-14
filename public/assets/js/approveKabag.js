@@ -1,4 +1,4 @@
-import { reject, escalated, approveTiket, closeTicket } from "./app.js";
+import { reject, escalated, approveTiket, closeTicket } from "/assets/js/app.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     const segments = window.location.pathname.split('/');

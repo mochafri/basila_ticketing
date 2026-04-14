@@ -5,7 +5,7 @@ namespace App\Services;
 use \App\Models\Kaur;
 use \App\Models\Staff;
 
-class KaurStaffService
+class KaurService
 {
     protected $kaur;
     protected $staff;

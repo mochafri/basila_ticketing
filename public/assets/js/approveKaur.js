@@ -1,4 +1,4 @@
-import { approveKaur, assignToStaff, verifikasiTugasTask, revisiTugasTask, selesaikanTugasKaur } from './app.js';
+import { approveKaur, assignToStaff, verifikasiTugasTask, revisiTugasTask, selesaikanTugasKaur } from "/assets/js/app.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     const segments = window.location.pathname.split('/');

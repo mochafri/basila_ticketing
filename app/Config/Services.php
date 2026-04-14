@@ -72,6 +72,15 @@ class Services extends BaseService
             return static::getSharedInstance('kaurstaff');
         }
 
-        return new \App\Services\KaurStaffService();
+        return new \App\Services\KaurService();
+    }
+
+    public static function riwayat($getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('riwayat');
+        }
+
+        return new \App\Services\RiwayatService();
     }
 }

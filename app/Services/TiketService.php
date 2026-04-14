@@ -50,7 +50,7 @@ class TiketService
     }
 
     # Create data tiket
-    public function create(array $data, $file)
+    public function create(array $data, $file, $username)
     {
         $filePath = null;
         $originalName = null;
@@ -74,99 +74,20 @@ class TiketService
             'original_dokumen_name' => $originalName
         ]);
 
+        if ($insertData) {
+            service('riwayat')->create([
+                'activity_title' => 'Pengajuan Tiket',
+                'message' => 'Pengajuan Tiket oleh ' . $username,
+                'created_by' => $username,
+            ]);
+        }
+
         return $insertData ? [
             'status' => 'success',
             'message' => 'Berhasil menambahkan tiket'
         ] : [
             'status' => 'fail',
             'message' => 'Gagal menambahkan tiket'
-        ];
-    }
-
-    # Update data tiket approve by kabag
-    public function approveTiket(array $data, $id)
-    {
-        $db = \Config\Database::connect();
-
-        $tiket = $this->tiketModel->find($id);
-
-        if (!$tiket) {
-            return [
-                'status' => 'fail',
-                'message' => 'Tiket tidak ada'
-            ];
-        }
-
-        $db->transStart();
-
-        $this->tiketModel->update($id, [
-            'tiket_status' => 'Open',
-            'approve_by' => $data['approve']
-        ]);
-
-        foreach ($data['assign_to_kaur'] as $index => $kaur) {
-            $this->assignTiket->insert([
-                'kaur_name' => $kaur,
-                'nip_kaur' => $data['user_id'][$index] ?? null,
-                'fk_tiket' => $id
-            ]);
-        }
-
-        $db->transComplete();
-
-        return $db->transStatus() ? [
-            'status' => 'success',
-            'message' => 'Berhasil approve tiket'
-        ] : [
-            'status' => 'fail',
-            'message' => 'Gagal approve tiket'
-        ];
-    }
-
-    # Escalated service
-    public function isEscalated($id)
-    {
-        $tiket = $this->tiketModel->find($id);
-
-        if (!$tiket) {
-            return [
-                'status' => 'fail',
-                'message' => 'Tiket tidak ada'
-            ];
-        }
-
-        $update = $this->tiketModel->update($id, [
-            'is_escalated' => true
-        ]);
-
-        return [
-            'status' => $update ? 'success' : 'fail',
-            'message' => $update ? 'Tiket berhasil di-eskalasi' : 'Gagal update tiket'
-        ];
-    }
-
-    # Reject tiket
-    public function rejectTiket($id)
-    {
-        log_message('info', 'PARAM SLUG: ' . $id);
-        $tiket = $this->tiketModel->find($id);
-
-        log_message('error', 'Hasil query : ' . json_encode($tiket));
-        if (!$tiket) {
-            return [
-                'status' => 'fail',
-                'message' => 'Tiket tidak ada'
-            ];
-        }
-
-        $update = $this->tiketModel->update($id, [
-            'tiket_status' => 'Rejected',
-            // 'catatan' => $data['catatan']
-        ]);
-
-        return [
-            'status' => $update ? 'success' : 'fail',
-            'message' => $update ? 'Tiket berhasil di-reject' : 'Gagal update tiket'
         ];
     }
 
@@ -276,7 +197,7 @@ class TiketService
         return ['status' => $result ? 'success' : 'fail', 'message' => $result ? 'Berhasil upload tugas' : 'Gagal upload tugas'];
     }
 
-    public function getTaskKaurByTiket($idTiket)
+    public function getTaskKaurByTiket($idTiket, $nipKaur)
     {
         return $this->assignTaskStaff
             ->select('
@@ -289,7 +210,7 @@ class TiketService
             ->join('assign_tiket', 'assign_tiket.id = assign_to_staff.fk_assign_tiket')
             ->join('tikets', 'tikets.id = assign_tiket.fk_tiket')
             ->where('assign_tiket.fk_tiket', $idTiket)
-            // ->where('assign_tiket.nip_kaur', $nipKaur)
+            ->where('assign_tiket.nip_kaur', $nipKaur)
             ->findAll();
     }
 

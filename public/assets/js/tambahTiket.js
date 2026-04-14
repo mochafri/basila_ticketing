@@ -1,4 +1,4 @@
-import { getLayananById, postTiket } from "./app.js";
+import { getLayananById, postTiket } from "/assets/js/app.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     const layananSelect = document.querySelector('.layanan');

@@ -38,7 +38,7 @@ class TicketController extends BaseController
             'kaur' => service('kaurstaff')->getKaur(),
             'staff' => service('kaurstaff')->getStaff($nip),
             'taskStaff' => service('tiket')->getTaskStaff($slug, $nip),
-            'taskStaffOnKaur' => service('tiket')->getTaskKaurByTiket($slug),
+            'taskStaffOnKaur' => service('tiket')->getTaskKaurByTiket($slug, $nip),
         ]);
     }
 
@@ -73,6 +73,7 @@ class TicketController extends BaseController
     public function createTiket()
     {
         $data = $this->request->getPost();
+        $username = session('username');
 
         if (!$this->validateData($data, 'tiketRule')) {
             return $this->response->setStatusCode(422)->setJSON([
@@ -81,9 +82,9 @@ class TicketController extends BaseController
             ]);
         }
 
-        $file = $this->request->getFile('lampiran_dokumen');
+        $file = $this->request->getFile('lampiran_dokumen'); 
 
-        $result = service('tiket')->create($data, $file);
+        $result = service('tiket')->create($data, $file, $username);
 
         if ($result['status'] === 'success') {
             return $this->response->setStatusCode(200)->setJSON($result);
@@ -92,10 +93,11 @@ class TicketController extends BaseController
         }
     }
 
-    # controller buat kaur
+    # Controller buat kabag
     public function approveTiket($slug)
     {
         $data = $this->request->getJSON(true);
+        $role = session('role_name');
 
         if (!$this->validateData($data, 'approveRule')) {
             return $this->response
@@ -107,9 +109,18 @@ class TicketController extends BaseController
         }
 
         $result = service('tiket')->approveTiket($data, $slug);
-        $statusCode = $result['status'] === 'success' ? 200 : 500;
 
-        return $this->response->setStatusCode($statusCode)->setJSON($result);
+        if ($result['status'] === 'success') {
+            service('riwayat')->create([
+                'activity_title' => 'Approve Tiket',
+                'message' => 'Tiket sudah diterima oleh' . $role,
+                'created_by' => $role,
+            ]);
+
+            return $this->response->setStatusCode(200)->setJSON($result);
+        } else {
+            return $this->response->setStatusCode(400)->setJSON($result);
+        }
     }
 
     public function rejectTiket($slug)
@@ -128,7 +139,7 @@ class TicketController extends BaseController
         return response()->setStatusCode($statusCode)->setJSON($result);
     }
 
-    # assign tiket to staff / controller buat kabag
+    # Controller buat kaur
     public function approveTask($slug)
     {
         $user_identifier = session('user_identifier');
@@ -158,6 +169,7 @@ class TicketController extends BaseController
         return $this->response->setStatusCode($statusCode)->setJSON($result);
     }
 
+    # Controller buat staff
     public function uploadTask($slug)
     {
         $data = $this->request->getPost();
