@@ -9,13 +9,13 @@ use App\Models\AssignTask;
 class TiketService
 {
     protected $tiketModel;
-    protected $assignTiketModel;
+    protected $assignTiket;
     protected $assignTaskStaff;
 
     public function __construct()
     {
         $this->tiketModel = new Tiket();
-        $this->assignTiketModel = new AssignTiket();
+        $this->assignTiket = new AssignTiket();
         $this->assignTaskStaff = new AssignTask();
     }
 
@@ -59,7 +59,7 @@ class TiketService
             $newName = $file->getRandomName();
             $originalName = $file->getClientName();
 
-            $uploadPath = WRITEPATH . 'uploads/tiket/';
+            $uploadPath = WRITEPATH . 'uploads/tiket/users/';
             $file->move($uploadPath, $newName);
 
             $filePath = $newName;
@@ -83,7 +83,7 @@ class TiketService
         ];
     }
 
-    # Update data tiket approve by kaur
+    # Update data tiket approve by kabag
     public function approveTiket(array $data, $id)
     {
         $db = \Config\Database::connect();
@@ -104,10 +104,10 @@ class TiketService
             'approve_by' => $data['approve']
         ]);
 
-        foreach ($data['assign_to_kabag'] as $index => $kabag) {
-            $this->assignTiketModel->insert([
-                'assign_task_to_kabag' => $kabag,
-                'user_id_kabag' => $data['user_id'][$index] ?? null,
+        foreach ($data['assign_to_kaur'] as $index => $kaur) {
+            $this->assignTiket->insert([
+                'kaur_name' => $kaur,
+                'nip_kaur' => $data['user_id'][$index] ?? null,
                 'fk_tiket' => $id
             ]);
         }
@@ -123,6 +123,7 @@ class TiketService
         ];
     }
 
+    # Escalated service
     public function isEscalated($id)
     {
         $tiket = $this->tiketModel->find($id);
@@ -144,6 +145,7 @@ class TiketService
         ];
     }
 
+    # Reject tiket
     public function rejectTiket($id)
     {
         log_message('info', 'PARAM SLUG: ' . $id);
@@ -168,22 +170,49 @@ class TiketService
         ];
     }
 
-    # Update data tiket approve by kabag to staff
-    public function assignToStaff($id, array $data)
+    # Kaur service
+    public function approveTask($idTiket)
+    {
+        $kaur = $this->assignTiket
+            ->where('fk_tiket', $idTiket)
+            ->where('nip_kaur', '1987654321')
+            ->first();
+
+        if (!$kaur) {
+            return [
+                'status' => 'fail',
+                'message' => 'User tidak ditemukan'
+            ];
+        }
+
+        $this->assignTiket->update($kaur['id'], [
+            'flag' => 'Approve'
+        ]);
+
+        return [
+            'status' => 'success',
+            'message' => 'Berhasil menerima tugas'
+        ];
+    }
+
+    public function assignToStaff($id, array $data, $user_identifier)
     {
         $db = \Config\Database::connect();
 
-        $idTiket = $this->assignTiketModel->select('fk_tiket')->find($id);
+        $idTiket = $this->assignTiket->select('id,fk_tiket')->where('fk_tiket', $id)->first();
 
         $db->transStart();
 
-        $this->assignTaskStaff->insert([
-            'task_instruction' => $data['task_instruction'],
-            'assign_task_to_staff' => $data['assign_task_to_staff'],
-            'fk_assign_tiket' => $id
-        ]);
+        foreach ($data['assign_task_to_staff'] as $index => $staffName) {
+            $this->assignTaskStaff->insert([
+                'task_instruction' => $data['task_instruction'],
+                'assign_task_to_staff' => $staffName,
+                'nip_staff' => $data['user_id'][$index] ?? null,
+                'fk_assign_tiket' => $idTiket['id']
+            ]);
+        }
 
-        $this->tiketModel->update($idTiket ,[
+        $this->tiketModel->update($idTiket['fk_tiket'], [
             'tiket_status' => 'In Progress'
         ]);
 
@@ -199,6 +228,190 @@ class TiketService
         return [
             'status' => 'success',
             'message' => 'Berhasil assign ke staff'
+        ];
+    }
+
+    public function getTaskStaff($id, $nip)
+    {
+        $getID = $this->assignTiket->where('fk_tiket', $id)->first();
+
+        if (!isset($getID)) {
+            return null;
+        }
+
+        $data = $this->assignTaskStaff
+            ->where('fk_assign_tiket', $getID['id'])
+            ->where('nip_staff', $nip)
+            ->first();
+
+        return $data ?? null;
+    }
+
+    public function updateTask($id, array $data, $file, $nip)
+    {
+        $staffData = $this->assignTaskStaff
+            ->select('assign_to_staff.id, assign_to_staff.nip_staff')
+            ->join('assign_tiket', 'assign_tiket.id = assign_to_staff.fk_assign_tiket')
+            ->where('assign_tiket.fk_tiket', $id)
+            ->where('assign_to_staff.nip_staff', $nip)
+            ->first();
+
+        if (!$staffData)
+            return [
+                'status' => 'fail',
+                'message' => 'Data penugasan staff tidak ditemukan'
+            ];
+
+        $updateData = [
+            'task_status' => 'Menunggu Approve',
+            'catatan_laporan_penyelesaian' => $data['laporan_task']
+        ];
+
+        if ($file && $file->isValid() && !$file->hasMoved()) {
+            $updateData['taks_dokumen'] = $file->getRandomName();
+            $file->move(WRITEPATH . 'uploads/tiket/admin/', $updateData['taks_dokumen']);
+        }
+
+        $result = $this->assignTaskStaff
+            ->update($staffData['id'], $updateData);
+
+        return ['status' => $result ? 'success' : 'fail', 'message' => $result ? 'Berhasil upload tugas' : 'Gagal upload tugas'];
+    }
+
+    public function getStatistikTiket()
+    {
+        return [
+            'total' => $this->tiketModel->countAll(),
+
+            'open' => $this->tiketModel
+                ->where('tiket_status', 'Open')
+                ->countAllResults(true),
+
+            'waiting' => $this->tiketModel
+                ->where('tiket_status', 'Waiting')
+                ->countAllResults(true),
+
+            'progress' => $this->tiketModel
+                ->where('tiket_status', 'In Progress')
+                ->countAllResults(true),
+
+            'done' => $this->tiketModel
+                ->where('tiket_status', 'Closed')
+                ->countAllResults(true),
+
+            'reject' => $this->tiketModel
+                ->where('tiket_status', 'Rejected')
+                ->countAllResults(true),
+        ];
+    }
+
+    public function getTaskKaurByTiket($idTiket, $nipKaur)
+    {
+        return $this->assignTaskStaff
+            ->select('
+                assign_to_staff.id, assign_to_staff.task_instruction, assign_to_staff.task_status, 
+                assign_to_staff.taks_dokumen, assign_to_staff.catatan_laporan_penyelesaian,
+                assign_to_staff.assign_task_to_staff, assign_to_staff.nip_staff,
+                assign_tiket.kaur_name, assign_tiket.fk_tiket as id_tiket,
+                tikets.judul_permohonan, tikets.tiket_status
+            ')
+            ->join('assign_tiket', 'assign_tiket.id = assign_to_staff.fk_assign_tiket')
+            ->join('tikets', 'tikets.id = assign_tiket.fk_tiket')
+            ->where('assign_tiket.fk_tiket', $idTiket)
+            ->where('assign_tiket.nip_kaur', $nipKaur)
+            ->findAll();
+    }
+
+    public function verifikasiTask($taskId)
+    {
+        $update = $this->assignTaskStaff->update($taskId, [
+            'task_status' => 'Selesai'
+        ]);
+
+        return [
+            'status' => $update ? 'success' : 'fail',
+            'message' => $update ? 'Berhasil memverifikasi tugas.' : 'Gagal memverifikasi tugas.'
+        ];
+    }
+
+    public function revisiTask($taskId)
+    {
+        $update = $this->assignTaskStaff->update($taskId, [
+            'task_status' => 'Revisi'
+        ]);
+
+        return [
+            'status' => $update ? 'success' : 'fail',
+            'message' => $update ? 'Berhasil mengembalikan tugas untuk direvisi.' : 'Gagal mengembalikan tugas untuk direvisi.'
+        ];
+    }
+
+    public function selesaikanTugasKaur($idTiket, $nipKaur)
+    {
+        $db = \Config\Database::connect();
+
+        $assignTiket = $this->assignTiket
+            ->where('fk_tiket', $idTiket)
+            ->where('nip_kaur', $nipKaur)
+            ->first();
+
+        if (!$assignTiket) {
+            return [
+                'status' => 'fail',
+                'message' => 'Data penugasan tidak ditemukan.'
+            ];
+        }
+
+        $staffTasks = $this->assignTaskStaff
+            ->where('fk_assign_tiket', $assignTiket['id'])
+            ->findAll();
+
+        if (empty($staffTasks)) {
+            return [
+                'status' => 'fail',
+                'message' => 'Belum ada staf yang ditugaskan.'
+            ];
+        }
+
+        foreach ($staffTasks as $task) {
+            if ($task['task_status'] !== 'Selesai') {
+                return [
+                    'status' => 'fail',
+                    'message' => 'Masih ada pekerjaan staf yang belum selesai. Mohon verifikasi seluruh pekerjaan staf terlebih dahulu.'
+                ];
+            }
+        }
+
+        $db->transStart();
+
+        $this->assignTiket->update($assignTiket['id'], [
+            'flag' => 'Selesai'
+        ]);
+
+        $db->transComplete();
+
+        if ($db->transStatus() === false) {
+            return [
+                'status' => 'fail',
+                'message' => 'Gagal menyelesaikan penugasan tiket.'
+            ];
+        }
+
+        return [
+            'status' => 'success',
+            'message' => 'Berhasil menyelesaikan penugasan tiket.'
+        ];
+    }
+
+    public function tutupTiket($id)
+    {
+        $this->tiketModel->update($id, [
+            'tiket_status' => 'Closed'
+        ]);
+
+        return [
+            'status' => 'success',
+            'message' => 'Tiket telah ditutup dan dinyatakan Selesai'
         ];
     }
 }

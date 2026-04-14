@@ -13,8 +13,9 @@ class AssignTiket extends Model
     protected $useSoftDeletes = false;
     protected $protectFields = true;
     protected $allowedFields = [
-        'assign_task_to_kabag',
-        'user_id_kabag',
+        'kaur_name',
+        'nip_kaur',
+        'flag',
         'fk_tiket'
     ];
 

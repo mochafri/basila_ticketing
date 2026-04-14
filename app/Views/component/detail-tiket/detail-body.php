@@ -7,19 +7,44 @@
         <!-- status 1 -->
         <?= $this->include('component/detail-tiket/ticket_created'); ?>
         <!-- status 2 -->
-        <p>-------------------------------komponen bu fira (approval_kabag.php)--------------------------</p>
-        <?= $this->include('component/detail-tiket/approval_kabag'); ?>
-        <p>-------------------------------end komponen bu fira-----------</p>
+        <!-- <p>-------------------------------komponen bu fira (approval_kabag.php)--------------------------</p> -->
+        <?php if (session('role_name') === 'SUPERADMIN'): ?>
+            <?= $this->include('component/detail-tiket/approval_kabag', [
+                'kaur' => $kaur
+            ]); ?>
+        <?php endif; ?>
+        <!-- <p>-------------------------------end komponen bu fira-----------</p> -->
         <!-- status 3 -->
-         <p>-------------------------------komponen pak bagas/bu farida (approval_kaur.php)--------------------------</p>
-        <?= $this->include('component/detail-tiket/approval_kaur'); ?>
-        <p>-------------------------------end komponen pak bagas/bu farida-----------</p>
+        <!-- <p>-------------------------------komponen pak bagas/bu farida (approval_kaur.php)--------------------------</p> -->
+        <?php if (session('role_name') === 'KEPALA URUSAN ADMINISTRASI AKADEMIK'): ?>
+            <?= $this->include('component/detail-tiket/approval_kaur', [
+                'staff' => $staff,
+                'taskStaffOnKaur' => $taskStaffOnKaur
+            ]); ?>
+        <?php endif; ?>
+        <!-- <p>-------------------------------end komponen pak bagas/bu farida-----------</p> -->
         <!-- status 4 / staff-->
-         <p>-------------------------------komponen staff (submission_staff.php)--------------------------</p>
-        <?= $this->include('component/detail-tiket/submission_staff'); ?>
-        <p>-------------------------------end komponen staff-----------</p>
+        <!-- <p>-------------------------------komponen staff (submission_staff.php)--------------------------</p> -->
+        <?php if (session('role_name') === 'PEGAWAI' || session('role_name') === 'ADMIN AKADEMIK'): ?>
+            <?= $this->include('component/detail-tiket/submission_staff', [
+                'taskStaff' => $taskStaff
+            ]); ?>
+        <?php endif; ?>
+        <!-- <p>-------------------------------end komponen staff-----------</p> -->
         <div class="d-flex align-items-center gap-3">
-            <iconify-icon icon="ic:round-done-all" class=" btn btn-light shadow-sm md "></iconify-icon>
+            <iconify-icon icon="<?=
+                $detail['tiket_status'] === 'Closed'
+                ? 'ph:check-bold'
+                : 'hugeicons:plus-sign'
+                ?>" class="btn h-25 <?=
+                $detail['tiket_status'] === 'Closed'
+                ? 'btn-success text-white'      // hijau
+                : (in_array($detail['tiket_status'], ['Open', 'In Progress'])
+                    ? 'btn-danger text-white'   // merah
+                    : 'btn-light'               // abu
+                )
+                ?>">
+            </iconify-icon>
             <p class="m-0 fw-bold custom-small-font">Konfirmasi penyelesaian (final)</p>
         </div>
     </div>

@@ -29,7 +29,7 @@ class RoleOptionController extends BaseController
             'role_id' => $roleId,
             'role_name' => $roleName
         ]);
-
+        
         return redirect()->to('/dashboard');
     }
 }

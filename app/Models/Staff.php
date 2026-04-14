@@ -4,17 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class AssignTask extends Model
+class Staff extends Model
 {
-    protected $table            = 'assign_to_staff';
+    protected $table            = 'staffs';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [
-        'task_instruction', 'assign_task_to_staff', 'task_status', 'taks_dokumen', 'fk_assign_tiket', 'nip_staff', 'catatan_laporan_penyelesaian'
-    ];
+    protected $allowedFields    = ['nip_staff', 'nama_staff', 'kaur_id'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

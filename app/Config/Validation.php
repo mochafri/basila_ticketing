@@ -61,12 +61,12 @@ class Validation extends BaseConfig
             'label' => 'Approve Oleh',
             'rules' => 'required|string|max_length[100]'
         ],
-        'assign_to_kabag' => [
-            'label' => 'Assign Kabag',
+        'assign_to_kaur' => [
+            'label' => 'Assign Kaur',
             'rules' => 'required'
         ],
-        'assign_to_kabag.*' => [
-            'label' => 'Kabag',
+        'assign_to_kaur.*' => [
+            'label' => 'Kaur',
             'rules' => 'required|string|max_length[100]'
         ],
         'user_id.*' => [
@@ -80,10 +80,14 @@ class Validation extends BaseConfig
             'label' => 'Instruksi Tugas',
             'rules' => 'required|string|min_length[3]'
         ],
-        'assign_task_to_staff' => [
+        'assign_task_to_staff.*' => [
             'label' => 'Staff',
             'rules' => 'required|string'
         ],
+        'user_id.*' => [
+            'label' => 'User ID',
+            'rules' => 'required|integer'
+        ]
     ];
 
     public array $tiketRule = [
@@ -107,6 +111,17 @@ class Validation extends BaseConfig
             'label' => 'Lampiran',
             'rules' => 'permit_empty|mime_in[lampiran_dokumen,image/png,image/jpeg,application/pdf]|max_size[lampiran_dokumen,10240]'
         ]
+    ];
+
+    public array $uploadTaskRule = [
+        'dokumen_task' => [
+            'label' => 'File Task',
+            'rules' => 'permit_empty|mime_in[file_task,image/png,image/jpeg,application/pdf]|max_size[file_task,10240]'
+        ],
+        'laporan_task'=> [
+            'label' => 'Laporan Task',
+            'rules' => 'required|string|min_length[5]'
+        ],
     ];
 
     // --------------------------------------------------------------------
