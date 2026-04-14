@@ -255,7 +255,7 @@ class TiketService
             ->where('assign_tiket.fk_tiket', $id)
             ->where('assign_to_staff.nip_staff', $nip)
             ->first();
-      
+
         if (!$staffData)
             return [
                 'status' => 'fail',
@@ -273,12 +273,39 @@ class TiketService
         }
 
         $result = $this->assignTaskStaff
-            ->update($staffData['id'] , $updateData);
+            ->update($staffData['id'], $updateData);
 
         return ['status' => $result ? 'success' : 'fail', 'message' => $result ? 'Berhasil upload tugas' : 'Gagal upload tugas'];
     }
 
-    public function getTaskKaurByTiket($idTiket)
+    public function getStatistikTiket()
+    {
+        return [
+            'total' => $this->tiketModel->countAll(),
+
+            'open' => $this->tiketModel
+                ->where('tiket_status', 'Open')
+                ->countAllResults(true),
+
+            'waiting' => $this->tiketModel
+                ->where('tiket_status', 'Waiting')
+                ->countAllResults(true),
+
+            'progress' => $this->tiketModel
+                ->where('tiket_status', 'In Progress')
+                ->countAllResults(true),
+
+            'done' => $this->tiketModel
+                ->where('tiket_status', 'Closed')
+                ->countAllResults(true),
+
+            'reject' => $this->tiketModel
+                ->where('tiket_status', 'Rejected')
+                ->countAllResults(true),
+        ];
+    }
+
+    public function getTaskKaurByTiket($idTiket, $nipKaur)
     {
         return $this->assignTaskStaff
             ->select('
@@ -291,7 +318,7 @@ class TiketService
             ->join('assign_tiket', 'assign_tiket.id = assign_to_staff.fk_assign_tiket')
             ->join('tikets', 'tikets.id = assign_tiket.fk_tiket')
             ->where('assign_tiket.fk_tiket', $idTiket)
-            // ->where('assign_tiket.nip_kaur', $nipKaur)
+            ->where('assign_tiket.nip_kaur', $nipKaur)
             ->findAll();
     }
 

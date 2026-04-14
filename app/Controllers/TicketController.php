@@ -38,7 +38,7 @@ class TicketController extends BaseController
             'kaur' => service('kaurstaff')->getKaur(),
             'staff' => service('kaurstaff')->getStaff($nip),
             'taskStaff' => service('tiket')->getTaskStaff($slug, $nip),
-            'taskStaffOnKaur' => service('tiket')->getTaskKaurByTiket($slug),
+            'taskStaffOnKaur' => service('tiket')->getTaskKaurByTiket($slug, $nip),
         ]);
     }
 
