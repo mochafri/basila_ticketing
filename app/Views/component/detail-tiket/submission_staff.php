@@ -72,8 +72,8 @@
     </div>
 </div>
 <div class="d-flex align-items-center gap-3">
-    <iconify-icon icon="ic:round-check" class="text-white btn btn-success "></iconify-icon>
-    <p class="m-0 fw-bold custom-small-font">approval kepala urusan (bu fira)</p>
+    <iconify-icon icon="<?php if ($detail['tiket_status'] === 'In Progress'): ?>streamline-ultimate:task-list-approve<?php else: ?>ic:round-check<?php endif; ?>" class="text-white <?php if ($detail['tiket_status'] === 'In Progress'): ?>btn btn-secondary<?php else: ?>btn btn-success<?php endif; ?> "></iconify-icon>
+    <p class="m-0 fw-bold custom-small-font">approval kepala urusan (pak bagas)</p>
 </div>
 
 <script>

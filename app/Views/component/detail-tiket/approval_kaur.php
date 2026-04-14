@@ -1,30 +1,23 @@
+<div class="d-flex align-items-center gap-3">
+    <iconify-icon icon="<?php if ($detail['tiket_status'] === 'Waiting'): ?>streamline-ultimate:task-list-approve<?php else: ?>ic:round-check<?php endif; ?>" class="text-white <?php if ($detail['tiket_status'] === 'Waiting'): ?> btn btn-secondary <?php else: ?> btn btn-success <?php endif; ?> "></iconify-icon>
+    <p class="m-0 fw-bold custom-small-font">approval kepala urusan (bu fira)</p>
+</div>
+<?php 
+            // Cek apakah ada staff dan SEMUA task_status-nya 'Selesai'
+            $semuaSelesai = !empty($taskStaffOnKaur) && count(array_filter($taskStaffOnKaur, fn($task) => $task['task_status'] !== 'Selesai')) === 0;
+        ?>
 <div class="d-flex gap-3 w-100">
-    <iconify-icon 
-    icon="<?=
-        $detail['tiket_status'] === 'Closed'
-            ? 'ph:check-bold'
-            : 'hugeicons:plus-sign'
-    ?>"
-    class="btn h-25 <?=
-        $detail['tiket_status'] === 'Closed'
-            ? 'btn-success text-white'      
-            : (in_array($detail['tiket_status'], ['Open', 'In Progress'])
-                ? 'btn-danger text-white'   
-                : 'btn-light'              
-            )
-    ?>">
-</iconify-icon>
-
+    <iconify-icon icon="<?= $semuaSelesai ? 'ph:check-bold' : 'hugeicons:plus-sign'?>" class="btn h-25 <?=$semuaSelesai ? 'btn-success text-white' : (in_array($detail['tiket_status'], ['Open', 'In Progress']) ? 'btn-danger text-white' : 'btn-light' )?>"></iconify-icon>
+    
     <div class="flex-grow-1">
+        
         <p class="m-0 fw-bold custom-small-font">Penugasan: pak bagas</p>
         <?php if ($detail['tiket_status'] === 'Open'): ?>
-            <button
-                class="btn btn-approve-kaur btn-danger rounded-3 w-100 mt-2 text-uppercase fw-bold custom-small-font py-3"
-                style="letter-spacing: 3px;">terima & mulai penugasan</button>
+            <button class="btn btn-approve-kaur btn-danger rounded-3 w-100 mt-2 text-uppercase fw-bold custom-small-font py-3" style="letter-spacing: 3px;">terima & mulai penugasan</button>
         <?php endif; ?>
         <!-- akan aktif kalau button sudah di klik -->
-        <div class="delegasi-wrapper" 
-     style="<?= in_array($detail['tiket_status'], [ 'In Progress']) ? 'display:block;' : 'display:none;' ?>">
+        <div class="delegasi-wrapper <?= $semuaSelesai ? 'd-none' : '' ?>" 
+             style="<?= in_array($detail['tiket_status'], ['In Progress']) ? 'display:block;' : 'display:none;' ?>">
             <?php if (in_array($detail['tiket_status'], ['Open', 'In Progress'])): ?>
                 <div class="p-4 bg-light rounded-3 w-100 d-flex gap-3 flex-column shadow-md mt-2 border">
                     <p class="m-0 fw-medium custom-text">delegasi penugasan staff</p>
@@ -117,3 +110,11 @@
         </div>
     </div>
 </div>
+<?php if (in_array($detail['tiket_status'], ['Waiting', 'Open', 'In Progress', 'Closed'])): ?>
+    <div class="d-flex align-items-center gap-3">
+        <iconify-icon icon="ph:flow-arrow" class="btn text-white <?= $detail['tiket_status'] === 'Closed' ? 'btn-success' : ($semuaSelesai ? 'btn-danger' : 'btn-secondary') ?>"></iconify-icon>
+        <div class="flex-grow-1 gap-2 d-flex flex-column">
+            <p class="m-0 fw-bold custom-small-font">konfirmasi penyelesaian</p>
+        </div>
+    </div>
+<?php endif; ?>

@@ -187,3 +187,17 @@ export async function closeTicket(id) {
     });
     return await res.json();
 }
+
+export async function editInstructionTask(id, instruction) {
+    const res = await fetch(`/edit-instruction/${id}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': tokenCSRF
+        },
+        body: JSON.stringify({
+            instruction: instruction
+        })
+    });
+    return await res.json();
+}

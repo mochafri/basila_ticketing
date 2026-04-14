@@ -22,6 +22,7 @@ class TicketController extends BaseController
 
     public function getLayananByID($slug)
     {
+        log_message('info', 'PARAM SLUG: ' . $slug);
         $result = service('layanan')->getLayananById($slug);
 
         $statusCode = $result['status'] === 'success' ? 201 : 422;
@@ -39,6 +40,7 @@ class TicketController extends BaseController
             'staff' => service('kaurstaff')->getStaff($nip),
             'taskStaff' => service('tiket')->getTaskStaff($slug, $nip),
             'taskStaffOnKaur' => service('tiket')->getTaskKaurByTiket($slug, $nip),
+            'kaurByTiketOpen' => service('tiket')->getKaurByTiketOpen($slug),
         ]);
     }
 
@@ -132,7 +134,7 @@ class TicketController extends BaseController
     public function approveTask($slug)
     {
         $user_identifier = session('user_identifier');
-        $result = service('tiket')->approveTask($slug);
+        $result = service('tiket')->approveTask($slug, $user_identifier);
 
         $statusCode = $result['status'] === 'success' ? 201 : 422;
         return response()->setStatusCode($statusCode)->setJSON($result);
@@ -209,6 +211,23 @@ class TicketController extends BaseController
     {
         $result = service('tiket')->tutupTiket($slug);
         $statusCode = $result['status'] === 'success' ? 200 : 400;
+
+        return $this->response->setStatusCode($statusCode)->setJSON($result);
+    }
+    public function updateTaskInstruction($taskId)
+    {
+        $data = $this->request->getJSON(true);
+        $instruction = $data['instruction'] ?? '';
+
+        if (empty($instruction)) {
+            return $this->response->setStatusCode(400)->setJSON([
+                'status' => 'fail',
+                'message' => 'Instruksi tidak boleh kosong'
+            ]);
+        }
+
+        $result = service('tiket')->updateInstruction($taskId, $instruction);
+        $statusCode = $result['status'] === 'success' ? 200 : 500;
 
         return $this->response->setStatusCode($statusCode)->setJSON($result);
     }

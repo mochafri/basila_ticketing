@@ -123,6 +123,16 @@ class TiketService
         ];
     }
 
+    public function getKaurByTiketOpen($id)
+    {
+        return $this->assignTiket
+            ->select('assign_tiket.*')
+            ->join('tikets', 'tikets.id = assign_tiket.fk_tiket')
+            ->where('assign_tiket.fk_tiket', $id)
+            ->whereIn('tikets.tiket_status', ['Open', 'In Progress', 'Closed'])
+            ->findAll();
+    }
+
     # Escalated service
     public function isEscalated($id)
     {
@@ -171,11 +181,11 @@ class TiketService
     }
 
     # Kaur service
-    public function approveTask($idTiket)
+    public function approveTask($idTiket, $nip)
     {
         $kaur = $this->assignTiket
             ->where('fk_tiket', $idTiket)
-            ->where('nip_kaur', '1987654321')
+            ->where('nip_kaur', $nip)
             ->first();
 
         if (!$kaur) {

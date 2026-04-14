@@ -33,4 +33,17 @@ class KategoriService
             'message' => 'Kategori gagal dibuat'
         ];
     }
+
+    public function delete($id)
+    {
+        $deleteData = $this->kategoriModel->delete($id);
+
+        return $deleteData ? [
+            'status' => 'success',
+            'message' => 'Kategori berhasil dihapus'
+        ] : [
+            'status' => 'fail',
+            'message' => 'Kategori gagal dihapus'
+        ];
+    }
 }

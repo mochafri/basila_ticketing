@@ -6,6 +6,16 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 
+$routes->get('/', 'DashboardController::index');
+$routes->get('tiket', 'TicketController::index');
+$routes->get('tiket/create', 'TicketController::create');
+$routes->get('tiket/(:num)', 'TicketController::show/$1');
+$routes->get('/user', 'MasterDataController::user');
+$routes->get('/kategori', 'MasterDataController::kategori');
+$routes->post('/create-kategori', 'MasterDataController::createKategori');
+$routes->post('/create-layanan', 'MasterDataController::createLayanan');
+$routes->get('/get-layanan/(:num)', 'TicketController::getLayananByID/$1');
+$routes->delete('master-data/delete-kategori/(:num)', 'MasterDataController::deleteKategori/$1');
 $routes->get('/dashboard', 'DashboardController::index');
 $routes->get('tiket', 'TicketController::index');
 $routes->get('tiket/create', 'TicketController::create');
@@ -52,6 +62,7 @@ $routes->post('/tutup-tiket/(:num)', 'TicketController::closeTicket/$1');
 # Assign task ke staff
 $routes->post('/approve-task/(:num)', 'TicketController::approveTask/$1');
 $routes->post('/assign-staff/(:num)', 'TicketController::asssignTiket/$1');
+$routes->post('/edit-instruction/(:num)', 'TicketController::updateTaskInstruction/$1');
 $routes->post('/upload-task/(:num)', 'TicketController::uploadTask/$1');
 $routes->post('/verifikasi-tugas/(:num)', 'TicketController::verifikasiTask/$1');
 $routes->post('/revisi-tugas/(:num)', 'TicketController::revisiTask/$1');
