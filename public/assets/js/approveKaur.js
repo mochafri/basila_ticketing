@@ -1,4 +1,4 @@
-import { approveKaur, assignToStaff, verifikasiTugasTask, revisiTugasTask, selesaikanTugasKaur } from './app.js';
+import { approveKaur, assignToStaff, verifikasiTugasTask, revisiTugasTask, selesaikanTugasKaur, editInstructionTask } from './app.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     const segments = window.location.pathname.split('/');
@@ -14,14 +14,13 @@ if (btnApproveKaur) {
 
         const res = await approveKaur(parseSlug);
 
-        alert(res.message || 'Penugasan berhasil diterima');
-
         if (res.status === 'success') {
             btnApproveKaur.style.display = 'none';
 
             if (formDelegasi) formDelegasi.style.display = 'block';
             if (btnSelesai) btnSelesai.style.display = 'block';
         } else {
+            console.error(res.message || 'Gagal menerima penugasan');
             btnApproveKaur.disabled = false;
             btnApproveKaur.innerHTML = 'Terima & Mulai Penugasan';
         }
@@ -41,7 +40,11 @@ if (btnApproveKaur) {
             const instruksi = document.querySelector('.instruksi').value;
 
             if (selected.length === 0) {
-                alert('Pilih staff dulu');
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Peringatan!',
+                    text: 'Pilih staff dulu'
+                });
                 return;
             }
 
@@ -60,34 +63,143 @@ if (btnApproveKaur) {
                 namaStaff.push(staff);
             });
 
-            const res = await assignToStaff(parseSlug, instruksi, namaStaff, nipStaff);
-            alert(res.message || 'Berhasil memberikan tugas ke staf terkait');
-            // location.reload();
+            Swal.fire({
+                title: "Apakah Anda yakin?",
+                text: "Menugaskan staf dengan instruksi tersebut?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya, tugaskan!",
+                cancelButtonText: "Batal"
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    const res = await assignToStaff(parseSlug, instruksi, namaStaff, nipStaff);
+                    if (res.status === 'success' || res.status === 200) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: res.message || 'Berhasil memberikan tugas ke staf terkait',
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+                        // Optional: Clear selection or refresh element manually
+                        btnAssignStaff.innerHTML = '+';
+                        btnAssignStaff.disabled = false;
+                        document.querySelector('.instruksi').value = '';
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: res.message || 'Gagal memberikan tugas'
+                        });
+                        btnAssignStaff.innerHTML = '+';
+                        btnAssignStaff.disabled = false;
+                    }
+                } else {
+                    btnAssignStaff.innerHTML = '+';
+                    btnAssignStaff.disabled = false;
+                }
+            });
         });
     }
 
     document.querySelectorAll('.btn-verifikasi-task').forEach(btn => {
         btn.addEventListener('click', async (e) => {
             const taskId = e.target.getAttribute('data-id');
-            const res = await verifikasiTugasTask(taskId);
-            if (res.ok) {
-                alert('Tugas diverifikasi');
-                location.reload();
-            } else {
-                alert('Gagal memverifikasi tugas');
-            }
+            Swal.fire({
+                title: "Apakah Anda yakin?",
+                text: "Ingin memverifikasi tugas ini?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya, verifikasi!",
+                cancelButtonText: "Batal"
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    const res = await verifikasiTugasTask(taskId);
+                    if (res.ok) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: 'Tugas diverifikasi',
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => location.reload());
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: 'Gagal memverifikasi tugas'
+                        });
+                    }
+                }
+            });
         });
     });
 
     document.querySelectorAll('.btn-revisi-task').forEach(btn => {
         btn.addEventListener('click', async (e) => {
             const taskId = e.target.getAttribute('data-id');
-            const res = await revisiTugasTask(taskId);
-            if (res.ok) {
-                alert('Tugas dikembalikan untuk direvisi');
-                location.reload();
-            } else {
-                alert('Gagal mengembalikan tugas untuk direvisi');
+            Swal.fire({
+                title: "Apakah Anda yakin?",
+                text: "Ingin mengembalikan tugas ini untuk direvisi?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#f39c12",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya, revisi!",
+                cancelButtonText: "Batal"
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    const res = await revisiTugasTask(taskId);
+                    if (res.ok) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: 'Tugas dikembalikan untuk direvisi',
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => location.reload());
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: 'Gagal mengembalikan tugas untuk direvisi'
+                        });
+                    }
+                }
+            });
+        });
+    });
+
+    document.querySelectorAll('.btn-edit-instruction').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            const targetBtn = e.target.closest('.btn-edit-instruction');
+            const taskId = targetBtn.getAttribute('data-id');
+            const oldInstruction = targetBtn.getAttribute('data-instruction');
+            
+            const newInstruction = prompt('Ubah instruksi penugasan:', oldInstruction);
+            if (newInstruction !== null && newInstruction.trim() !== '') {
+                targetBtn.disabled = true;
+                const res = await editInstructionTask(taskId, newInstruction.trim());
+                if (res.status === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Instruksi berhasil diubah',
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => location.reload());
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal!',
+                        text: res.message || 'Gagal mengubah instruksi'
+                    });
+                }
+                targetBtn.disabled = false;
             }
         });
     });
@@ -95,11 +207,35 @@ if (btnApproveKaur) {
     const btnSelesaiPenugasan = document.querySelector('.btn-selesaikan-penugasan');
     if (btnSelesaiPenugasan) {
         btnSelesaiPenugasan.addEventListener('click', async () => {
-            const result = await selesaikanTugasKaur(parseSlug);
-            alert(result.message);
-            if (result.status === 'success') {
-                location.reload();
-            }
+            Swal.fire({
+                title: "Apakah Anda yakin?",
+                text: "Menyelesaikan seluruh bagian penugasan tiket ini?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya, selesaikan!",
+                cancelButtonText: "Batal"
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    const res = await selesaikanTugasKaur(parseSlug);
+                    if (res.status === 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: res.message,
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => location.reload());
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: res.message
+                        });
+                    }
+                }
+            });
         });
     }
 });

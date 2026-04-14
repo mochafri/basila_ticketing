@@ -62,6 +62,7 @@ $routes->post('/tutup-tiket/(:num)', 'TicketController::closeTicket/$1');
 # Assign task ke staff
 $routes->post('/approve-task/(:num)', 'TicketController::approveTask/$1');
 $routes->post('/assign-staff/(:num)', 'TicketController::asssignTiket/$1');
+$routes->post('/edit-instruction/(:num)', 'TicketController::updateTaskInstruction/$1');
 $routes->post('/upload-task/(:num)', 'TicketController::uploadTask/$1');
 $routes->post('/verifikasi-tugas/(:num)', 'TicketController::verifikasiTask/$1');
 $routes->post('/revisi-tugas/(:num)', 'TicketController::revisiTask/$1');

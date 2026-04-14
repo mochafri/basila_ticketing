@@ -10,9 +10,40 @@ document.addEventListener('DOMContentLoaded', () => {
         btnReject.addEventListener('click', async () => {
             btnReject.innerHTML = 'Loading...';
             btnReject.disabled = true;
-            const res = await reject(parseSlug);
-            alert(res.message || 'Tiket berhasil direject');
-            location.reload();
+            Swal.fire({
+                title: "Apakah Anda yakin?",
+                text: "Ingin menolak tiket ini?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Ya, tolak!",
+                cancelButtonText: "Batal"
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    const res = await reject(parseSlug);
+                    if (res.status === 'success' || res.status === 201 || res.status === 200) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: res.message || 'Tiket berhasil direject',
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => location.reload());
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: res.message || 'Gagal mereject tiket'
+                        });
+                        btnReject.innerHTML = 'Tolak';
+                        btnReject.disabled = false;
+                    }
+                } else {
+                    btnReject.innerHTML = 'Tolak';
+                    btnReject.disabled = false;
+                }
+            });
         });
     }
 
@@ -21,9 +52,40 @@ document.addEventListener('DOMContentLoaded', () => {
         btnEscalated.addEventListener('click', async () => {
             btnEscalated.innerHTML = 'Loading...';
             btnEscalated.disabled = true;
-            const res = await escalated(parseSlug);
-            alert(res.message || 'Tiket berhasil dieskalasi');
-            location.reload();
+            Swal.fire({
+                title: "Apakah Anda yakin?",
+                text: "Ingin mengeskalasi tiket ini?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya, eskalasi!",
+                cancelButtonText: "Batal"
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    const res = await escalated(parseSlug);
+                    if (res.status === 'success' || res.status === 201 || res.status === 200) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: res.message || 'Tiket berhasil dieskalasi',
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => location.reload());
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: res.message || 'Gagal eskalasi tiket'
+                        });
+                        btnEscalated.innerHTML = 'Eskalasi';
+                        btnEscalated.disabled = false;
+                    }
+                } else {
+                    btnEscalated.innerHTML = 'Eskalasi';
+                    btnEscalated.disabled = false;
+                }
+            });
         });
     }
 
@@ -33,7 +95,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const selected = document.querySelectorAll('input[name="kaur_id[]"]:checked');
 
             if (selected.length === 0) {
-                alert('Pilih kaur dulu');
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Peringatan!',
+                    text: 'Pilih kaur dulu'
+                });
                 return;
             }
 
@@ -51,9 +117,40 @@ document.addEventListener('DOMContentLoaded', () => {
                 namaKaurList.push(namaKaur);
             });
 
-            const res = await approveTiket(parseSlug, idKaurList, namaKaurList);
-            alert(res.message || 'Berhasil assign tiket ke KAUR');
-            location.reload();
+            Swal.fire({
+                title: "Apakah Anda yakin?",
+                text: "Ingin menyetujui tiket ini dan menugaskan ke KAUR?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya, setujui & tugaskan!",
+                cancelButtonText: "Batal"
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    const res = await approveTiket(parseSlug, idKaurList, namaKaurList);
+                    if (res.status === 'success' || res.status === 200) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: res.message || 'Berhasil assign tiket ke KAUR',
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => location.reload());
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: res.message || 'Gagal assign tiket'
+                        });
+                        btnApprove.innerHTML = 'Setujui & Tugaskan';
+                        btnApprove.disabled = false;
+                    }
+                } else {
+                    btnApprove.innerHTML = 'Setujui & Tugaskan';
+                    btnApprove.disabled = false;
+                }
+            });
         });
     }
 
@@ -62,9 +159,40 @@ document.addEventListener('DOMContentLoaded', () => {
         btnClosed.addEventListener('click', async () => {
             btnClosed.innerHTML = 'Loading...';
             btnClosed.disabled = true;
-            const res = await closeTicket(parseSlug);
-            alert(res.message || 'Tiket berhasil ditutup');
-            location.reload();
+            Swal.fire({
+                title: "Apakah Anda yakin?",
+                text: "Ingin menutup tiket ini (Selesai)?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya, tutup tiket!",
+                cancelButtonText: "Batal"
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    const res = await closeTicket(parseSlug);
+                    if (res.status === 'success' || res.status === 200) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: res.message || 'Tiket berhasil ditutup',
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => location.reload());
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: res.message || 'Gagal menutup tiket'
+                        });
+                        btnClosed.innerHTML = 'Tutup Tiket (Selesai)';
+                        btnClosed.disabled = false;
+                    }
+                } else {
+                    btnClosed.innerHTML = 'Tutup Tiket (Selesai)';
+                    btnClosed.disabled = false;
+                }
+            });
         });
     }
 });

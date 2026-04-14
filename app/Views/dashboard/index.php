@@ -34,7 +34,7 @@
                     </div>
                     <small>TOTAL TIKET</small>
                 </div>
-                <h1><?= $statistik['total'] ?></h1>
+                <h1>1</h1>
             </div>
         </div>
         <div class="col-md-3">
@@ -57,20 +57,20 @@
                 <div class="progress-center">
                     <div class="progress-row">
                         <span>Open</span>
-                        <strong><?= $statistik['open'] ?></strong>
+                        <strong>0</strong>
                     </div>
                     <div class="progress-row">
                         <span>Waiting</span>
-                        <strong><?= $statistik['waiting'] ?></strong>
+                        <strong>0</strong>
                     </div>
                     <div class="progress-row">
                         <span>Progress</span>
-                        <strong><?= $statistik['progress'] ?></strong>
+                        <strong></strong>
                     </div>
                 </div>
 
                 <div class="progress-total">
-                    <h1><?= $statistik['open'] + $statistik['waiting'] + $statistik['progress'] ?></h1>
+                    <h1>0</h1>
                 </div>
 
             </div>
@@ -84,7 +84,7 @@
                     </div>
                     <small>TIKET SELESAI</small>
                 </div>
-                <h1><?= $statistik['done'] ?></h1>
+                <h1>0</h1>
             </div>
         </div>
 
@@ -96,7 +96,7 @@
                     </div>
                     <small>TIKET DITOLAK</small>
                 </div>
-                <h1><?= $statistik['reject'] ?></h1>
+                <h1>0</h1>
             </div>
         </div>
     </div>

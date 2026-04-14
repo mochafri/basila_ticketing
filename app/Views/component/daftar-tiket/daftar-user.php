@@ -2,7 +2,7 @@
     $no = 1;
     foreach ($tiket as $data): ?>
     <div class="col-12">
-        <div class="card mt-5 border-0 shadow-sm rounded-4">
+        <div class="card mt-3 border-0 shadow-sm rounded-4">
             <div class="card-body">
                 <div class="row">
                     <div class="col-12 d-flex align-items-center gap-4">
