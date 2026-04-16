@@ -15,7 +15,7 @@ class Tiket extends Model
     protected $allowedFields    = [
         'id_kategori', 'id_layanan', 'judul_permohonan', 'deskripsi_permohonan', 
         'dokumen_lampiran', 'original_dokumen_name', 'is_escalated', 'tiket_status',
-        'approve_by'
+        'approve_by', 'nip_creator', 'nama_creator'
     ];
 
     protected bool $allowEmptyInserts = false;

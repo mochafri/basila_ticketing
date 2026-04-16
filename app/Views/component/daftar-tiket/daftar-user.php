@@ -1,53 +1,53 @@
-<?php
-    $no = 1;
-    foreach ($tiket as $data):
-        $statusClass = '';
-        switch ($data['tiket_status']) {
-            case 'Waiting':
-                $statusClass = 'bg-status-waiting';
-                break;
-            case 'Open':
-                $statusClass = 'bg-status-open';
-                break;
-            case 'In Progress':
-                $statusClass = 'bg-status-inprogress';
-                break;
-            case 'Closed':
-                $statusClass = 'bg-status-closed';
-                break;
-            case 'Rejected':
-                $statusClass = 'bg-status-rejected';
-                break;
-            default:
-                $statusClass = 'bg-body-secondary';
-        }
+<?php 
+$statusColors = [
+    'Waiting'           => 'warning',
+    'Open'              => 'info',
+    'Escalated Process' => 'secondary',
+    'Approve Escalated' => 'primary',
+    'In Progress'       => 'primary',
+    'Closed'            => 'success',
+    'Rejected'          => 'danger'
+];
 ?>
-    <div class="col-12">
-        <div class="card mt-3 border-0 shadow-sm rounded-4">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-12 d-flex align-items-center gap-4">
-                        <span class="kodePengajuan text-uppercase"><?= $no++ ?></span>
-                        <span
-                            class="statusPengajuan text-uppercase fw-bold px-2 py-1 rounded-5 <?= $statusClass ?>"><?= $data['tiket_status'] ?></span>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <h5 class="card-title text-uppercase fw-bold py-3"><?= $data['judul_permohonan'] ?></h5>
-                        <a href="<?= site_url('tiket/'. $data['id']) ?>" class="stretched-link"></a>
-                    </div>
-                </div>
-                <div class="row end-row">
-                    <div class="col-12 d-flex align-items-center gap-4">
-                        <div class="d-flex align-items-center gap-2">
-                            <iconify-icon icon="hugeicons:group-01"></iconify-icon>
-                            <span class="kodePengajuan text-uppercase fw-bold"><?= $data['kategori_layanan'] ?></span>
+
+<?php foreach ($tiket as $data): 
+    $color = $statusColors[$data['tiket_status']] ?? 'secondary';
+?>
+    <div class="col-12 mb-3">
+        <div class="card border-0 shadow-sm rounded-4 hov-shadow transition-all position-relative overflow-hidden">
+            <!-- Subtle accent border -->
+            <div class="position-absolute top-0 start-0 h-100 bg-<?= $color ?>" style="width: 4px; opacity: 0.6;"></div>
+            
+            <div class="card-body p-4">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <div class="d-flex align-items-center gap-3 mb-2">
+                            <span class="font-monospace fw-bold text-muted small">#<?= $data['id'] ?></span>
+                            <span class="badge bg-<?= $color ?> bg-opacity-10 text-<?= $color ?> px-3 py-1 rounded-pill fw-bold text-uppercase d-inline-flex align-items-center gap-1" style="font-size: 0.6rem; letter-spacing: 0.5px;">
+                                <iconify-icon icon="ph:dot-bold" class="fs-5"></iconify-icon>
+                                <?= $data['tiket_status'] ?>
+                            </span>
                         </div>
-                        <div class="d-flex align-items-center gap-2">
-                            <iconify-icon icon="hugeicons:clock-01"></iconify-icon>
-                            <span class="kodePengajuan text-uppercase fw-bold"><?= date('Y-m-d', strtotime($data['created_at'])) ?></span>
+                        <h5 class="card-title fw-extra-bold text-dark text-uppercase m-0 transition-all hover-danger" style="letter-spacing: -0.5px;"><?= esc($data['judul_permohonan']) ?></h5>
+                        
+                        <div class="d-flex flex-wrap align-items-center gap-3 mt-3 text-muted">
+                            <div class="d-flex align-items-center gap-1">
+                                <iconify-icon icon="ph:stack-duotone" class="text-danger fs-5"></iconify-icon>
+                                <span class="custom-small-font fw-bold text-dark text-uppercase"><?= esc($data['kategori_layanan']) ?></span>
+                            </div>
+                            <div class="vr opacity-25 d-none d-md-block" style="height: 1rem;"></div>
+                            <div class="d-flex align-items-center gap-1">
+                                <iconify-icon icon="ph:calendar-blank-duotone" class="text-danger fs-5"></iconify-icon>
+                                <span class="custom-small-font fw-medium"><?= date('d M Y, H:i', strtotime($data['created_at'])) ?> WIB</span>
+                            </div>
                         </div>
+                    </div>
+                    
+                    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                        <a href="<?= site_url('tiket/'. $data['id']) ?>" class="btn btn-outline-danger px-4 py-2 rounded-3 custom-small-font fw-bold text-uppercase d-inline-flex align-items-center gap-2 stretched-link">
+                            Detail Tiket
+                            <iconify-icon icon="ph:arrow-right-bold" class="fs-5"></iconify-icon>
+                        </a>
                     </div>
                 </div>
             </div>

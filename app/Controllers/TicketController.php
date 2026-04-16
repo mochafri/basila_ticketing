@@ -27,9 +27,12 @@ class TicketController extends BaseController
 
     public function index(): string
     {
+        $roles = [session('role_name')];
+        $nip = session('user_identifier');
+
         return view('tiket/daftar/index', [
             'title' => 'Daftar Tiket',
-            'tiket' => $this->tiketService->getDataTiket(),
+            'tiket' => $this->tiketService->getDataTiket($roles, $nip),
         ]);
     }
 

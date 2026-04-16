@@ -23,6 +23,8 @@ class TicketSeeder extends Seeder
                 'catatan' => null,
                 'created_at' => Time::now()->subDays(2)->toDateTimeString(),
                 'updated_at' => Time::now()->subDays(2)->toDateTimeString(),
+                'nip_creator' => '1987654321',
+                'nama_creator' => 'Muhammad Afrizal (Mahasiswa)',
             ],
             [
                 'id_kategori' => 2,
@@ -37,6 +39,8 @@ class TicketSeeder extends Seeder
                 'catatan' => null,
                 'created_at' => Time::now()->subDays(1)->toDateTimeString(),
                 'updated_at' => Time::now()->subHours(5)->toDateTimeString(),
+                'nip_creator' => '1987654321',
+                'nama_creator' => 'Muhammad Afrizal (Mahasiswa)',
             ],
             [
                 'id_kategori' => 3,
@@ -51,6 +55,8 @@ class TicketSeeder extends Seeder
                 'catatan' => null,
                 'created_at' => Time::now()->subHours(10)->toDateTimeString(),
                 'updated_at' => Time::now()->subHours(10)->toDateTimeString(),
+                'nip_creator' => '1987654322', // User lain
+                'nama_creator' => 'Budi Sudarsono',
             ],
             [
                 'id_kategori' => 4,
@@ -65,6 +71,8 @@ class TicketSeeder extends Seeder
                 'catatan' => null,
                 'created_at' => Time::now()->subDays(5)->toDateTimeString(),
                 'updated_at' => Time::now()->subDays(4)->toDateTimeString(),
+                'nip_creator' => '1987654321',
+                'nama_creator' => 'Muhammad Afrizal (Mahasiswa)',
             ],
             [
                 'id_kategori' => 5,
@@ -79,6 +87,8 @@ class TicketSeeder extends Seeder
                 'catatan' => null,
                 'created_at' => Time::now()->toDateTimeString(),
                 'updated_at' => Time::now()->toDateTimeString(),
+                'nip_creator' => '1987654321',
+                'nama_creator' => 'Muhammad Afrizal (Mahasiswa)',
             ]
         ];
         
