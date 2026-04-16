@@ -21,6 +21,16 @@ class DashboardService
         return $this->db->table('tikets')->where('tiket_status', 'In Progress')->countAllResults() ?? 0;
     }
 
+    public function getTiketOnWaiting()
+    {
+        return $this->db->table('tikets')->where('tiket_status', 'Waiting')->countAllResults() ?? 0;
+    }
+
+    public function getTiketOnOpen()
+    {
+        return $this->db->table('tikets')->where('tiket_status', 'Open')->countAllResults() ?? 0;
+    }
+
     public function getTiketClosed()
     {
         return $this->db->table('tikets')->where('tiket_status', 'Closed')->countAllResults() ?? 0;
