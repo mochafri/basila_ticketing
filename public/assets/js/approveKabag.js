@@ -1,4 +1,4 @@
-import { reject, escalated, approveTiket, closeTicket } from "./app.js";
+import { reject, escalated, approveTiket, closeTicket } from "/assets/js/app.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     const segments = window.location.pathname.split('/');
@@ -130,13 +130,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (result.isConfirmed) {
                     const res = await approveTiket(parseSlug, idKaurList, namaKaurList);
                     if (res.status === 'success' || res.status === 200) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Berhasil!',
-                            text: res.message || 'Berhasil assign tiket ke KAUR',
-                            timer: 1500,
-                            showConfirmButton: false
-                        }).then(() => location.reload());
+                        if (res.duplicates && res.duplicates.length > 0) {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Peringatan Penugasan!',
+                                html: `Berhasil menyetujui tiket.<br><br><small class="text-muted">Catatan: Kaur berikut sudah ditugaskan sebelumnya pada tiket ini: <br><b>${res.duplicates.join(', ')}</b></small>`,
+                            }).then(() => location.reload());
+                        } else {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: res.message || 'Berhasil assign tiket ke KAUR',
+                                timer: 1500,
+                                showConfirmButton: false
+                            }).then(() => location.reload());
+                        }
                     } else {
                         Swal.fire({
                             icon: 'error',

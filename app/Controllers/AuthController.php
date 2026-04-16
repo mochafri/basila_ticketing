@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 class AuthController extends BaseController
 {
+    protected $service;
+
     public function signIn(): string
     {
         $data = [
@@ -58,6 +60,7 @@ class AuthController extends BaseController
             'title' => 'SignIn',
         ];
 
+
         return view('auth/signUp/index', $data);
     }
     public function forgotPassword(): string
@@ -66,13 +69,14 @@ class AuthController extends BaseController
             'title' => 'ForgotPassword',
         ];
 
+
         return view('auth/forgotPassword/index', $data);
     }
 
     public function logout()
     {
-        session()->destroy(); 
-        return redirect()->to('/signin'); 
+        session()->destroy(); // hapus semua session
+        return redirect()->to('/signin'); // arahkan ke login
     }
 
 }

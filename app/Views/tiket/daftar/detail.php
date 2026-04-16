@@ -13,7 +13,7 @@
              <!-- detail staff (pak bagas) -->
         </div>
         <div class="col-4">
-            <?= $this->include('component/detail-tiket/riwayat'); ?>
+            <?= $this->include('component/detail-tiket/riwayat', $riwayat); ?>
         </div>
     </div>
 </div>

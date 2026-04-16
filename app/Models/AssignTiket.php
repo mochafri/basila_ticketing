@@ -6,7 +6,7 @@ use CodeIgniter\Model;
 
 class AssignTiket extends Model
 {
-    protected $table = 'assign_tiket';
+    protected $table = 'assign_to_kaur';
     protected $primaryKey = 'id';
     protected $useAutoIncrement = true;
     protected $returnType = 'array';

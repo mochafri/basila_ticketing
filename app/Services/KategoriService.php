@@ -2,14 +2,12 @@
 
 namespace App\Services;
 
-use App\Models\Kategori;
-
 class KategoriService
 {
     protected $kategoriModel;
     public function __construct()
     {
-        $this->kategoriModel = new Kategori();
+        $this->kategoriModel = model('Kategori');
     }
 
     public function getKategori()

@@ -1,4 +1,4 @@
-import { postLayanan } from "./app.js";
+import { postLayanan } from "/assets/js/app.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('.btn-layanan').addEventListener('click', async () => {

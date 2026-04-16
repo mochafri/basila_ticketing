@@ -44,9 +44,7 @@
                     <div class="icon-box bg-light-warning">
                         <iconify-icon icon="mdi:clock-outline"></iconify-icon>
                     </div>
-                    <select name="status" id="status"
-                        class="bg-transparent border-0 text-white text-uppercase custom-small-font shadow-sm py-2 px-1"
-                        style="letter-spacing: 0.15rem;">
+                    <select name="status" id="status" class="bg-transparent border-0 text-white text-uppercase custom-small-font shadow-sm py-2 px-1" style="letter-spacing: 0.15rem;">
                         <option value="waiting" class="text-dark">Waiting</option>
                         <option value="open" class="text-dark">Open</option>
                         <option value="in_progress" class="text-dark">In Progress</option>
