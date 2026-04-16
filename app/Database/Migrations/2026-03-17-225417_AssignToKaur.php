@@ -4,7 +4,7 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class AssignTiket extends Migration
+class AssignToKaur extends Migration
 {
     public function up()
     {
@@ -26,8 +26,8 @@ class AssignTiket extends Migration
                 'unsigned'  =>  true
             ],
             'flag' => [
-                'type' => 'VARCHAR',
-                'constraint' => '255',
+                'type' => 'ENUM',
+                'constraint' => ['Start', 'Finish'],
                 'null' => true
             ],
             'fk_tiket' => [
@@ -38,12 +38,12 @@ class AssignTiket extends Migration
         ]);
 
         $this->forge->addKey('id', true);
-        $this->forge->createTable('assign_tiket');
+        $this->forge->createTable('assign_to_kaur');
         $this->forge->addForeignKey('fk_tiket', 'tikets', 'id', 'CASCADE', 'CASCADE');
     }
 
     public function down()
     {
-        $this->forge->dropTable('assign_tiket');
+        $this->forge->dropTable('assign_to_kaur');
     }
 }

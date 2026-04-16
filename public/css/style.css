@@ -900,3 +900,18 @@ li a {
 }
 
 /* end style halaman detail tiket */
+
+.smooth-collapse {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s ease;
+    overflow: hidden;
+}
+
+.smooth-collapse.show {
+    grid-template-rows: 1fr;
+}
+
+.smooth-collapse-inner {
+    min-height: 0;
+}

@@ -6,11 +6,6 @@ class AuthController extends BaseController
 {
     protected $service;
 
-    public function __construct()
-    {
-        $this->service = new AuthService();
-        helper(['form', 'url']);
-    }
     public function signIn(): string
     {
         $data = [
@@ -68,7 +63,7 @@ class AuthController extends BaseController
 
         return view('auth/signUp/index', $data);
     }
-    
+
     public function forgotPassword(): string
     {
         $data = [

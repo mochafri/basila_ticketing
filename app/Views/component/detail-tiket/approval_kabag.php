@@ -1,4 +1,4 @@
-<?php if ($detail['tiket_status'] === 'Waiting'): ?>
+<?php if ($detail['tiket_status'] === 'Waiting' || $detail['tiket_status'] === 'Approve Escalated'): ?>
     <div class="d-flex gap-3 w-100">
         <iconify-icon icon="<?php if ($detail['tiket_status'] === 'Waiting'): ?>streamline-ultimate:task-list-approve<?php else: ?>ic:round-check<?php endif; ?>" class="text-white h-25 <?php if ($detail['tiket_status'] === 'Waiting'): ?>btn btn-danger<?php else: ?>btn btn-success<?php endif; ?>"></iconify-icon>
         <div class="flex-grow-1">

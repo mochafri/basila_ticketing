@@ -11,57 +11,43 @@ $routes->get('tiket', 'TicketController::index');
 $routes->get('tiket/create', 'TicketController::create');
 $routes->get('tiket/(:num)', 'TicketController::show/$1');
 $routes->get('/user', 'MasterDataController::user');
+$routes->get('/kategori', 'MasterDataController::kategori');
+$routes->post('/create-kategori', 'MasterDataController::createKategori');
+$routes->post('/create-layanan', 'MasterDataController::createLayanan');
 $routes->get('/get-layanan/(:num)', 'TicketController::getLayananByID/$1');
 $routes->delete('master-data/delete-kategori/(:num)', 'MasterDataController::deleteKategori/$1');
+$routes->get('/dashboard', 'DashboardController::index');
+$routes->get('tiket', 'TicketController::index');
+$routes->get('tiket/create', 'TicketController::create');
+$routes->get('tiket/(:num)', 'TicketController::show/$1');
 
-$routes->group('', ['filter' => 'auth'], function ($routes) {
+$routes->get('/user', 'MasterDataController::user');
+$routes->get('/kategori', 'MasterDataController::kategori');
 
-    $routes->get('/dashboard', 'DashboardController::index');
-    $routes->get('tiket', 'TicketController::index');
-    $routes->get('tiket/create', 'TicketController::create');
-    $routes->get('tiket/(:num)', 'TicketController::show/$1');
+$routes->post('/create-kategori', 'MasterDataController::createKategori');
+$routes->post('/create-layanan', 'MasterDataController::createLayanan');
 
-    $routes->get('/user', 'MasterDataController::user');
-    $routes->get('/kategori', 'MasterDataController::kategori');
+$routes->get('/get-layanan/(:num)', 'TicketController::getLayananByID/$1');
 
-    $routes->post('/create-kategori', 'MasterDataController::createKategori');
-    $routes->post('/create-layanan', 'MasterDataController::createLayanan');
+# Ambil file dari local server
+$routes->get('tiket/file/users/(:any)', 'TicketController::getFileUsers/$1');
+$routes->get('tiket/file/admin/(:any)', 'TicketController::getFileAdmin/$1');
 
-    $routes->get('/get-layanan/(:num)', 'TicketController::getLayananByID/$1');
-
-    # Ambil file dari local server
-    $routes->get('tiket/file/(:any)', 'TicketController::getFile/$1');
-
-    # Coba endPoint approve reject sama eskalasi
-    $routes->post('/reject-tiket/(:num)', 'TicketController::rejectTiket/$1');
-    $routes->post('/escalated-tiket/(:num)', 'TicketController::escalated/$1');
-    $routes->post('/approve-tiket/(:num)', 'TicketController::approveTiket/$1');
-
-    # EndPoint buat tiket baru 
-    $routes->post('/auth/', 'TicketController::createTiket');
-
-    # Assign task ke staff
-    $routes->post('/assign-staff/(:num)', 'TicketController::asssignTiket/$1');
-
-    # End point layanan
-    $routes->post('/layanan/(:num)', 'MasterController:getLayanan/$1');
-
-    $routes->get('/role-option', 'RoleOptionController::index');
-    $routes->post('/role-choice', 'RoleOptionController::chooseRole');
-});
+# EndPoint buat tiket baru 
+$routes->post('/create-tiket', 'TicketController::createTiket');
 
 #EndPoint login pages
 $routes->get('/', 'AuthController::signIn');
 $routes->get('/signin', 'AuthController::signIn');
 $routes->get('/signup', 'AuthController::signUp');
 $routes->get('/forgot-password', 'AuthController::forgotPassword');
-
-$routes->post('logout', 'AuthController::logout');
+$routes->get('/role-option', 'RoleOptionController::index');
 
 #EndPoint login Process
 $routes->post('/auth/signin', 'AuthController::processSignIn');
 $routes->post('/auth/signup', 'AuthController::processSignUp');
 $routes->post('/auth/forgot-password', 'AuthController::processForgotPassword');
+$routes->post('/role-choice', 'RoleOptionController::chooseRole');
 
 #Endpoint logout
 $routes->post('logout', 'AuthController::logout');
@@ -84,8 +70,3 @@ $routes->post('/selesaikan-tugas-kaur/(:num)', 'TicketController::selesaikanTuga
 
 # End point layanan
 $routes->post('/layanan/(:num)', 'MasterController:getLayanan/$1');
-
-# End Point Master data
-$routes->get('/kategori', 'MasterDataController::kategori');
-$routes->post('/create-kategori', 'MasterDataController::createKategori');
-$routes->post('/create-layanan', 'MasterDataController::createLayanan');

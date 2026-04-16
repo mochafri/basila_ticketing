@@ -6,7 +6,7 @@ use CodeIgniter\Model;
 
 class RiwayatAktifitas extends Model
 {
-    protected $table            = 'riwayataktifitas';
+    protected $table            = 'riwayat_aktifitas';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
@@ -16,6 +16,7 @@ class RiwayatAktifitas extends Model
         'activity_title',
         'message',
         'created_by',
+        'fk_tiket',
         'created_at',
         'updated_at'
     ];

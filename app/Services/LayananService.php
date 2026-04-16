@@ -2,9 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\Layanan;
-use App\Models\Kategori;
-
 class LayananService
 {
     protected $layananModel;
@@ -12,8 +9,8 @@ class LayananService
 
     public function __construct()
     {
-        $this->layananModel = new Layanan();
-        $this->kategoriModel = new Kategori();
+        $this->layananModel = model('Layanan');
+        $this->kategoriModel = model('Kategori');
     }
 
     public function getLayanan()

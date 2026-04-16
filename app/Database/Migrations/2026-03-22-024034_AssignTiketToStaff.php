@@ -50,7 +50,7 @@ class AssignTiketToStaff extends Migration
                 'constraint' => '255',
                 'null' => false
             ],
-            'fk_assign_tiket' => [
+            'fk_assign_to_kaur' => [
                 'type' => 'INT',
                 'constraint' => 5,
                 'unsigned' => true
@@ -59,7 +59,7 @@ class AssignTiketToStaff extends Migration
 
         $this->forge->addKey('id', true);
         $this->forge->createTable('assign_to_staff');
-        $this->forge->addForeignKey('fk_assign_tiket', 'assign_tiket', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('fk_assign_to_kaur', 'assign_to_kaur', 'id', 'CASCADE', 'CASCADE');
     }
 
     public function down()

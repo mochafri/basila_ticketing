@@ -201,3 +201,23 @@ export async function editInstructionTask(id, instruction) {
     });
     return await res.json();
 }
+
+export async function approveEscalated(id) {
+    const res = await fetch(`/approve-escalated/${id}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': tokenCSRF
+        }
+    });
+    return await res.json();
+}
+
+export async function rejectEscalated(id) {
+    const res = await fetch(`/reject-escalated/${id}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': tokenCSRF
+        }
+    });
+    return await res.json();
+}

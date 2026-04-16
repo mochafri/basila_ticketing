@@ -66,13 +66,50 @@ class Services extends BaseService
         return new \App\Services\AuthService();
     }
 
-    public static function kaurstaff($getShared = true)
+    public static function dashboard($getShared = true)
     {
         if ($getShared) {
-            return static::getSharedInstance('kaurstaff');
+            return static::getSharedInstance('dashboard');
+        }
+
+        return new \App\Services\DashboardService();
+    }
+
+    # Service kabag kaur staff
+    public static function kabag($getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('kabag');
+        }
+
+        return new \App\Services\KabagService();
+    }
+
+    public static function kaur($getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('kaur');
         }
 
         return new \App\Services\KaurService();
+    }
+
+    public static function staff($getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('staff');
+        }
+
+        return new \App\Services\StaffService();
+    }
+
+    public static function eskalasi($getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('eskalasi');
+        }
+
+        return new \App\Services\EskalasiService();
     }
 
     public static function riwayat($getShared = true)
@@ -82,14 +119,5 @@ class Services extends BaseService
         }
 
         return new \App\Services\RiwayatService();
-    }
-
-    public static function dashboard($getShared = true)
-    {
-        if ($getShared) {
-            return static::getSharedInstance('dashboard');
-        }
-
-        return new \App\Services\DashboardService();
     }
 }

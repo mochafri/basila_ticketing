@@ -2,21 +2,26 @@
 
 namespace App\Services;
 
-use App\Models\Tiket;
-use App\Models\AssignTiket;
-use App\Models\AssignTask;
-
 class KabagService
 {
+    protected $kaur;
     protected $tiketModel;
     protected $assignTiket;
     protected $assignTaskStaff;
+    protected $riwayatAktifitas;
 
     public function __construct()
     {
-        $this->tiketModel = new Tiket();
-        $this->assignTiket = new AssignTiket();
-        $this->assignTaskStaff = new AssignTask();
+        $this->kaur = model('Kaur');
+        $this->tiketModel = model('Tiket');
+        $this->assignTiket = model('AssignTiket');
+        $this->assignTaskStaff = model('AssignTask');
+        $this->riwayatAktifitas = model('RiwayatAktifitas');
+    }
+
+    public function getKaur()
+    {
+        return $this->kaur->findAll();
     }
 
     # Update data tiket approve by kabag
@@ -33,6 +38,9 @@ class KabagService
             ];
         }
 
+        $hasDuplicate = false;
+        $kaur_on_skip = [];
+
         $db->transStart();
 
         $this->tiketModel->update($id, [
@@ -40,28 +48,76 @@ class KabagService
             'approve_by' => $data['approve']
         ]);
 
+        $insertedCount = 0;
         foreach ($data['assign_to_kaur'] as $index => $kaur) {
+            $nip = $data['user_id'][$index] ?? null;
+
+            if (!$nip)
+                continue;
+
+            $exist = $this->assignTiket
+                ->where('nip_kaur', $nip)
+                ->where('fk_tiket', $id)
+                ->first();
+
+            if ($exist) {
+                $hasDuplicate = true;
+                $kaur_on_skip[] = $kaur;
+                continue;
+            }
+
             $this->assignTiket->insert([
                 'kaur_name' => $kaur,
-                'nip_kaur' => $data['user_id'][$index] ?? null,
+                'nip_kaur' => $nip,
                 'fk_tiket' => $id
             ]);
+
+            $insertedCount++;
         }
+
+        if ($insertedCount === 0) {
+            $db->transRollback();
+            return [
+                'status' => 'fail',
+                'message' => 'Gagal menyetujui tiket. Kaur yang dipilih sudah ditugaskan sebelumnya.'
+            ];
+        }
+
+        $this->riwayatAktifitas->insert([
+            'activity_title' => 'Persetujuan Tiket',
+            'message' => 'Tiket telah disetujui oleh Kepala Bagian.',
+            'created_by' => 'Kepala Bagian',
+            'fk_tiket' => $id
+        ]);
 
         $db->transComplete();
 
         return $db->transStatus() ? [
             'status' => 'success',
-            'message' => 'Berhasil approve tiket'
+            'message' => 'Berhasil approve tiket',
+            'duplicates' => $kaur_on_skip
         ] : [
             'status' => 'fail',
             'message' => 'Gagal approve tiket'
         ];
     }
 
+    # Buat wrapper nya kaur di kabag page
+    public function getKaurByTiketOpen($id)
+    {
+        return $this->assignTiket
+            ->select('assign_to_kaur.*')
+            ->join('tikets', 'tikets.id = assign_to_kaur.fk_tiket')
+            ->where('assign_to_kaur.fk_tiket', $id)
+            ->whereIn('tikets.tiket_status', ['Open', 'In Progress', 'Closed'])
+            ->findAll();
+    }
+
     # Escalated service
     public function isEscalated($id)
     {
+        $db = \Config\Database::connect();
+
         $tiket = $this->tiketModel->find($id);
 
         if (!$tiket) {
@@ -71,38 +127,134 @@ class KabagService
             ];
         }
 
+        $db->transStart();
+
         $update = $this->tiketModel->update($id, [
-            'is_escalated' => true
+            'is_escalated' => true,
+            'tiket_status' => 'Escalated Process'
         ]);
 
-        return [
-            'status' => $update ? 'success' : 'fail',
-            'message' => $update ? 'Tiket berhasil di-eskalasi' : 'Gagal update tiket'
+        if (!$update) {
+            $db->transRollback();
+            return [
+                'status' => 'fail',
+                'message' => 'Gagal update tiket'
+            ];
+        }
+
+        $this->riwayatAktifitas->insert([
+            'activity_title' => 'Tiket diterima',
+            'message' => 'Tiket di eskalasi oleh kepala bagian.',
+            'created_by' => 'Kepala Bagian',
+            'fk_tiket' => $id
+        ]);
+
+        $db->transComplete();
+
+        return $db->transStatus() ? [
+            'status' => 'success',
+            'message' => 'Tiket berhasil di-eskalasi'
+        ] : [
+            'status' => 'fail',
+            'message' => 'Gagal update tiket'
         ];
     }
 
-    # Reject tiket
+    # Service Reject tiket 
     public function rejectTiket($id)
     {
-        log_message('info', 'PARAM SLUG: ' . $id);
+        $db = \Config\Database::connect();
+
         $tiket = $this->tiketModel->find($id);
 
-        log_message('error', 'Hasil query : ' . json_encode($tiket));
         if (!$tiket) {
             return [
                 'status' => 'fail',
                 'message' => 'Tiket tidak ada'
             ];
         }
+
+        $db->transStart();
 
         $update = $this->tiketModel->update($id, [
             'tiket_status' => 'Rejected',
             // 'catatan' => $data['catatan']
         ]);
 
-        return [
-            'status' => $update ? 'success' : 'fail',
-            'message' => $update ? 'Tiket berhasil di-reject' : 'Gagal update tiket'
+        if (!$update) {
+            $db->transRollback();
+            return [
+                'status' => 'fail',
+                'message' => 'Gagal update tiket'
+            ];
+        }
+
+        $this->riwayatAktifitas->insert([
+            'activity_title' => 'Penolakan Tiket',
+            'message' => 'Tiket telah ditolak oleh Kepala Bagian.',
+            'created_by' => 'Kepala Bagian',
+            'fk_tiket' => $id
+        ]);
+
+        $db->transComplete();
+
+        return $db->transStatus() ? [
+            'status' => 'success',
+            'message' => 'Tiket berhasil di-reject'
+        ] : [
+            'status' => 'fail',
+            'message' => 'Gagal update tiket'
+        ];
+    }
+
+    # Service closed tiket oleh kabag
+    public function tutupTiket($id)
+    {
+        $db = \Config\Database::connect();
+
+        $taskKaur = $this->assignTiket
+            ->select('id,flag,kaur_name')
+            ->where('fk_tiket', $id)
+            ->findAll();
+
+        foreach ($taskKaur as $kaur) {
+            if ($kaur['flag'] !== 'Finish') {
+                return [
+                    'status' => 'fail',
+                    'message' => "Kepala bagian " . $kaur['kaur_name'] . " belum menyelesaikan tugasnya"
+                ];
+            }
+        }
+
+        $db->transStart();
+
+        $update = $this->tiketModel->update($id, [
+            'tiket_status' => 'Closed'
+        ]);
+
+        if (!$update) {
+            $db->transRollback();
+            return [
+                'status' => 'fail',
+                'message' => 'Gagal update tiket'
+            ];
+        }
+
+        $this->riwayatAktifitas->insert([
+            'activity_title' => 'Tiket Selesai',
+            'message' => 'Tiket telah diselesaikan oleh Kepala Bagian.',
+            'created_by' => 'Kepala Bagian',
+            'fk_tiket' => $id
+        ]);
+
+        $db->transComplete();
+
+        return $db->transStatus() ? [
+            'status' => 'success',
+            'message' => 'Tiket telah ditutup dan dinyatakan Selesai'
+        ] : [
+            'status' => 'fail',
+            'message' => 'Gagal menutup tiket.'
         ];
     }
 }

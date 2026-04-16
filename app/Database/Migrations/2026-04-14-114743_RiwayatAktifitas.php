@@ -32,12 +32,21 @@ class RiwayatAktifitas extends Migration
             'updated_at' => [
                 'type' => 'DATETIME',
                 'null' => true
+            ],
+            'fk_tiket' => [
+                'type' => 'INT',
+                'unsigned' => true,
+                'null' => true
             ]
         ]);
 
         $this->forge->addKey('id', true);
+        $this->forge->addForeignKey('fk_tiket', 'tikets', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('riwayat_aktifitas');
     }
 
-    public function down() {}
+    public function down()
+    {
+        $this->forge->dropTable('riwayat_aktifitas');
+    }
 }

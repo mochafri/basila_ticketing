@@ -15,19 +15,20 @@
         <span class="text-danger fw-semibold">BASILA</span>
     </p>
 
+
+    <div class="col-md-6"></div>
     <!-- Role List -->
     <div class="row">
-        <div class="col-md-6">
 
-            <?php if (session()->get('roles')): ?>
-                <?php foreach (session()->get('roles') as $data): ?>
-
-                    <div class="role-card mb-4">
+        <?php if (session()->get('roles')): ?>
+            <?php foreach (session()->get('roles') as $data): ?>
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="role-card">
 
                         <!-- Icon -->
                         <div class="role-icon">
-                                <iconify-icon icon="mynaui:smile-ghost-solid" width="50" height="50"
-                                    style="color: #E60042;"></iconify-icon>
+                            <iconify-icon icon="mynaui:smile-ghost-solid" width="50" height="50"
+                                style="color: #E60042;"></iconify-icon>
                         </div>
 
                         <!-- Text + Button -->
@@ -49,15 +50,14 @@
                         </div>
 
                     </div>
-
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p class="text-muted">Data role tidak ditemukan</p>
-            <?php endif; ?>
-
                 </div>
-            </div>
-        </div>
+                
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p class="text-muted">Data role tidak ditemukan</p>
+        <?php endif; ?>
+
+
     </div>
 
 </div>
