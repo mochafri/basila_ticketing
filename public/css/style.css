@@ -864,6 +864,13 @@ li a {
     letter-spacing: 1px;
 }
 
+.bg-status-waiting { background-color: #6c757d !important; color: white !important; }
+.bg-status-open { background-color: #0dcaf0 !important; color: white !important; }
+.bg-status-inprogress { background-color: #ffc107 !important; color: black !important; }
+.bg-status-closed { background-color: #198754 !important; color: white !important; }
+.bg-status-rejected { background-color: #dc3545 !important; color: white !important; }
+
+
 .tiket-btn-aksi {
     width: 38px;
     height: 38px;

@@ -14,7 +14,28 @@
 
         <tbody>
             <?php $no = 1; ?>
-            <?php foreach ($tiket as $data): ?>
+            <?php foreach ($tiket as $data): 
+                $statusClass = '';
+                switch ($data['tiket_status']) {
+                    case 'Waiting':
+                        $statusClass = 'bg-status-waiting';
+                        break;
+                    case 'Open':
+                        $statusClass = 'bg-status-open';
+                        break;
+                    case 'In Progress':
+                        $statusClass = 'bg-status-inprogress';
+                        break;
+                    case 'Closed':
+                        $statusClass = 'bg-status-closed';
+                        break;
+                    case 'Rejected':
+                        $statusClass = 'bg-status-rejected';
+                        break;
+                    default:
+                        $statusClass = '';
+                }
+            ?>
                 <tr>
                     <td class="tiket-id"><?= $no++ ?></td>
                     <td class="tiket-judul">
@@ -29,7 +50,7 @@
                         <?= date('Y-m-d', strtotime($data['created_at'])) ?>
                     </td>
                     <td>
-                        <span class="tiket-status-badge">
+                        <span class="tiket-status-badge <?= $statusClass ?>">
                             <?= $data['tiket_status'] ?>
                         </span>
                     </td>
