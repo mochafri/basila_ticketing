@@ -42,5 +42,9 @@
             ]); ?>
         <?php endif; ?>
         <!-- <p>-------------------------------end komponen staff-----------</p> -->
+
+        <?php if (session('role_name') === "MAHASISWA"): ?>
+            <?= $this->include('component/detail-tiket/submission_mahasiswa'); ?>
+        <?php endif; ?>
     </div>
 </div>

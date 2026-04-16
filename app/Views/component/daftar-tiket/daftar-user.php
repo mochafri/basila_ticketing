@@ -1,6 +1,27 @@
 <?php
     $no = 1;
-    foreach ($tiket as $data): ?>
+    foreach ($tiket as $data):
+        $statusClass = '';
+        switch ($data['tiket_status']) {
+            case 'Waiting':
+                $statusClass = 'bg-status-waiting';
+                break;
+            case 'Open':
+                $statusClass = 'bg-status-open';
+                break;
+            case 'In Progress':
+                $statusClass = 'bg-status-inprogress';
+                break;
+            case 'Closed':
+                $statusClass = 'bg-status-closed';
+                break;
+            case 'Rejected':
+                $statusClass = 'bg-status-rejected';
+                break;
+            default:
+                $statusClass = 'bg-body-secondary';
+        }
+?>
     <div class="col-12">
         <div class="card mt-3 border-0 shadow-sm rounded-4">
             <div class="card-body">
@@ -8,7 +29,7 @@
                     <div class="col-12 d-flex align-items-center gap-4">
                         <span class="kodePengajuan text-uppercase"><?= $no++ ?></span>
                         <span
-                            class="statusPengajuan text-uppercase fw-bold bg-body-secondary px-2 py-1 rounded-5 "><?= $data['tiket_status'] ?></span>
+                            class="statusPengajuan text-uppercase fw-bold px-2 py-1 rounded-5 <?= $statusClass ?>"><?= $data['tiket_status'] ?></span>
                     </div>
                 </div>
                 <div class="row">
