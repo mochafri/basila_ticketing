@@ -27,9 +27,12 @@ class TicketController extends BaseController
 
     public function index(): string
     {
+        $roles = [session('role_name')];
+        $nip = session('user_identifier');
+
         return view('tiket/daftar/index', [
             'title' => 'Daftar Tiket',
-            'tiket' => $this->tiketService->getDataTiket(),
+            'tiket' => $this->tiketService->getDataTiket($roles, $nip),
         ]);
     }
 
@@ -190,6 +193,7 @@ class TicketController extends BaseController
     {
         $data = $this->request->getPost();
         $file = $this->request->getFile('dokumen_task');
+        $nip = session('user_identifier');
 
         if (!$this->validateData($data, 'uploadTaskRule')) {
             return $this->response->setStatusCode(422)->setJSON([

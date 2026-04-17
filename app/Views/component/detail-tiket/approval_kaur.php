@@ -18,6 +18,7 @@ $semuaSelesai = !empty($taskStaffOnKaur) && count(array_filter($taskStaffOnKaur,
     <iconify-icon icon="<?= ($semuaSelesai || $sudahSelesaiKaur) ? 'ph:check-bold' : 'hugeicons:plus-sign' ?>" class="btn h-25 <?= ($semuaSelesai || $sudahSelesaiKaur) ? 'btn-success text-white' : (in_array($detail['tiket_status'], ['Open', 'In Progress']) ? 'btn-danger text-white' : 'btn-light') ?>"></iconify-icon>
 
     <div class="flex-grow-1">
+        
         <p class="m-0 fw-bold custom-small-font">Penugasan: pak bagas</p>
 
         <?php if ($detail['tiket_status'] === 'Open' && !$sudahMulaiKaur): ?>
@@ -31,13 +32,21 @@ $semuaSelesai = !empty($taskStaffOnKaur) && count(array_filter($taskStaffOnKaur,
                     <div class="p-4 bg-light rounded-3 w-100 d-flex gap-3 flex-column shadow-md mt-2 border">
                         <p class="m-0 fw-medium custom-text">delegasi penugasan staff</p>
                         <div class="d-flex gap-2 flex-wrap">
-                            <?php if (!empty($staff)): ?>
-                                <?php foreach ($staff as $stf): ?>
-                                    <label class="flex-fill p-3 bg-white d-flex justify-content-between align-items-center rounded-3 shadow-sm border border-light" style="cursor: pointer;">
-                                        <span class="text-uppercase fw-bold custom-small-font"><?= esc($stf['nama_staff']); ?></span>
-                                        <input type="checkbox" name="staff_id[]" value="<?= esc($stf['nip_staff']); ?>" data-name="<?= esc($stf['nama_staff']); ?>" class="form-check-input staff-checkbox mb-0" style="width: 1.25rem; height: 1.25rem;">
-                                    </label>
-                                <?php endforeach; ?>
+                            <?php if (!empty($staff)): 
+                                // Ambil daftar NIP staf yang sudah ditugaskan
+                                $assignedNips = array_column($taskStaffOnKaur, 'nip_staff');
+                                $availableStaff = array_filter($staff, fn($stf) => !in_array($stf['nip_staff'], $assignedNips));
+                            ?>
+                                <?php if (!empty($availableStaff)): ?>
+                                    <?php foreach ($availableStaff as $stf): ?>
+                                        <label class="flex-fill p-3 bg-white d-flex justify-content-between align-items-center rounded-3 shadow-sm border border-light" style="cursor: pointer;">
+                                            <span class="text-uppercase fw-bold custom-small-font"><?= esc($stf['nama_staff']); ?></span>
+                                            <input type="checkbox" name="staff_id[]" value="<?= esc($stf['nip_staff']); ?>" data-name="<?= esc($stf['nama_staff']); ?>" class="form-check-input staff-checkbox mb-0" style="width: 1.25rem; height: 1.25rem;">
+                                        </label>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <p class="text-muted mb-0 w-100 custom-small-font fst-italic">Semua staf telah ditugaskan.</p>
+                                <?php endif; ?>
                             <?php else: ?>
                                 <p class="text-muted mb-0 w-100 custom-small-font">Data staff tidak tersedia.</p>
                             <?php endif; ?>
@@ -121,7 +130,6 @@ $semuaSelesai = !empty($taskStaffOnKaur) && count(array_filter($taskStaffOnKaur,
         </div>
     </div>
 </div>
-
 <?php if (in_array($detail['tiket_status'], ['Waiting', 'Open', 'In Progress', 'Closed'])): ?>
     <div class="d-flex align-items-center gap-3">
         <iconify-icon icon="ph:flow-arrow" class="btn text-white <?= $detail['tiket_status'] === 'Closed' ? 'btn-success' : ($semuaSelesai ? 'btn-danger' : 'btn-secondary') ?>"></iconify-icon>

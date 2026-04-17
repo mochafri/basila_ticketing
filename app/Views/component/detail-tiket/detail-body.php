@@ -15,7 +15,7 @@
         ]); ?>
         <?php endif; ?>
         <!-- <p>-------------------------------komponen bu fira (approval_kabag.php)--------------------------</p> -->
-        <?php if (session('role_name') === 'SUPERADMIN'):  ?>
+        <?php if (session('role_name') === 'SUPERADMIN'): ?>
             <?= $this->include('component/detail-tiket/approval_kabag', [
                 'kaur' => $kaur,
                 'detail' => $detail,
@@ -26,7 +26,7 @@
         <!-- <p>-------------------------------end komponen bu fira-----------</p> -->
         <!-- status 3 -->
         <!-- <p>-------------------------------komponen pak bagas/bu farida (approval_kaur.php)--------------------------</p> -->
-        <?php if (session('role_name') === 'KEPALA URUSAN ADMINISTRASI AKADEMIK'):  ?>
+        <?php if (session('role_name') === 'KEPALA URUSAN ADMINISTRASI AKADEMIK'): ?>
             <?= $this->include('component/detail-tiket/approval_kaur', [
                 'staff' => $staff,
                 'detail' => $detail,
@@ -37,11 +37,15 @@
         <!-- <p>-------------------------------end komponen pak bagas/bu farida-----------</p> -->
         <!-- status 4 / staff-->
         <!-- <p>-------------------------------komponen staff (submission_staff.php)--------------------------</p> -->
-        <?php if (session('role_name') === 'PEGAWAI' || session('role_name') === 'ADMIN AKADEMIK'):  ?>
+        <?php if (session('role_name') === 'PEGAWAI' || session('role_name') === 'ADMIN AKADEMIK'): ?>
             <?= $this->include('component/detail-tiket/submission_staff', [
                 'taskStaff' => $taskStaff
             ]); ?>
         <?php endif; ?>
         <!-- <p>-------------------------------end komponen staff-----------</p> -->
+
+        <?php if (session('role_name') === "MAHASISWA"): ?>
+            <?= $this->include('component/detail-tiket/submission_mahasiswa'); ?>
+        <?php endif; ?>
     </div>
 </div>

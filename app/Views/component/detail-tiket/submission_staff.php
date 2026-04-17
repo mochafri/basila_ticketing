@@ -29,6 +29,17 @@
                                 <?= esc($currentStatus) ?>
                             </span>
                         </div>
+                        <?php if (!empty($taskStaff['catatan_laporan_penyelesaian'])): ?>
+                            <div class="bg-light p-2 rounded-2 border-start border-4 border-<?= $config['color'] ?> mt-2 shadow-sm">
+                                <div class="d-flex align-items-center gap-1 mb-1 text-muted">
+                                    <iconify-icon icon="ph:notebook-bold" style="font-size: .8rem;"></iconify-icon>
+                                    <span class="fw-bold text-uppercase" style="font-size: .6rem; letter-spacing: 1px;">Laporan Penyelesaian Staff</span>
+                                </div>
+                                <p class="m-0 custom-small-font fst-italic text-dark">
+                                    "<?= esc($taskStaff['catatan_laporan_penyelesaian']) ?>"
+                                </p>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <!-- button selesaikan tugas -->

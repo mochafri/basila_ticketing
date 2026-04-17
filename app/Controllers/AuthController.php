@@ -63,7 +63,6 @@ class AuthController extends BaseController
 
         return view('auth/signUp/index', $data);
     }
-
     public function forgotPassword(): string
     {
         $data = [

@@ -17,17 +17,45 @@ class TiketService
         $this->riwayatAktifitas = model('RiwayatAktifitas');
     }
 
-    # Bagian get all data tiket
-    public function getDataTiket()
+    # Bagian get all data tiket dengan filtering Role
+    public function getDataTiket($roles = [], $nip = null)
     {
-        return $this->tiketModel
+        $query = $this->tiketModel
             ->select(
-                'tikets.id, tikets.judul_permohonan, tikets.deskripsi_permohonan, tikets.tiket_status, tikets.created_at, 
+                'tikets.id, tikets.judul_permohonan, tikets.deskripsi_permohonan, tikets.tiket_status, 
+                tikets.created_at, tikets.nip_creator, tikets.nama_creator,
                 layanans.per_kategori_layanan,
                 kategoris.kategori_layanan'
             )
             ->join('layanans', 'layanans.id = tikets.id_layanan', 'left')
-            ->join('kategoris', 'kategoris.id = layanans.fk_kategori', 'left')
+            ->join('kategoris', 'kategoris.id = layanans.fk_kategori', 'left');
+
+        // 1. KABAG (SUPERADMIN): Melihat semua tiket
+        if (in_array('SUPERADMIN', $roles)) {
+            return $query->findAll();
+        }
+
+        // 2. KAUR: Melihat tiket yang didelegasikan kepadanya (Kecuali status Waiting)
+        if (in_array('KEPALA URUSAN ADMINISTRASI AKADEMIK', $roles)) {
+            return $query->join('assign_to_kaur', 'assign_to_kaur.fk_tiket = tikets.id')
+                ->where('assign_to_kaur.nip_kaur', $nip)
+                ->where('tikets.tiket_status !=', 'Waiting')
+                ->findAll();
+        }
+
+        // 3. STAFF & MAHASISWA (Pelapor): 
+        // - Melihat tiket yang mereka buat sendiri (nip_creator) -> STATUS APA SAJA
+        // - Melihat tiket dimana mereka ditugaskan sebagai staff (nip_staff) -> HANYA JIKA BUKAN WAITING
+        return $query->join('assign_to_kaur', 'assign_to_kaur.fk_tiket = tikets.id', 'left')
+            ->join('assign_to_staff', 'assign_to_staff.fk_assign_to_kaur = assign_to_kaur.id', 'left')
+            ->groupStart()
+                ->where('tikets.nip_creator', $nip)
+                ->orGroupStart()
+                    ->where('assign_to_staff.nip_staff', $nip)
+                    ->where('tikets.tiket_status !=', 'Waiting')
+                ->groupEnd()
+            ->groupEnd()
+            ->distinct() 
             ->findAll();
     }
 
@@ -39,6 +67,7 @@ class TiketService
                 tikets.id, tikets.judul_permohonan, tikets.deskripsi_permohonan, 
                 tikets.tiket_status, tikets.created_at, tikets.dokumen_lampiran, 
                 tikets.original_dokumen_name,tikets.is_escalated,
+                tikets.nip_creator, tikets.nama_creator,
                 layanans.per_kategori_layanan,
                 kategoris.kategori_layanan
             ')
@@ -73,7 +102,9 @@ class TiketService
             'id_kategori' => $data['kategori'],
             'id_layanan' => $data['layanan'],
             'dokumen_lampiran' => $filePath,
-            'original_dokumen_name' => $originalName
+            'original_dokumen_name' => $originalName,
+            'nip_creator' => session('user_identifier'),
+            'nama_creator' => session('username')
         ]);
 
         $insertId = $this->tiketModel->getInsertID();
