@@ -48,9 +48,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             text: res.message,
                             timer: 1500,
                             showConfirmButton: false
-                        }).then(() => {
-                            window.location.href = '/tiket';
-                        });
+                        })
+                        // .then(() => {
+                        //     window.location.href = '/tiket';
+                        // });
                     } else {
                         Swal.fire({
                             icon: "error",

@@ -40,13 +40,14 @@ class EskalasiService
         ];
     }
 
-    public function rejectEscalated($id)
+    public function rejectEscalated($id, $data)
     {
         $db = \Config\Database::connect();
         $db->transStart();
 
         $this->tiketModel->update($id, [
-            'tiket_status' => 'Reject'
+            'tiket_status' => 'Reject',
+            'catatan' => $data
         ]);
 
         $this->riwayatAktifitas->insert([

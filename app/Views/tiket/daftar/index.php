@@ -9,8 +9,10 @@
         </div>
         <div class="col-6 d-flex justify-content-end align-items-center">
             <button class="btn add-btn fw-bold d-flex align-items-center gap-2">
-                <iconify-icon icon="hugeicons:plus-sign" class="text-white"></iconify-icon>
-                <span class="text-uppercase">tiket baru</span>
+                <a href="tiket/create" class="text-decoration-none text-white">
+                    <iconify-icon icon="hugeicons:plus-sign" class="text-white"></iconify-icon>
+                    <span class="text-uppercase">tiket baru</span>
+                </a>
             </button>
         </div>
     </div>

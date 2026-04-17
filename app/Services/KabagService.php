@@ -161,7 +161,7 @@ class KabagService
     }
 
     # Service Reject tiket 
-    public function rejectTiket($id)
+    public function rejectTiket($id, $data)
     {
         $db = \Config\Database::connect();
 
@@ -178,7 +178,7 @@ class KabagService
 
         $update = $this->tiketModel->update($id, [
             'tiket_status' => 'Rejected',
-            // 'catatan' => $data['catatan']
+            'catatan' => $data
         ]);
 
         if (!$update) {
@@ -255,6 +255,65 @@ class KabagService
         ] : [
             'status' => 'fail',
             'message' => 'Gagal menutup tiket.'
+        ];
+    }
+
+    public function tolakHasilKaur($assignKaurId, $catatan = null)
+    {
+        $db = \Config\Database::connect();
+
+        $assign = $this->assignTiket->find($assignKaurId);
+
+        if (!$assign) {
+            return [
+                'status' => 'fail',
+                'message' => 'Data penugasan tidak ditemukan'
+            ];
+        }
+
+        $db->transStart();
+
+        # Update flag kaur spesifik menjadi Revisi dan simpan catatan
+        $update = $this->assignTiket->update($assignKaurId, [
+            'flag' => 'Revisi',
+            'catatan_revisi' => $catatan
+        ]);
+
+        # Update status task
+        $this->assignTaskStaff
+            ->where('fk_assign_to_kaur', $assignKaurId)
+            ->update([
+                'task_status' => 'Revisi'
+            ]);
+
+        if (!$update) {
+            $db->transRollback();
+            return [
+                'status' => 'fail',
+                'message' => 'Gagal mengubah status tugas'
+            ];
+        }
+
+        # Kembalikan status tiket menjadi In Progress
+        $this->tiketModel->update($assign['fk_tiket'], [
+            'tiket_status' => 'In Progress'
+        ]);
+
+        $this->riwayatAktifitas->insert([
+            'activity_title' => 'Revisi Hasil Pekerjaan',
+            'message' => "Kepala Bagian meminta revisi kepada {$assign['kaur_name']} dengan catatan: \"{$catatan}\"",
+            'created_by' => 'Kepala Bagian',
+            'fk_tiket' => $assign['fk_tiket']
+        ]);
+
+        $db->transComplete();
+
+        return $db->transStatus() ? [
+            'status' => 'success',
+            'message' => 'Tugas berhasil dikembalikan untuk direvisi'
+        ] : [
+            'status' => 'fail',
+            'message' => 'Gagal memproses revisi'
         ];
     }
 }

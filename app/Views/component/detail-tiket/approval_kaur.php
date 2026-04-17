@@ -59,10 +59,10 @@ $semuaSelesai = !empty($taskStaffOnKaur) && count(array_filter($taskStaffOnKaur,
                                     <div class="d-flex flex-column gap-2 flex-grow-1">
                                         <div class="d-flex align-items-center gap-2">
                                             <p class="custom-small-font fw-bold m-0"><?= esc($task['task_instruction'] ?: $task['judul_permohonan']) ?></p>
-                                            <button class="btn btn-sm btn-outline-secondary border-0 p-1 btn-edit-instruction" 
-                                                    data-id="<?= esc($task['id']) ?>" 
-                                                    data-instruction="<?= esc($task['task_instruction'] ?: $task['judul_permohonan']) ?>"
-                                                    title="Edit Instruksi">
+                                            <button class="btn btn-sm btn-outline-secondary border-0 p-1 btn-edit-instruction"
+                                                data-id="<?= esc($task['id']) ?>"
+                                                data-instruction="<?= esc($task['task_instruction'] ?: $task['judul_permohonan']) ?>"
+                                                title="Edit Instruksi">
                                                 <iconify-icon icon="ph:pencil-simple-line-bold"></iconify-icon>
                                             </button>
                                         </div>
@@ -95,10 +95,10 @@ $semuaSelesai = !empty($taskStaffOnKaur) && count(array_filter($taskStaffOnKaur,
                                 <div class="d-flex flex-column gap-2">
                                     <div class="d-flex align-items-center gap-2">
                                         <span class="custom-small-font fw-bold"><?= esc($task['task_instruction'] ?: $task['judul_permohonan']) ?></span>
-                                        <button class="btn btn-sm btn-outline-secondary border-0 p-1 btn-edit-instruction" 
-                                                data-id="<?= esc($task['id']) ?>" 
-                                                data-instruction="<?= esc($task['task_instruction'] ?: $task['judul_permohonan']) ?>"
-                                                title="Edit Instruksi">
+                                        <button class="btn btn-sm btn-outline-secondary border-0 p-1 btn-edit-instruction"
+                                            data-id="<?= esc($task['id']) ?>"
+                                            data-instruction="<?= esc($task['task_instruction'] ?: $task['judul_permohonan']) ?>"
+                                            title="Edit Instruksi">
                                             <iconify-icon icon="ph:pencil-simple-line-bold"></iconify-icon>
                                         </button>
                                     </div>

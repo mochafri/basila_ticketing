@@ -59,13 +59,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 text: "Ingin menolak eskalasi tiket ini?",
                 icon: "warning",
                 showCancelButton: true,
-                confirmButtonColor: "#d33",
+                confirmButtonColor: "#f39c12",
                 cancelButtonColor: "#3085d6",
-                confirmButtonText: "Ya, tolak!",
-                cancelButtonText: "Batal"
+                confirmButtonText: "Ya, Tolak!",
+                cancelButtonText: "Batal",
+                preConfirm: (value) => {
+                    if (!value) {
+                        Swal.showValidationMessage('Catatan revisi wajib diisi!')
+                    }
+                    return value;
+                }
             }).then(async (result) => {
                 if (result.isConfirmed) {
-                    const res = await rejectEscalated(parseSlug);
+                    const res = await rejectEscalated(parseSlug, result.value);
                     if (res.status === 'success') {
                         Swal.fire({
                             icon: 'success',

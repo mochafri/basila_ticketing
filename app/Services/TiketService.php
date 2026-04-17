@@ -81,15 +81,15 @@ class TiketService
         $this->riwayatAktifitas->insert([
             'activity_title' => 'Laporan Tugas',
             'message' => 'Staf telah mengunggah laporan penyelesaian tugas.',
-            'created_by' => 'Staf',
+            'created_by' => $username,
             'fk_tiket' => $insertId
         ]);
 
         $db->transComplete();
 
-        return $db->transStatus() ? [ 
+        return $db->transStatus() ? [
             'status' => 'success',
-            'message' => 'Berhasil menambahkan tiket'
+            'message' => 'Berhasil menambahkan tiket',
         ] : [
             'status' => 'fail',
             'message' => 'Gagal menambahkan tiket'

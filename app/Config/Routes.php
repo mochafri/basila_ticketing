@@ -58,6 +58,7 @@ $routes->post('/reject-tiket/(:num)', 'TicketController::rejectTiket/$1');
 $routes->post('/escalated-tiket/(:num)', 'TicketController::escalated/$1');
 $routes->post('/approve-tiket/(:num)', 'TicketController::approveTiket/$1');
 $routes->post('/tutup-tiket/(:num)', 'TicketController::closeTicket/$1');
+$routes->post('revisi-kaur', 'TicketController::revisiKaur');
 
 # Assign task ke staff
 $routes->post('/approve-task/(:num)', 'TicketController::approveTask/$1');

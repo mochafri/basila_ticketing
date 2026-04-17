@@ -60,6 +60,7 @@ class TicketController extends BaseController
             'staff' => $this->kaurService->getStaff($nip) ?? [],
             'taskStaff' => $this->staffService->getTaskStaff($slug, $nip),
             'taskStaffOnKaur' => $this->kaurService->getTaskStaffOnKaur($slug, $nip) ?? [],
+            'allTaskStaffOnKaur' => $this->kaurService->getAllTaskStaffByTiket($slug) ?? [],
             'kaurByTiketOpen' => $this->kabagService->getKaurByTiketOpen($slug),
             'riwayat' => $this->riwayatService->getRiwayat($slug) ?? [],
         ]);
@@ -135,7 +136,16 @@ class TicketController extends BaseController
 
     public function rejectTiket($slug)
     {
-        $result = $this->kabagService->rejectTiket($slug);
+        $data = $this->request->getJSON(true);
+
+        if (!$this->validateData($data, 'rejectRule')) {
+            return $this->response->setStatusCode(422)->setJSON([
+                'status' => 'failed',
+                'message' => 'Gagal reject tiket'
+            ]);
+        }
+
+        $result = $this->kabagService->rejectTiket($slug, $data['catatan']);
         $statusCode = $result['status'] === 'success' ? 200 : 422;
 
         return response()->setStatusCode($statusCode)->setJSON($result);
@@ -246,6 +256,24 @@ class TicketController extends BaseController
         return $this->response->setStatusCode($statusCode)->setJSON($result);
     }
 
+    public function revisiKaur()
+    {
+        $payload = $this->request->getJSON(true);
+        $id = $payload['assign_id'] ?? null;
+        $catatan = $payload['catatan'] ?? null;
+
+        if (!$id) {
+             return $this->response->setStatusCode(400)->setJSON([
+                'status' => 'fail',
+                'message' => 'ID penugasan tidak ditemukan'
+            ]);
+        }
+        $result = $this->kabagService->tolakHasilKaur($id, $catatan);
+        $statusCode = $result['status'] === 'success' ? 200 : 422;
+
+        return $this->response->setStatusCode($statusCode)->setJSON($result);
+    }
+
     public function approveEscalated($slug)
     {
         $result = $this->eskalasiService->approveEscalated($slug);
@@ -257,7 +285,16 @@ class TicketController extends BaseController
 
     public function rejectEscalated($slug)
     {
-        $result = $this->eskalasiService->rejectEscalated($slug);
+        $data = $this->request->getJSON(true);
+
+        if (!$this->validateData($data, 'rejectRule')) {
+            return $this->response->setStatusCode(422)->setJSON([
+                'status' => 'failed',
+                'message' => 'Gagal reject tiket'
+            ]);
+        }
+
+        $result = $this->eskalasiService->rejectEscalated($slug, $data['catatan']);
         $statusCode = $result['status'] === 'success' ? 200 : 400;
 
         return $this->response->setStatusCode($statusCode)->setJSON($result);
