@@ -122,18 +122,17 @@ if ($hasFinish): ?>
     <?php endif; ?>
 <?php endif; ?>
 <div class="d-flex gap-3 w-100">
-    <iconify-icon icon="<?= $detail['tiket_status'] === 'Closed' ? 'ph:check-bold' : 'ph:flow-arrow' ?>" 
+    <iconify-icon icon="<?= $detail['tiket_status'] === 'Closed' ? 'ph:check-bold' : 'ph:flow-arrow' ?>"
         class="text-white btn h-25 
-        <?= $detail['tiket_status'] === 'Closed' ? 'btn-success' :
-            ($detail['tiket_status'] === 'In Progress' ? 'btn-danger' : 'btn-secondary') ?> "></iconify-icon>
+        <?= $detail['tiket_status'] === 'Closed' ? 'btn-success' : ($detail['tiket_status'] === 'In Progress' ? 'btn-danger' : 'btn-secondary') ?> "></iconify-icon>
     <div class="flex-grow-1 gap-2 d-flex flex-column">
         <p class="m-0 fw-bold custom-small-font">konfirmasi penyelesaian</p>
         <?php if ($detail['tiket_status'] === 'In Progress'): ?>
             <div class="d-flex flex-wrap gap-2">
-                <?php if(in_array('Finish', array_column($kaurByTiketOpen, 'flag'))): ?>
-                <button
-                    class="btn btn-tutup-tiket btn-success flex-fill text-uppercase fw-bold rounded-3 custom-small-font py-3 px-4">tutup
-                    tiket (selesai)</button>
+                <?php if (in_array('Finish', array_column($kaurByTiketOpen, 'flag'))): ?>
+                    <button
+                        class="btn btn-tutup-tiket btn-success flex-fill text-uppercase fw-bold rounded-3 custom-small-font py-3 px-4">tutup
+                        tiket (selesai)</button>
                 <?php endif; ?>
             </div>
         <?php endif; ?>

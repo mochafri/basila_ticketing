@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     const res = await postTiket(judul, kategori, layanan, deskripsi, file);
-                    
+
                     if (res.status === 'success') {
                         Swal.fire({
                             icon: "success",
@@ -48,10 +48,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             text: res.message,
                             timer: 1500,
                             showConfirmButton: false
-                        })
-                        // .then(() => {
-                        //     window.location.href = '/tiket';
-                        // });
+                        }).then(() => {
+                            window.location.href = '/tiket';
+                        });
                     } else {
                         Swal.fire({
                             icon: "error",

@@ -10,7 +10,13 @@ $statusColors = [
 ];
 ?>
 
-<?php foreach ($tiket as $data): 
+<?php if (empty($tiket['data'])): ?>
+    <div class="col-12 text-center py-5">
+        <iconify-icon icon="ph:ticket-duotone" class="fs-1 text-muted mb-3 opacity-25"></iconify-icon>
+        <p class="text-muted">Tidak ada tiket yang ditemukan.</p>
+    </div>
+<?php else: ?>
+    <?php foreach ($tiket['data'] as $data): 
     $color = $statusColors[$data['tiket_status']] ?? 'secondary';
 ?>
     <div class="col-12 mb-3">
@@ -54,3 +60,18 @@ $statusColors = [
         </div>
     </div>
 <?php endforeach; ?>
+    <div class="col-12 mt-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="pager-info d-none d-md-block">
+                <span class="text-secondary custom-small-font">
+                    Showing <b><?= (($tiket['pager']->getCurrentPage() - 1) * $tiket['pager']->getPerPage()) + 1 ?></b> 
+                    to <b><?= min($tiket['pager']->getCurrentPage() * $tiket['pager']->getPerPage(), $tiket['pager']->getTotal()) ?></b> 
+                    of <b><?= $tiket['pager']->getTotal() ?></b> entries
+                </span>
+            </div>
+            <div>
+                <?= $tiket['pager']->links('default', 'premium') ?>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>

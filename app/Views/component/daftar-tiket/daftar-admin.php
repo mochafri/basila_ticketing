@@ -11,10 +11,8 @@
                 <th>AKSI</th>
             </tr>
         </thead>
-
         <tbody>
-            <?php $no = 1; ?>
-            <?php foreach ($tiket as $data): 
+            <?php foreach ($tiket['data'] as $data):
                 $statusClass = '';
                 switch ($data['tiket_status']) {
                     case 'Waiting':
@@ -37,7 +35,7 @@
                 }
             ?>
                 <tr>
-                    <td class="tiket-id"><?= $no++ ?></td>
+                    <td class="tiket-id"><?= $data['id'] ?></td>
                     <td class="tiket-judul">
                         <?= $data['judul_permohonan'] ?>
                     </td>
@@ -63,4 +61,16 @@
             <?php endforeach; ?>
         </tbody>
     </table>
+    <div class="d-flex justify-content-between align-items-center p-4 pt-0">
+        <div class="pager-info d-none d-md-block">
+            <span class="text-secondary custom-small-font">
+                Showing <b><?= (($tiket['pager']->getCurrentPage() - 1) * $tiket['pager']->getPerPage()) + 1 ?></b>
+                to <b><?= min($tiket['pager']->getCurrentPage() * $tiket['pager']->getPerPage(), $tiket['pager']->getTotal()) ?></b>
+                of <b><?= $tiket['pager']->getTotal() ?></b> entries
+            </span>
+        </div>
+        <div>
+            <?= $tiket['pager']->links('default', 'premium') ?>
+        </div>
+    </div>
 </div>
