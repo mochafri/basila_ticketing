@@ -1,66 +1,80 @@
-<div class="card mt-5 border-0 shadow-sm tiket-tabel">
-    <table class="table align-middle mb-0">
+<?php 
+$statusColors = [
+    'Waiting'           => 'warning',
+    'Open'              => 'info',
+    'Escalated Process' => 'secondary',
+    'Approve Escalated' => 'primary',
+    'In Progress'       => 'primary',
+    'Closed'            => 'success',
+    'Rejected'          => 'danger'
+];
+?>
 
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>JUDUL PERMOHONAN</th>
-                <th>KATEGORI</th>
-                <th>TANGGAL</th>
-                <th>STATUS</th>
-                <th>AKSI</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            <?php $no = 1; ?>
-            <?php foreach ($tiket as $data): 
-                $statusClass = '';
-                switch ($data['tiket_status']) {
-                    case 'Waiting':
-                        $statusClass = 'bg-status-waiting';
-                        break;
-                    case 'Open':
-                        $statusClass = 'bg-status-open';
-                        break;
-                    case 'In Progress':
-                        $statusClass = 'bg-status-inprogress';
-                        break;
-                    case 'Closed':
-                        $statusClass = 'bg-status-closed';
-                        break;
-                    case 'Rejected':
-                        $statusClass = 'bg-status-rejected';
-                        break;
-                    default:
-                        $statusClass = '';
-                }
-            ?>
+<div class="card border-0 shadow-sm rounded-4 overflow-hidden mt-2">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="bg-light border-bottom">
                 <tr>
-                    <td class="tiket-id"><?= $no++ ?></td>
-                    <td class="tiket-judul">
-                        <?= $data['judul_permohonan'] ?>
-                    </td>
-                    <td class="tiket-kategori">
-                        <div class="tiket-kategori-wrapper"></div>
-                        <iconify-icon icon="hugeicons:layers-01"></iconify-icon>
-                        <?= $data['kategori_layanan'] ?>
-                    </td>
-                    <td class="tiket-tanggal">
-                        <?= date('Y-m-d', strtotime($data['created_at'])) ?>
-                    </td>
-                    <td>
-                        <span class="tiket-status-badge <?= $statusClass ?>">
-                            <?= $data['tiket_status'] ?>
-                        </span>
-                    </td>
-                    <td>
-                        <a href="<?= site_url('tiket/' . $data['id']) ?>" class="tiket-btn-aksi">
-                            <iconify-icon icon="hugeicons:arrow-right-02"></iconify-icon>
-                        </a>
-                    </td>
+                    <th class="ps-4 py-3 text-uppercase custom-small-font fw-bold text-secondary" style="width: 80px;">ID</th>
+                    <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary">Judul Permohonan</th>
+                    <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary">Kategori</th>
+                    <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary">Pengaju</th>
+                    <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary">Tanggal</th>
+                    <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary text-center">Status</th>
+                    <th class="pe-4 py-3 text-uppercase custom-small-font fw-bold text-secondary text-end">Aksi</th>
                 </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <?php foreach ($tiket as $data): 
+                    $color = $statusColors[$data['tiket_status']] ?? 'secondary';
+                ?>
+                    <tr>
+                        <td class="ps-4">
+                            <span class="font-monospace fw-bold text-muted small">#<?= $data['id'] ?></span>
+                        </td>
+                        <td>
+                            <div class="fw-extra-bold text-dark text-uppercase small" style="letter-spacing: -0.2px;"><?= esc($data['judul_permohonan']) ?></div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center gap-1">
+                                <iconify-icon icon="ph:stack-duotone" class="text-danger fs-6"></iconify-icon>
+                                <span class="custom-small-font fw-bold text-dark text-uppercase"><?= esc($data['kategori_layanan']) ?></span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center gap-1">
+                                <iconify-icon icon="ph:user-duotone" class="text-danger fs-6"></iconify-icon>
+                                <span class="custom-small-font fw-medium"><?= esc($data['nama_creator']) ?></span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center gap-1 text-muted">
+                                <iconify-icon icon="ph:calendar-blank-duotone" class="fs-6"></iconify-icon>
+                                <span class="custom-small-font"><?= date('d/m/Y', strtotime($data['created_at'])) ?></span>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge bg-<?= $color ?> bg-opacity-10 text-<?= $color ?> px-3 py-1 rounded-pill fw-bold text-uppercase d-inline-flex align-items-center gap-1" style="font-size: 0.6rem; letter-spacing: 0.5px;">
+                                <iconify-icon icon="ph:dot-bold" class="fs-5"></iconify-icon>
+                                <?= $data['tiket_status'] ?>
+                            </span>
+                        </td>
+                        <td class="pe-4 text-end">
+                            <a href="<?= site_url('tiket/'. $data['id']) ?>" class="btn btn-sm btn-outline-danger rounded-3 p-1 px-2 d-inline-flex align-items-center justify-content-center">
+                                <iconify-icon icon="ph:arrow-right-bold" class="fs-6"></iconify-icon>
+                            </a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                <?php if (empty($tiket)): ?>
+                    <tr>
+                        <td colspan="7" class="text-center py-5 text-muted">
+                            <iconify-icon icon="ph:empty-duotone" class="fs-1 d-block mb-2"></iconify-icon>
+                            Belum ada data tiket.
+                        </td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
 </div>
