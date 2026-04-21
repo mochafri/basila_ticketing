@@ -1,17 +1,17 @@
 <div class="card mb-4 border-0 shadow-sm rounded-4 overlay-container overflow-hidden">
     <div class="card-header p-5 pb-4 bg-white border-0">
         <div class="d-flex align-items-center gap-2 mb-3">
-            <?php 
-                $statusColors = [
-                    'Waiting'           => 'warning',
-                    'Open'              => 'info',
-                    'Escalated Process' => 'secondary',
-                    'Approve Escalated' => 'primary',
-                    'In Progress'       => 'primary',
-                    'Closed'            => 'success',
-                    'Rejected'          => 'danger'
-                ];
-                $color = $statusColors[$detail['tiket_status']] ?? 'secondary';
+            <?php
+            $statusColors = [
+                'Waiting'           => 'warning',
+                'Open'              => 'info',
+                'Escalated Process' => 'secondary',
+                'Approve Escalated' => 'primary',
+                'In Progress'       => 'primary',
+                'Closed'            => 'success',
+                'Rejected'          => 'danger'
+            ];
+            $color = $statusColors[$detail['tiket_status']] ?? 'secondary';
             ?>
             <span class="badge bg-<?= $color ?> bg-opacity-10 text-<?= $color ?> px-3 py-2 rounded-pill fw-bold text-uppercase d-inline-flex align-items-center gap-1" style="font-size: 0.65rem; letter-spacing: 0.5px;">
                 <iconify-icon icon="ph:dot-bold" class="fs-5"></iconify-icon>
@@ -26,7 +26,7 @@
 
         <!-- Metadata Section: Compact & Elegant -->
         <div class="d-flex flex-wrap align-items-center gap-3 gap-md-4 py-3 px-4 bg-light bg-opacity-50 rounded-4 border border-light">
-            
+
             <!-- Kategori & Layanan -->
             <div class="d-flex align-items-center gap-2">
                 <iconify-icon icon="ph:stack-duotone" class="text-danger fs-5"></iconify-icon>
@@ -63,20 +63,20 @@
 
     <div class="card-body p-5 pt-0">
         <div class="task-desc py-4">
-            <p class="fs-5 fw-medium text-secondary" style="line-height: 1.6;"><?= nl2br(esc($detail['deskripsi_permohonan'])) ?></p>
+            <p class="fs-5 fw-medium text-secondary" style="line-height: 1.6;"><?= nl2br(esc(strip_tags($detail['deskripsi_permohonan']))) ?></p>
         </div>
-        
+
         <?php if (!empty($detail['dokumen_lampiran'])): ?>
-        <div class="mt-2 pt-4 border-top">
-            <span class="text-uppercase custom-small-font fw-bold text-muted d-block mb-3" style="letter-spacing: 1px;">Dokumen Pendukung:</span>
-            <a href="<?= base_url('tiket/file/users/' . $detail['dokumen_lampiran']) ?>" target="_blank"
-                class="btn btn-outline-danger d-inline-flex align-items-center gap-2 px-4 py-2 rounded-3 transition-all hov-shadow">
-                <iconify-icon icon="ph:file-pdf-duotone" class="fs-4"></iconify-icon>
-                <span class="custom-small-font fw-bold">
-                    <?= esc($detail['original_dokumen_name']) ?>
-                </span>
-            </a>
-        </div>
+            <div class="mt-2 pt-4 border-top">
+                <span class="text-uppercase custom-small-font fw-bold text-muted d-block mb-3" style="letter-spacing: 1px;">Dokumen Pendukung:</span>
+                <a href="<?= base_url('tiket/file/users/' . $detail['dokumen_lampiran']) ?>" target="_blank"
+                    class="btn btn-outline-danger d-inline-flex align-items-center gap-2 px-4 py-2 rounded-3 transition-all hov-shadow">
+                    <iconify-icon icon="ph:file-pdf-duotone" class="fs-4"></iconify-icon>
+                    <span class="custom-small-font fw-bold">
+                        <?= esc($detail['original_dokumen_name']) ?>
+                    </span>
+                </a>
+            </div>
         <?php endif; ?>
     </div>
 </div>

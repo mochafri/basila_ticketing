@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     const res = await postTiket(judul, kategori, layanan, deskripsi, file);
-                    
+
                     if (res.status === 'success') {
                         Swal.fire({
                             icon: "success",

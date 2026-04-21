@@ -130,7 +130,7 @@ class KaurService
             ->select('id,fk_tiket,nip_kaur')
             ->where('fk_tiket', $idTiket)
             ->where('nip_kaur', $nip)
-            ->first(); 
+            ->first();
 
         if (!$kaur) {
             return [
@@ -177,7 +177,7 @@ class KaurService
             ->select('
                 assign_to_staff.id, assign_to_staff.task_instruction, assign_to_staff.task_status, 
                 assign_to_staff.taks_dokumen, assign_to_staff.catatan_laporan_penyelesaian,
-                assign_to_staff.assign_task_to_staff, assign_to_staff.nip_staff,
+                assign_to_staff.assign_task_to_staff, assign_to_staff.nip_staff,assign_to_staff.fk_assign_to_kaur,
                 assign_to_kaur.kaur_name, assign_to_kaur.fk_tiket as id_tiket,
                 tikets.judul_permohonan, tikets.tiket_status
             ')
@@ -185,6 +185,22 @@ class KaurService
             ->join('tikets', 'tikets.id = assign_to_kaur.fk_tiket')
             ->where('assign_to_kaur.fk_tiket', $idTiket)
             ->where('assign_to_kaur.nip_kaur', $nipKaur)
+            ->findAll();
+    }
+
+    public function getAllTaskStaffByTiket($idTiket)
+    {
+        return $this->assignTaskStaff
+            ->select('
+                assign_to_staff.id, assign_to_staff.task_instruction, 
+                assign_to_staff.taks_dokumen, assign_to_staff.catatan_laporan_penyelesaian,
+                assign_to_staff.assign_task_to_staff,assign_to_staff.fk_assign_to_kaur,
+                assign_to_kaur.kaur_name, assign_to_kaur.fk_tiket as id_tiket,
+                tikets.judul_permohonan, tikets.tiket_status
+            ')
+            ->join('assign_to_kaur', 'assign_to_kaur.id = assign_to_staff.fk_assign_to_kaur')
+            ->join('tikets', 'tikets.id = assign_to_kaur.fk_tiket')
+            ->where('assign_to_kaur.fk_tiket', $idTiket)
             ->findAll();
     }
 

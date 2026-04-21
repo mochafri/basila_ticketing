@@ -5,7 +5,6 @@
     <div class="row">
         <div class="col-10 mx-auto">
             <div class="card mt-4 border-0 shadow-lg rounded-4">
-                <!-- Tambahin aja disini 1 lagi buat gagal membuat tiket nya -->
                 <div class="card-body p-5">
                     <div class="row header mb-5">
                         <div class="col-6">
@@ -83,4 +82,17 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const checkBox = document.getElementById('invalidCheck');
+        const btnSubmit = document.querySelector('.btn-submit');
+
+        btnSubmit.disabled = true;
+
+        checkBox.addEventListener('change', function() {
+            btnSubmit.disabled = !this.checked;
+        });
+    });
+</script>
 <?= $this->endSection() ?>

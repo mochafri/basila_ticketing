@@ -40,6 +40,11 @@ class AssignTiketToStaff extends Migration
                 'constraint' => '255',
                 'null' => false
             ],
+            'original_task_name' => [
+                'type' => 'VARCHAR',
+                'constraint' => '255',
+                'null' => false
+            ],
             'catatan_revisi' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255',

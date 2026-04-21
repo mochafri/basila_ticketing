@@ -33,32 +33,39 @@ class TiketService
 
         // 1. KABAG (SUPERADMIN): Melihat semua tiket
         if (in_array('SUPERADMIN', $roles)) {
-            return $query->findAll();
+            return [
+                'data' => $query->paginate(10),
+                'pager' => $query->pager,
+            ];
         }
         // 2. KAUR: Melihat tiket yang didelegasikan kepadanya (Kecuali status Waiting)
-        elseif (in_array('KEPALA URUSAN ADMINISTRASI AKADEMIK', $roles)) {
-            return $query->join('assign_to_kaur', 'assign_to_kaur.fk_tiket = tikets.id')
-                ->where('assign_to_kaur.nip_kaur', $nip)
-                ->where('tikets.tiket_status !=', 'Waiting')
-                ->findAll();
+        if (in_array('KEPALA URUSAN ADMINISTRASI AKADEMIK', $roles)) {
+            return [
+                'data' => $query->join('assign_to_kaur', 'assign_to_kaur.fk_tiket = tikets.id')
+                    ->where('assign_to_kaur.nip_kaur', $nip)
+                    ->where('tikets.tiket_status !=', 'Waiting')
+                    ->paginate(10),
+                'pager' => $query->pager,
+            ];
         }
         // 3. STAFF & MAHASISWA (Pelapor): 
-        else {
-            return $query->join('assign_to_kaur', 'assign_to_kaur.fk_tiket = tikets.id', 'left')
+        // - Melihat tiket yang mereka buat sendiri (nip_creator) -> STATUS APA SAJA
+        // - Melihat tiket dimana mereka ditugaskan sebagai staff (nip_staff) -> HANYA JIKA BUKAN WAITING
+        return [
+            'data' => $query->join('assign_to_kaur', 'assign_to_kaur.fk_tiket = tikets.id', 'left')
                 ->join('assign_to_staff', 'assign_to_staff.fk_assign_to_kaur = assign_to_kaur.id', 'left')
                 ->groupStart()
-                    ->where('tikets.nip_creator', $nip)
-                    ->orGroupStart()
-                        ->where('assign_to_staff.nip_staff', $nip)
-                        ->where('tikets.tiket_status !=', 'Waiting')
-                    ->groupEnd()
+                ->where('tikets.nip_creator', $nip)
+                ->orGroupStart()
+                ->where('assign_to_staff.nip_staff', $nip)
+                ->where('tikets.tiket_status !=', 'Waiting')
+                ->groupEnd()
                 ->groupEnd()
                 ->distinct()
-                ->findAll();
-        }
+                ->paginate(10),
+            'pager' => $query->pager
+        ];
     }
-
-
 
     # Bagian get detail tiket
     public function showTiket($id)
@@ -113,15 +120,15 @@ class TiketService
         $this->riwayatAktifitas->insert([
             'activity_title' => 'Laporan Tugas',
             'message' => 'Staf telah mengunggah laporan penyelesaian tugas.',
-            'created_by' => 'Staf',
+            'created_by' => $username,
             'fk_tiket' => $insertId
         ]);
 
         $db->transComplete();
 
-        return $db->transStatus() ? [ 
+        return $db->transStatus() ? [
             'status' => 'success',
-            'message' => 'Berhasil menambahkan tiket'
+            'message' => 'Berhasil menambahkan tiket',
         ] : [
             'status' => 'fail',
             'message' => 'Gagal menambahkan tiket'

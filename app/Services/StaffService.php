@@ -33,6 +33,8 @@ class StaffService
 
     public function updateTask($id, array $data, $file, $nip)
     {
+        $db = \Config\Database::connect();
+
         $staffData = $this->assignTaskStaff
             ->select('assign_to_staff.id')
             ->join('assign_to_kaur', 'assign_to_kaur.id = assign_to_staff.fk_assign_to_kaur')
@@ -54,23 +56,37 @@ class StaffService
 
         if ($file && $file->isValid() && !$file->hasMoved()) {
             $updateData['taks_dokumen'] = $file->getRandomName();
+            $updateData['original_task_dokumen'] = $file;
             $file->move(WRITEPATH . 'uploads/tiket/admin/', $updateData['taks_dokumen']);
         }
 
+        $db->transStart();
+
         $result = $this->assignTaskStaff->update($staffData['id'], $updateData);
 
-        if ($result) {
-            $this->riwayatAktifitas->insert([
-                'activity_title' => 'Laporan Tugas',
-                'message' => 'Staf telah mengunggah laporan penyelesaian tugas.',
-                'created_by' => 'Staf',
-                'fk_tiket' => $id
-            ]);
+        if (!$result) {
+            $db->transRollback();
+            return [
+                'status' => 'fail',
+                'message' => 'Gagal update tugas'
+            ];
         }
 
-        return [
-            'status' => $result ? 'success' : 'fail',
-            'message' => $result ? 'Berhasil upload tugas' : 'Gagal upload tugas'
+        $this->riwayatAktifitas->insert([
+            'activity_title' => 'Laporan Tugas',
+            'message' => 'Staf telah mengunggah laporan penyelesaian tugas.',
+            'created_by' => 'Staf',
+            'fk_tiket' => $id
+        ]);
+
+        $db->transComplete();
+
+        return $db->transStatus() ? [
+            'status' => 'success',
+            'message' => 'Berhasil upload tugas'
+        ] : [
+            'status' => 'fail',
+            'message' => 'Gagal upload tugas'
         ];
     }
 }

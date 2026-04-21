@@ -24,7 +24,7 @@ $statusColors = [
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($tiket as $data): 
+                <?php foreach ($tiket['data'] as $data): 
                     $color = $statusColors[$data['tiket_status']] ?? 'secondary';
                 ?>
                     <tr>
@@ -60,7 +60,7 @@ $statusColors = [
                         </td>
                     </tr>
                 <?php endforeach; ?>
-                <?php if (empty($tiket)): ?>
+                <?php if (empty($tiket['data'])): ?>
                     <tr>
                         <td colspan="6" class="text-center py-5 text-muted">
                             <iconify-icon icon="ph:empty-duotone" class="fs-1 d-block mb-2"></iconify-icon>
@@ -70,5 +70,18 @@ $statusColors = [
                 <?php endif; ?>
             </tbody>
         </table>
+    </div>
+    <!-- Pagination Footer -->
+    <div class="d-flex justify-content-between align-items-center p-4 pt-0">
+        <div class="pager-info d-none d-md-block">
+            <span class="text-secondary custom-small-font">
+                Showing <b><?= (($tiket['pager']->getCurrentPage() - 1) * $tiket['pager']->getPerPage()) + 1 ?></b>
+                to <b><?= min($tiket['pager']->getCurrentPage() * $tiket['pager']->getPerPage(), $tiket['pager']->getTotal()) ?></b>
+                of <b><?= $tiket['pager']->getTotal() ?></b> entries
+            </span>
+        </div>
+        <div>
+            <?= $tiket['pager']->links('default', 'premium') ?>
+        </div>
     </div>
 </div>

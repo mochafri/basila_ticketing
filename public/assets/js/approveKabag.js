@@ -1,9 +1,66 @@
-import { reject, escalated, approveTiket, closeTicket } from "/assets/js/app.js";
+import { reject, escalated, approveTiket, closeTicket, revisiKaur } from "/assets/js/app.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     const segments = window.location.pathname.split('/');
     const slug = segments.pop();
     const parseSlug = parseInt(slug);
+
+    const btnRevisiIndividual = document.querySelectorAll('.btn-revisi-kaur-individual');
+    if (btnRevisiIndividual.length > 0) {
+        btnRevisiIndividual.forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const assignId = btn.getAttribute('data-id');
+                const kaurName = btn.getAttribute('data-name');
+                const originalText = btn.innerHTML;
+
+                Swal.fire({
+                    title: `Revisi untuk ${kaurName}?`,
+                    text: `Berikan catatan apa yang perlu diperbaiki oleh ${kaurName}:`,
+                    input: 'textarea',
+                    inputPlaceholder: 'Ketik catatan revisi di sini...',
+                    inputAttributes: {
+                        'aria-label': 'Ketik catatan revisi di sini'
+                    },
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#f39c12",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Ya, Kirim Revisi!",
+                    cancelButtonText: "Batal",
+                    preConfirm: (value) => {
+                        if (!value) {
+                            Swal.showValidationMessage('Catatan revisi wajib diisi!')
+                        }
+                        return value;
+                    }
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        btn.innerHTML = '<iconify-icon icon="line-md:loading-loop" class="fs-6"></iconify-icon> Processing...';
+                        btn.disabled = true;
+
+                        const res = await revisiKaur(assignId, result.value);
+                        if (res.status === 'success' || res.status === 200) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: res.message || `Berhasil mengirim permintaan revisi ke ${kaurName}`,
+                                timer: 1500,
+                                showConfirmButton: false
+                            }).then(() => location.reload());
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal!',
+                                text: res.message || 'Gagal mengirim permintaan revisi'
+                            });
+                            btn.innerHTML = originalText;
+                            btn.disabled = false;
+                        }
+                    }
+                });
+            });
+        });
+    }
 
     const btnReject = document.querySelector('.btn-reject');
     if (btnReject) {
@@ -15,13 +72,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 text: "Ingin menolak tiket ini?",
                 icon: "warning",
                 showCancelButton: true,
-                confirmButtonColor: "#d33",
+                confirmButtonColor: "#f39c12",
                 cancelButtonColor: "#3085d6",
-                confirmButtonText: "Ya, tolak!",
-                cancelButtonText: "Batal"
+                confirmButtonText: "Ya, Tolak!",
+                cancelButtonText: "Batal",
+                preConfirm: (value) => {
+                    if (!value) {
+                        Swal.showValidationMessage('Catatan revisi wajib diisi!')
+                    }
+                    return value;
+                }
             }).then(async (result) => {
                 if (result.isConfirmed) {
-                    const res = await reject(parseSlug);
+                    const res = await reject(parseSlug, result.value);
                     if (res.status === 'success' || res.status === 201 || res.status === 200) {
                         Swal.fire({
                             icon: 'success',

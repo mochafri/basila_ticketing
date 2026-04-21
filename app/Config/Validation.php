@@ -75,6 +75,13 @@ class Validation extends BaseConfig
         ]
     ];
 
+    public array $rejectRule = [
+        'catatan' => [
+            'label' => 'Catatan Revisi',
+            'rules' => 'required|string|min_length[3]'
+        ]
+    ];
+
     public array $assignTaskRule = [
         'task_instruction' => [
             'label' => 'Instruksi Tugas',

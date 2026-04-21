@@ -27,7 +27,11 @@ class AssignToKaur extends Migration
             ],
             'flag' => [
                 'type' => 'ENUM',
-                'constraint' => ['Start', 'Finish'],
+                'constraint' => ['Start', 'Progress', 'Revisi', 'Finish'],
+                'null' => true
+            ],
+            'catatan_revisi' => [
+                'type' => 'TEXT',
                 'null' => true
             ],
             'fk_tiket' => [

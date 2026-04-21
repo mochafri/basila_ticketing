@@ -19,7 +19,8 @@
             <?= $this->include('component/detail-tiket/approval_kabag', [
                 'kaur' => $kaur,
                 'detail' => $detail,
-                'kaurByTiketOpen' => $kaurByTiketOpen
+                'kaurByTiketOpen' => $kaurByTiketOpen,
+                'allTaskStaffOnKaur' => $allTaskStaffOnKaur
             ]); ?>
         <?php endif; ?>
         <!-- <p>-------------------------------end komponen bu fira-----------</p> -->
