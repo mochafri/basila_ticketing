@@ -1078,3 +1078,82 @@ li a {
 .pager-info b {
     color: var(--primaryColor);
 }
+
+.hover-red:hover {
+    color: #ef4444 !important;
+    transform: scale(1.2);
+    transition: all 0.2s ease;
+}
+
+/* User Management Compact Roles - Hover Expand Pattern */
+.role-badges-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
+    max-height: 32px; /* Setinggi satu baris badge */
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    max-width: 380px;
+    margin: 0 auto;
+    padding: 2px;
+}
+
+.role-badges-grid:hover {
+    max-height: 300px; /* Expand untuk menampilkan semua */
+    padding-bottom: 10px;
+}
+
+.role-badge-compact {
+    background: #f8fafc !important;
+    color: #475569 !important;
+    border: 1px solid #e2e8f0 !important;
+    padding: 4px 10px !important;
+    border-radius: 6px !important;
+    font-size: 9px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    transition: all 0.2s ease;
+    max-width: 200px; /* Batasi lebar maksimal agar tidak berantakan */
+}
+
+.role-badge-compact span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+}
+
+.role-badge-compact:hover {
+    background: #fff1f2 !important;
+    color: #ef4444 !important;
+    border-color: #fecaca !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.role-badge-compact .delete-icon {
+    cursor: pointer;
+    font-size: 11px;
+    color: #94a3b8;
+    transition: all 0.2s ease;
+    flex-shrink: 0; /* Pastikan ikon tidak mengecil */
+}
+
+.role-badge-compact:hover .delete-icon {
+    color: #ef4444;
+}
+
+.roles-expand-indicator {
+    transition: all 0.3s ease;
+}
+
+.role-badges-grid-container:hover .roles-expand-indicator {
+    transform: rotate(180deg);
+    opacity: 0.8 !important;
+}

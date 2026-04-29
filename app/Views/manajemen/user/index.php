@@ -42,39 +42,69 @@
                             <div class="icon-box" style="width: 45px; height: 45px; background: #eef2ff; color: #4f46e5; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
                                 <iconify-icon icon="solar:user-plus-bold-duotone" style="font-size: 24px;"></iconify-icon>
                             </div>
-                            <h5 class="fw-bold mb-0">MAPPING USER ROLE</h5>
+                            <h5 class="fw-bold mb-0 text-uppercase">Mapping User Role</h5>
                         </div>
+                        
                         <div class="row g-3">
-                            <div class="col-md-7">
-                                <div class="select-wrapper w-100">
-                                    <select id="user_select" class="form-select custom-input">
-                                        <option selected disabled>PILIH USER</option>
-                                        <?php foreach($users as $user): ?>
-                                            <option value="<?= esc($user['username']) ?>" data-nip="<?= esc($user['nip']) ?>">
-                                                <?= esc($user['username']) ?> (<?= esc($user['nip'] ?? '-') ?>)
-                                            </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                    <iconify-icon icon="solar:alt-arrow-down-outline" class="select-icon"></iconify-icon>
+                            <!-- CUSTOM MULTISELECT USER -->
+                            <div class="col-md-7 position-relative">
+                                <div class="custom-multiselect" id="multiselect-user">
+                                    <div class="select-trigger custom-input d-flex justify-content-between align-items-center bg-light border-0 rounded-4 px-3 py-2" style="cursor: pointer; min-height: 45px;">
+                                        <span class="text-muted small fw-bold" id="selected-users-label">PILIH USER</span>
+                                        <iconify-icon icon="solar:alt-arrow-down-outline" class="text-muted"></iconify-icon>
+                                    </div>
+                                    <div class="multiselect-dropdown shadow-lg border-0 rounded-4 p-3 d-none position-absolute w-100 bg-white" style="z-index: 1000; margin-top: 5px;">
+                                        <div class="form-check mb-2 border-bottom pb-2">
+                                            <input class="form-check-input" type="checkbox" id="check-all-users">
+                                            <label class="form-check-label small fw-bold text-danger" for="check-all-users" style="cursor: pointer;">PILIH SEMUA USER</label>
+                                        </div>
+                                        <div class="scrollable-area" style="max-height: 180px; overflow-y: auto;">
+                                            <?php foreach($users as $user): ?>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input user-checkbox" type="checkbox" value="<?= esc($user['username']) ?>" data-nip="<?= esc($user['nip']) ?>" id="user_<?= esc($user['username']) ?>">
+                                                    <label class="form-check-label small fw-bold text-dark" for="user_<?= esc($user['username']) ?>" style="cursor: pointer;">
+                                                        <?= esc($user['username']) ?>
+                                                    </label>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                            
                             <div class="col-md-5">
-                                <input type="text" id="nip" class="form-control custom-input" placeholder="NIP (OTOMATIS)" readonly style="background: #f8fafc;">
+                                <input type="text" id="nip_display" class="form-control custom-input bg-light border-0 rounded-4" placeholder="NIP TERPILIH" readonly style="background: #f8fafc; font-size: 0.8rem; height: 45px;">
                             </div>
-                            <div class="col-md-7">
-                                <div class="select-wrapper w-100">
-                                    <select id="role_id" class="form-select custom-input">
-                                        <option selected disabled>PILIH ROLE</option>
-                                        <?php foreach($roles as $role): ?>
-                                            <option value="<?= $role['id'] ?>"><?= esc($role['role_name']) ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                    <iconify-icon icon="solar:alt-arrow-down-outline" class="select-icon"></iconify-icon>
+
+                            <!-- CUSTOM MULTISELECT ROLE -->
+                            <div class="col-md-7 position-relative">
+                                <div class="custom-multiselect" id="multiselect-role">
+                                    <div class="select-trigger custom-input d-flex justify-content-between align-items-center bg-light border-0 rounded-4 px-3 py-2" style="cursor: pointer; min-height: 45px;">
+                                        <span class="text-muted small fw-bold" id="selected-roles-label">PILIH ROLE</span>
+                                        <iconify-icon icon="solar:alt-arrow-down-outline" class="text-muted"></iconify-icon>
+                                    </div>
+                                    <div class="multiselect-dropdown shadow-lg border-0 rounded-4 p-3 d-none position-absolute w-100 bg-white" style="z-index: 1000; margin-top: 5px;">
+                                        <div class="form-check mb-2 border-bottom pb-2">
+                                            <input class="form-check-input" type="checkbox" id="check-all-roles">
+                                            <label class="form-check-label small fw-bold text-danger" for="check-all-roles" style="cursor: pointer;">PILIH SEMUA ROLE</label>
+                                        </div>
+                                        <div class="scrollable-area" style="max-height: 180px; overflow-y: auto;">
+                                            <?php foreach($roles as $role): ?>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input role-checkbox" type="checkbox" value="<?= $role['id'] ?>" data-name="<?= esc($role['role_name']) ?>" id="role_<?= $role['id'] ?>">
+                                                    <label class="form-check-label small fw-bold text-dark" for="role_<?= $role['id'] ?>" style="cursor: pointer;">
+                                                        <?= esc($role['role_name']) ?>
+                                                    </label>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+
                             <div class="col-md-5">
-                                <button class="btn btn-danger btn-master w-100 justify-content-center" id="add-user-mapping">
-                                    <iconify-icon icon="mdi:plus"></iconify-icon>
+                                <button class="btn btn-danger btn-master w-100 justify-content-center" id="add-user-mapping" style="height: 45px; border-radius: 12px;">
+                                    <iconify-icon icon="mdi:link-variant"></iconify-icon>
                                     MAPPING
                                 </button>
                             </div>
@@ -111,36 +141,96 @@
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
                         <h5 class="fw-bold mb-0">DAFTAR MAPPING USER</h5>
-                        <small class="text-muted">Akses user yang terdaftar dalam sistem</small>
+                        <small class="text-muted">Kelola akses user dalam sistem</small>
                     </div>
                     <div class="badge bg-blue-custom py-2 px-3" style="border-radius: 10px;">
-                        <?= count($userRoles) ?> USER TERDAFTAR
+                        <?= $pager->getTotal('user_roles') ?> USER TERDAFTAR
                     </div>
                 </div>
-                <div class="list-wrapper scrollable-list" style="max-height: 500px; overflow-y: auto; padding-right: 8px;">
-                    <div class="row g-3">
-                        <?php foreach($userRoles as $ur): ?>
-                            <div class="col-md-6">
-                                <div class="list-item p-3 bg-light rounded-4 d-flex justify-content-between align-items-center category-box-card">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div class="icon-box" style="width: 40px; height: 40px; background: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.03);">
-                                            <iconify-icon icon="solar:user-circle-bold" style="font-size: 20px; color: #64748b;"></iconify-icon>
-                                        </div>
-                                        <div>
-                                            <div class="fw-bold" style="font-size: 0.95rem; color: #1e293b;"><?= esc($ur['user_fullname']) ?></div>
-                                            <div class="d-flex gap-2 align-items-center mt-1">
-                                                <small class="badge bg-white text-danger border border-danger-subtle" style="font-size: 9px;"><?= esc($ur['role_name']) ?></small>
-                                                <small class="text-muted" style="font-size: 11px;"><?= esc($ur['user_nip']) ?></small>
+
+                <!-- FILTER & SEARCH -->
+                <form action="" method="GET" class="row g-3 mb-4">
+                    <div class="col-md-5">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-0 rounded-start-4">
+                                <iconify-icon icon="ph:magnifying-glass-bold" class="text-muted"></iconify-icon>
+                            </span>
+                            <input type="text" name="search" class="form-control bg-light border-0 rounded-end-4 custom-input ps-0" placeholder="Cari nama atau NIP..." value="<?= esc($search) ?>">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="select-wrapper">
+                            <select name="role" class="form-select bg-light border-0 rounded-4 custom-input" onchange="this.form.submit()">
+                                <option value="">Semua Role</option>
+                                <?php foreach($roles as $role): ?>
+                                    <option value="<?= $role['id'] ?>" <?= $roleFilter == $role['id'] ? 'selected' : '' ?>><?= esc($role['role_name']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <iconify-icon icon="solar:alt-arrow-down-outline" class="select-icon"></iconify-icon>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-danger w-100 rounded-4 fw-bold">FILTER</button>
+                    </div>
+                </form>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light border-bottom">
+                            <tr>
+                                <th class="ps-3 py-3 text-uppercase small fw-bold text-muted" style="width: 60%;">User</th>
+                                <th class="py-3 text-uppercase small fw-bold text-muted text-center" style="width: 40%;">Role</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach($userRoles as $ur): 
+                                $roleList = explode('|', $ur['roles_list']);
+                                $idList = explode('|', $ur['ids_list']);
+                            ?>
+                                <tr>
+                                    <td class="ps-3 py-3">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="icon-box shadow-sm" style="width: 42px; height: 42px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                                <iconify-icon icon="solar:user-circle-bold-duotone" style="font-size: 24px; color: #64748b;"></iconify-icon>
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold text-dark" style="font-size: 0.95rem;"><?= esc($ur['user_fullname']) ?></div>
+                                                <small class="text-muted font-monospace" style="font-size: 0.75rem; letter-spacing: 0.5px;">NIP: <?= esc($ur['user_nip']) ?></small>
                                             </div>
                                         </div>
-                                    </div>
-                                    <button class="btn btn-white btn-sm rounded-circle shadow-sm" onclick="deleteMapping(<?= $ur['id'] ?>)" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border: none; background: white;">
-                                        <iconify-icon icon="mdi:close" style="color: #ef4444; font-size: 1rem;"></iconify-icon>
-                                    </button>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
+                                    </td>
+                                    <td class="text-center py-3">
+                                        <div class="d-flex align-items-center justify-content-center gap-2 role-badges-grid-container">
+                                            <div class="role-badges-grid">
+                                                <?php foreach($roleList as $index => $roleName): ?>
+                                                    <span class="badge role-badge-compact shadow-sm">
+                                                        <span><?= esc($roleName) ?></span>
+                                                        <iconify-icon icon="ph:x-bold" class="delete-icon" onclick="deleteMapping(<?= $idList[$index] ?>)"></iconify-icon>
+                                                    </span>
+                                                <?php endforeach; ?>
+                                            </div>
+                                            <?php if(count($roleList) > 1): ?>
+                                                <iconify-icon icon="solar:alt-arrow-down-outline" class="text-danger opacity-25 roles-expand-indicator fs-5"></iconify-icon>
+                                            <?php endif; ?>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                            <?php if(empty($userRoles)): ?>
+                                <tr>
+                                    <td colspan="2" class="text-center py-5 text-muted bg-white">
+                                        <iconify-icon icon="ph:user-minus-duotone" class="fs-1 d-block mb-2 text-danger opacity-50"></iconify-icon>
+                                        <p class="m-0 fw-medium">Tidak ada mapping user yang ditemukan.</p>
+                                    </td>
+                                </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- PAGINATION -->
+                <div class="mt-5 d-flex justify-content-center">
+                    <?= $pager->links('user_roles', 'premium') ?>
                 </div>
             </div>
         </div>
@@ -154,7 +244,10 @@
 
         fetch('/create-role', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '<?= csrf_hash() ?>'
+            },
             body: JSON.stringify({ role_name: roleName })
         }).then(res => res.json()).then(data => {
             if (data.status === 'success') {
@@ -165,25 +258,98 @@
         });
     });
 
-    document.getElementById('user_select').addEventListener('change', function() {
-        const selectedOption = this.options[this.selectedIndex];
-        const nip = selectedOption.getAttribute('data-nip');
-        document.getElementById('nip').value = nip || '-';
+    // --- Custom Multiselect Logic ---
+    function setupMultiselect(id, labelId) {
+        const wrapper = document.getElementById(id);
+        const trigger = wrapper.querySelector('.select-trigger');
+        const dropdown = wrapper.querySelector('.multiselect-dropdown');
+        const label = document.getElementById(labelId);
+        const checkboxes = wrapper.querySelectorAll('input[type="checkbox"]:not(#check-all-users):not(#check-all-roles)');
+
+        trigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            document.querySelectorAll('.multiselect-dropdown').forEach(d => {
+                if (d !== dropdown) d.classList.add('d-none');
+            });
+            dropdown.classList.toggle('d-none');
+        });
+
+        wrapper.addEventListener('click', (e) => e.stopPropagation());
+
+        function updateLabel() {
+            const checkedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
+            const originalText = id.includes('user') ? 'PILIH USER' : 'PILIH ROLE';
+            
+            if (checkedCount === 0) {
+                label.textContent = originalText;
+                label.classList.add('text-muted');
+            } else if (checkedCount === checkboxes.length) {
+                label.textContent = 'SEMUA TERPILIH';
+                label.classList.remove('text-muted');
+            } else {
+                label.textContent = `${checkedCount} TERPILIH`;
+                label.classList.remove('text-muted');
+            }
+
+            if (id.includes('user')) {
+                const checkedUsers = Array.from(checkboxes).filter(cb => cb.checked);
+                const nipDisplay = document.getElementById('nip_display');
+                if (checkedUsers.length === 1) {
+                    nipDisplay.value = checkedUsers[0].getAttribute('data-nip') || '-';
+                } else if (checkedUsers.length > 1) {
+                    nipDisplay.value = 'MULTIPLE NIP';
+                } else {
+                    nipDisplay.value = '';
+                }
+            }
+        }
+
+        checkboxes.forEach(cb => cb.addEventListener('change', updateLabel));
+        return updateLabel;
+    }
+
+    const updateLabelUser = setupMultiselect('multiselect-user', 'selected-users-label');
+    const updateLabelRole = setupMultiselect('multiselect-role', 'selected-roles-label');
+
+    document.addEventListener('click', () => {
+        document.querySelectorAll('.multiselect-dropdown').forEach(d => d.classList.add('d-none'));
+    });
+
+    document.getElementById('check-all-users').addEventListener('change', function() {
+        document.querySelectorAll('.user-checkbox').forEach(cb => cb.checked = this.checked);
+        updateLabelUser();
+    });
+
+    document.getElementById('check-all-roles').addEventListener('change', function() {
+        document.querySelectorAll('.role-checkbox').forEach(cb => cb.checked = this.checked);
+        updateLabelRole();
     });
 
     document.getElementById('add-user-mapping').addEventListener('click', function() {
-        const username = document.getElementById('user_select').value;
-        const nip = document.getElementById('nip').value;
-        const role_id = document.getElementById('role_id').value;
+        const selectedUsers = [];
+        document.querySelectorAll('.user-checkbox:checked').forEach(cb => {
+            selectedUsers.push({
+                username: cb.value,
+                nip: cb.getAttribute('data-nip')
+            });
+        });
 
-        if (!username || username === 'PILIH USER' || !role_id || role_id === 'PILIH ROLE') {
-            return Swal.fire('Error', 'User dan Role harus diisi', 'error');
+        const selectedRoles = [];
+        document.querySelectorAll('.role-checkbox:checked').forEach(cb => {
+            selectedRoles.push(cb.value);
+        });
+
+        if (selectedUsers.length === 0 || selectedRoles.length === 0) {
+            return Swal.fire('Error', 'Pilih minimal satu User dan satu Role', 'error');
         }
 
         fetch('/create-user-mapping', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, nip, role_id })
+            headers: { 
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '<?= csrf_hash() ?>'
+            },
+            body: JSON.stringify({ users: selectedUsers, roles: selectedRoles })
         }).then(res => res.json()).then(data => {
             if (data.status === 'success') {
                 Swal.fire('Success', data.message, 'success').then(() => location.reload());
@@ -204,7 +370,10 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 fetch(`/delete-user-mapping/${id}`, {
-                    method: 'DELETE'
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': '<?= csrf_hash() ?>'
+                    }
                 }).then(res => res.json()).then(data => {
                     if (data.status === 'success') {
                         Swal.fire('Deleted!', data.message, 'success').then(() => location.reload());

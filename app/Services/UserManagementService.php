@@ -25,9 +25,30 @@ class UserManagementService
         return $this->roleModel->findAll();
     }
 
-    public function getUserRoles()
+    public function getUserRoles($search = null, $roleFilter = null)
     {
-        return $this->userRoleModel->getUserRoles();
+        $query = $this->userRoleModel->select('user_nip, user_fullname, GROUP_CONCAT(roles.role_name SEPARATOR "|") as roles_list, GROUP_CONCAT(user_roles.id SEPARATOR "|") as ids_list')
+            ->join('roles', 'roles.id = user_roles.role_id')
+            ->groupBy('user_nip, user_fullname')
+            ->orderBy('MAX(user_roles.created_at)', 'DESC');
+
+        if ($search) {
+            $query->groupStart()
+                ->like('user_fullname', $search)
+                ->orLike('user_nip', $search)
+                ->groupEnd();
+        }
+
+        if ($roleFilter) {
+            $query->whereIn('user_nip', function($dq) use ($roleFilter) {
+                return $dq->select('user_nip')->from('user_roles')->where('role_id', $roleFilter);
+            });
+        }
+
+        return [
+            'data' => $query->paginate(15, 'user_roles'),
+            'pager' => $query->pager
+        ];
     }
 
     public function createRole(array $data)
@@ -39,11 +60,33 @@ class UserManagementService
 
     public function createUserMapping(array $data)
     {
-        return $this->userRoleModel->insert([
-            'user_fullname' => $data['username'],
-            'user_nip'      => $data['nip'] ?? '-',
-            'role_id'       => $data['role_id']
-        ]);
+        $users = $data['users'] ?? []; // Array of ['username' => ..., 'nip' => ...]
+        $roles = $data['roles'] ?? []; // Array of role IDs
+
+        if (empty($users) || empty($roles)) return false;
+
+        $db = \Config\Database::connect();
+        $db->transStart();
+
+        foreach ($users as $user) {
+            foreach ($roles as $role_id) {
+                // Hindari duplikasi mapping
+                $exist = $this->userRoleModel->where('user_nip', $user['nip'])
+                    ->where('role_id', $role_id)
+                    ->first();
+                
+                if (!$exist) {
+                    $this->userRoleModel->insert([
+                        'user_fullname' => $user['username'],
+                        'user_nip'      => $user['nip'] ?? '-',
+                        'role_id'       => $role_id
+                    ]);
+                }
+            }
+        }
+
+        $db->transComplete();
+        return $db->transStatus();
     }
 
     public function deleteUserMapping($id)

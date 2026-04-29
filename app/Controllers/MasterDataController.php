@@ -7,11 +7,19 @@ class MasterDataController extends BaseController
     public function user()
     {
         $service = service('userManagement');
+        $search = $this->request->getGet('search');
+        $roleFilter = $this->request->getGet('role');
+
+        $userRolesData = $service->getUserRoles($search, $roleFilter);
+
         $data = [
             'title' => 'Data User',
             'roles' => $service->getRoles(),
-            'userRoles' => $service->getUserRoles(),
-            'users' => $service->getUsers()
+            'userRoles' => $userRolesData['data'],
+            'pager' => $userRolesData['pager'],
+            'users' => $service->getUsers(),
+            'search' => $search,
+            'roleFilter' => $roleFilter
         ];
 
         return view('manajemen/user/index', $data);
