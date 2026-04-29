@@ -22,6 +22,9 @@ $routes->get('tiket/create', 'TicketController::create');
 $routes->get('tiket/(:num)', 'TicketController::show/$1');
 
 $routes->get('/user', 'MasterDataController::user');
+$routes->post('/create-role', 'MasterDataController::createRole');
+$routes->post('/create-user-mapping', 'MasterDataController::createUserMapping');
+$routes->delete('/delete-user-mapping/(:num)', 'MasterDataController::deleteUserMapping/$1');
 $routes->get('/kategori', 'MasterDataController::kategori');
 
 $routes->post('/create-kategori', 'MasterDataController::createKategori');

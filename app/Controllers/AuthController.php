@@ -45,6 +45,24 @@ class AuthController extends BaseController
                 'isLoggedIn' => true
             ]);
 
+            $roles = $service['data_role'];
+
+            // LOGIC: Check role count
+            if (count($roles) === 0) {
+                session()->destroy();
+                return redirect()->to('/signin')->with('error', 'Anda tidak memiliki akses ke sistem. Silahkan hubungi Admin.');
+            }
+
+            if (count($roles) === 1) {
+                // Auto-set single role
+                session()->set([
+                    'role_id' => $roles[0]['id'],
+                    'role_name' => $roles[0]['role']
+                ]);
+                return redirect()->to('/dashboard');
+            }
+
+            // If more than 1 role, show choice page
             return redirect()->to('/role-option');
 
         } catch (\Exception $e) {

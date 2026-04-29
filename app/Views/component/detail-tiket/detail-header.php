@@ -20,9 +20,7 @@
             <span class="text-muted font-monospace" style="font-size: 0.7rem;">#<?= $detail['id'] ?></span>
         </div>
 
-        <h2 class="text-uppercase fw-bold m-0 mb-4" style="letter-spacing: -1.5px; line-height: 1.1; font-size: 2.2rem; color: #1a1a1a;">
-            <?= esc($detail['judul_permohonan']) ?>
-        </h2>
+
 
         <!-- Metadata Section: Compact & Elegant -->
         <div class="d-flex flex-wrap align-items-center gap-3 gap-md-4 py-3 px-4 bg-light bg-opacity-50 rounded-4 border border-light">

@@ -6,11 +6,47 @@ class MasterDataController extends BaseController
 {
     public function user()
     {
+        $service = service('userManagement');
         $data = [
-            'title' => 'Data User'
+            'title' => 'Data User',
+            'roles' => $service->getRoles(),
+            'userRoles' => $service->getUserRoles(),
+            'users' => $service->getUsers()
         ];
 
         return view('manajemen/user/index', $data);
+    }
+
+    public function createRole()
+    {
+        $request = $this->request->getJSON(true);
+        $result = service('userManagement')->createRole($request);
+
+        return $this->response->setJSON([
+            'status' => $result ? 'success' : 'fail',
+            'message' => $result ? 'Role berhasil ditambahkan' : 'Gagal menambahkan role'
+        ]);
+    }
+
+    public function createUserMapping()
+    {
+        $request = $this->request->getJSON(true);
+        $result = service('userManagement')->createUserMapping($request);
+
+        return $this->response->setJSON([
+            'status' => $result ? 'success' : 'fail',
+            'message' => $result ? 'Mapping user berhasil' : 'Gagal melakukan mapping'
+        ]);
+    }
+
+    public function deleteUserMapping($id)
+    {
+        $result = service('userManagement')->deleteUserMapping($id);
+
+        return $this->response->setJSON([
+            'status' => $result ? 'success' : 'fail',
+            'message' => $result ? 'Mapping berhasil dihapus' : 'Gagal menghapus mapping'
+        ]);
     }
 
     public function kategori()

@@ -121,5 +121,14 @@ class Services extends BaseService
         return new \App\Services\RiwayatService();
     }
 
+    public static function userManagement($getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('userManagement');
+        }
+
+        return new \App\Services\UserManagementService();
+    }
+
 
 }

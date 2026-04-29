@@ -16,8 +16,8 @@ $statusColors = [
             <thead class="bg-light border-bottom">
                 <tr>
                     <th class="ps-4 py-3 text-uppercase custom-small-font fw-bold text-secondary" style="width: 80px;">ID</th>
-                    <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary">Judul Permohonan</th>
                     <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary">Kategori</th>
+                    <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary">Layanan</th>
                     <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary">Tanggal Pengajuan</th>
                     <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary text-center">Status</th>
                     <th class="pe-4 py-3 text-uppercase custom-small-font fw-bold text-secondary text-end">Aksi</th>
@@ -31,13 +31,15 @@ $statusColors = [
                         <td class="ps-4">
                             <span class="font-monospace fw-bold text-muted small">#<?= $data['id'] ?></span>
                         </td>
+
                         <td>
-                            <div class="fw-extra-bold text-dark text-uppercase small" style="letter-spacing: -0.2px;"><?= esc($data['judul_permohonan']) ?></div>
+                            <div class="d-flex align-items-center gap-1">
+                                <span class="custom-small-font fw-bold text-dark text-uppercase"><?= esc($data['kategori_layanan']) ?></span>
+                            </div>
                         </td>
                         <td>
                             <div class="d-flex align-items-center gap-1">
-                                <iconify-icon icon="ph:stack-duotone" class="text-danger fs-6"></iconify-icon>
-                                <span class="custom-small-font fw-bold text-dark text-uppercase"><?= esc($data['kategori_layanan']) ?></span>
+                                <span class="custom-small-font fw-medium text-dark"><?= esc($data['per_kategori_layanan']) ?></span>
                             </div>
                         </td>
                         <td>

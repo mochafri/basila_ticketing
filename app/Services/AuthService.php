@@ -63,19 +63,17 @@ class AuthService
                 $api_roles = json_decode($response_role->getBody(), true);
                 if (!is_array($api_roles)) $api_roles = [];
 
-                // GET ROLE FROM LOCAL DATABASE
+                // GET ROLE FROM LOCAL DATABASE (Mapping by Admin)
                 $db = \Config\Database::connect();
-                $local_roles = $db->table('roles')->get()->getResultArray();
+                $mapped_roles = $db->table('user_roles')
+                    ->select('roles.id, roles.role_name as role')
+                    ->join('roles', 'roles.id = user_roles.role_id')
+                    ->where('user_roles.user_nip', $profile['numberid'] ?? '-')
+                    ->get()
+                    ->getResultArray();
 
-                $local_roles_mapped = array_map(function ($r) {
-                    return [
-                        'id' => $r['id'],
-                        'role' => $r['role_name']
-                    ];
-                }, $local_roles);
-
-                // Gabungkan role API dan DB lokal
-                $merged_roles = array_merge($api_roles, $local_roles_mapped);
+                // Gabungkan role API dan DB lokal (Mapping)
+                $merged_roles = array_merge($api_roles, $mapped_roles);
 
                 // Hilangkan duplikat berdasarkan ID
                 $role = [];
@@ -108,19 +106,17 @@ class AuthService
                 throw new \Exception('Username atau password tidak valid.');
             }
 
-            // GET ROLE FROM LOCAL DATABASE ONLY
+            // GET ROLE FROM LOCAL DATABASE (Mapping by Admin)
             $db = \Config\Database::connect();
-            $local_roles = $db->table('roles')->get()->getResultArray();
-
-            $local_roles_mapped = array_map(function ($r) {
-                return [
-                    'id' => $r['id'],
-                    'role' => $r['role_name']
-                ];
-            }, $local_roles);
+            $mapped_roles = $db->table('user_roles')
+                ->select('roles.id, roles.role_name as role')
+                ->join('roles', 'roles.id = user_roles.role_id')
+                ->where('user_roles.user_nip', $user['nip'] ?? '-')
+                ->get()
+                ->getResultArray();
 
             return [
-                'data_role' => $local_roles_mapped,
+                'data_role' => $mapped_roles,
                 'token' => 'local_token_' . rand(100000, 999999), // Dummy token lokal
                 'profile' => [
                     'fullname' => $user['username'],
