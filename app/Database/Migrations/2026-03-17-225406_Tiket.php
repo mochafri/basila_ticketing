@@ -40,12 +40,12 @@ class Tiket extends Migration
             'dokumen_lampiran' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255',
-                'null' => false
+                'null' => true
             ],
             'original_dokumen_name' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255',
-                'null' => false
+                'null' => true
             ],
             'is_escalated' => [
                 'type' => 'BOOLEAN',
@@ -58,8 +58,8 @@ class Tiket extends Migration
             ],
             'tiket_status' => [
                 'type' => 'ENUM',
-                'constraint' => ['Waiting', 'Open', 'Escalated Process', 'Approve Escalated', 'In Progress', 'Closed', 'Rejected'],
-                'default' => 'Waiting'
+                'constraint' => ['Open', 'Escalated Process', 'Approve Escalated', 'In Progress', 'Closed', 'Rejected'],
+                'default' => 'Open'
             ],
             'catatan' => [
                 'type' => 'TEXT',
@@ -70,6 +70,10 @@ class Tiket extends Migration
                 'null' => true,
             ],
             'updated_at' => [
+                'type' => 'DATETIME',
+                'null' => true,
+            ],
+            'closed_at' => [
                 'type' => 'DATETIME',
                 'null' => true,
             ],
