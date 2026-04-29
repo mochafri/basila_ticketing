@@ -15,7 +15,7 @@
         </div>
     </div>
 
-    <div class="row mt-4">
+    <div class="row my-4">
         <div class="col-12">
             <form action="<?= site_url('tiket') ?>" method="get" class="d-flex flex-column flex-lg-row align-items-lg-center gap-3 bg-light p-3 rounded-4 border border-light shadow-sm">
                 
@@ -79,13 +79,20 @@
 
     <div class="row">
         <div class="col-12">
+            <?php 
+                $roleName  = session('role_name');
+                $loginUser = strtolower(session('login_username') ?? '');
+                $userId    = session('user_identifier');
+                $isAdmin   = ($roleName === 'SUPERADMIN' || $loginUser === 'admin' || $userId === '000000');
+            ?>
+
             <!-- daftar tiket admin -->
             <?php if (
-                session('role_name') === 'SUPERADMIN' ||
-                session('role_name') === 'KEPALA URUSAN ADMINISTRASI AKADEMIK' ||
-                session('role_name') === 'PEGAWAI' ||
-                session('role_name') === 'ADMIN AKADEMIK' ||
-                session('role_name') === 'BAA'
+                $isAdmin ||
+                $roleName === 'KEPALA URUSAN ADMINISTRASI AKADEMIK' ||
+                $roleName === 'PEGAWAI' ||
+                $roleName === 'ADMIN AKADEMIK' ||
+                $roleName === 'BAA'
             ): ?>
                 <?= $this->include('component/daftar-tiket/daftar-admin', ['tiket' => $tiket]); ?>
             <?php endif; ?>

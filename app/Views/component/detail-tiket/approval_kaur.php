@@ -1,3 +1,11 @@
+<?php 
+    $roleName  = $roleName ?? session('role_name');
+    $loginUser = $loginUser ?? strtolower(session('login_username') ?? '');
+    $userId    = $userId ?? session('user_identifier');
+    $isAdmin   = $isAdmin ?? ($roleName === 'SUPERADMIN' || $loginUser === 'admin' || $userId === '000000');
+    $isReadOnly = $isReadOnly ?? ($loginUser === 'admin' && $roleName !== 'SUPERADMIN');
+?>
+<?php if (!($hideContext ?? false)): ?>
 <div class="d-flex align-items-center gap-3">
     <div class="timeline-icon-box <?= ($detail['tiket_status'] === 'Waiting') ? 'bg-secondary' : 'bg-success' ?> text-white">
         <span class="step-num"><?= $step ?? 3 ?></span>
@@ -24,6 +32,7 @@
         </div>
     </div>
 </div>
+<?php endif; ?>
 
 <?php
 $nipMe = session('user_identifier');
@@ -63,7 +72,7 @@ $semuaSelesai = !empty($taskStaffOnKaur) && count(array_filter($taskStaffOnKaur,
             <?php endif; ?>
         </div>
 
-        <?php if ($detail['tiket_status'] === 'Open' && !$sudahMulaiKaur): ?>
+        <?php if ($detail['tiket_status'] === 'Open' && !$sudahMulaiKaur && !($isReadOnly ?? false)): ?>
             <button class="btn btn-approve-kaur btn-danger rounded-3 w-100 mt-2 text-uppercase fw-bold custom-small-font py-3" style="letter-spacing: 3px;">terima & mulai penugasan</button>
         <?php endif; ?>
 
@@ -93,10 +102,12 @@ $semuaSelesai = !empty($taskStaffOnKaur) && count(array_filter($taskStaffOnKaur,
                                 <p class="text-muted mb-0 w-100 custom-small-font">Data staff tidak tersedia.</p>
                             <?php endif; ?>
                         </div>
+                        <?php if (!($isReadOnly ?? false)): ?>
                         <div class="d-flex gap-3 mt-4 align-items-stretch">
                             <input type="text" class="instruksi form-control text-uppercase custom-text p-3 rounded-4 fw-medium" placeholder="Instruksi pengerjaan staff">
                             <button type="button" class="btn btn-assign-staff btn-danger fw-bold">+</button>
                         </div>
+                        <?php endif; ?>
                     </div>
                 <?php endif; ?>
 
@@ -110,12 +121,14 @@ $semuaSelesai = !empty($taskStaffOnKaur) && count(array_filter($taskStaffOnKaur,
                                     <div class="d-flex flex-column gap-2 flex-grow-1">
                                         <div class="d-flex align-items-center gap-2">
                                             <p class="custom-small-font fw-bold m-0"><?= esc($task['task_instruction'] ?: $task['judul_permohonan']) ?></p>
+                                            <?php if (!($isReadOnly ?? false)): ?>
                                             <button class="btn btn-sm btn-outline-secondary border-0 p-1 btn-edit-instruction"
                                                 data-id="<?= esc($task['id']) ?>"
                                                 data-instruction="<?= esc($task['task_instruction'] ?: $task['judul_permohonan']) ?>"
                                                 title="Edit Instruksi">
                                                 <iconify-icon icon="ph:pencil-simple-line-bold"></iconify-icon>
                                             </button>
+                                            <?php endif; ?>
                                         </div>
                                         <p style="font-size: .7rem;" class="text-danger bg-danger bg-opacity-10 px-2 py-1 fw-bold text-center rounded m-0 w-50"><?= esc($task['assign_task_to_staff']) ?></p>
                                         
@@ -146,7 +159,7 @@ $semuaSelesai = !empty($taskStaffOnKaur) && count(array_filter($taskStaffOnKaur,
                                     </div>
                                 </div>
 
-                                <?php if ($task['task_status'] === 'Menunggu Approve'): ?>
+                                <?php if ($task['task_status'] === 'Menunggu Approve' && !($isReadOnly ?? false)): ?>
                                     <div class="d-flex flex-wrap gap-2">
                                         <button class="btn btn-success flex-fill px-4 py-2 fw-semibold btn-verifikasi-task" data-id="<?= esc($task['id']) ?>">Verifikasi</button>
                                         <button class="btn btn-warning flex-fill px-4 py-2 fw-semibold text-white btn-revisi-task" data-id="<?= esc($task['id']) ?>">Revisi</button>
@@ -174,8 +187,12 @@ $semuaSelesai = !empty($taskStaffOnKaur) && count(array_filter($taskStaffOnKaur,
                     <?php endforeach; ?>
                 <?php endif; ?>
 
-                <?php if ($semuaSelesai && !$sudahSelesaiKaur): ?>
+                <?php if ($semuaSelesai && !$sudahSelesaiKaur && !($isReadOnly ?? false)): ?>
                     <button class="btn btn-success rounded-3 w-100 mt-2 text-uppercase fw-bold custom-small-font py-3 btn-selesaikan-penugasan">selesaikan bagian penugasan</button>
+                <?php elseif ($semuaSelesai && !$sudahSelesaiKaur && ($isReadOnly ?? false)): ?>
+                    <div class="alert alert-info mt-2 rounded-3 text-center border-0 py-2 mb-0 small fw-bold">
+                        MENUNGGU VERIFIKASI SELESAI DARI KAUR...
+                    </div>
                 <?php elseif ($sudahSelesaiKaur): ?>
                     <div class="alert alert-success mt-2 rounded-3 text-center border-0 py-3 mb-0" style="background-color: #d1e7dd; color: #0a3622;">
                         <iconify-icon icon="ph:check-circle-fill" class="me-2"></iconify-icon>

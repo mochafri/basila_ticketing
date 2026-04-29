@@ -1,3 +1,10 @@
+<?php 
+    $roleName  = $roleName ?? session('role_name');
+    $loginUser = $loginUser ?? strtolower(session('login_username') ?? '');
+    $userId    = $userId ?? session('user_identifier');
+    $isAdmin   = $isAdmin ?? ($roleName === 'SUPERADMIN' || $loginUser === 'admin' || $userId === '000000');
+    $isReadOnly = $isReadOnly ?? ($loginUser === 'admin' && $roleName !== 'SUPERADMIN');
+?>
 <?php if ($detail['tiket_status'] === 'Escalated Process'): ?>
     <div class="d-flex gap-3 w-100 mb-4">
         <div class="timeline-icon-box bg-warning text-white">
@@ -8,7 +15,7 @@
             <p class="m-0 fw-bold mb-2 custom-small-font">approval eskalasi</p>
             <div class="p-4 bg-light rounded-3 w-100 d-flex gap-3 flex-column shadow-md border">
                 <p class="m-0 fw-medium custom-text text-danger italic">Tiket ini sedang dalam proses eskalasi dan membutuhkan persetujuan.</p>
-                <?php if (session('role_name') === 'SUPERADMIN'): ?>
+                <?php if ($isAdmin && !($isReadOnly ?? false)): ?>
                     <div class="d-flex gap-2 flex-wrap mt-2">
                         <button type="button"
                             class="btn btn-approve-escalated btn-success flex-fill p-4 text-uppercase fw-bold rounded-4">Setujui Eskalasi</button>
