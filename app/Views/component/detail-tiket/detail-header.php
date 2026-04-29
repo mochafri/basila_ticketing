@@ -14,20 +14,29 @@
 
         <!-- Metadata Section -->
         <div class="bg-light bg-opacity-50 rounded-4 border border-light p-3 mb-4">
-            <div class="d-flex flex-wrap align-items-center justify-content-center gap-4">
-                
+            <!-- Row 1: Informasi Layanan & Pemohon -->
+            <div class="d-flex flex-wrap align-items-center justify-content-center gap-4 mb-3 pb-3 border-bottom border-dark border-opacity-10">
                 <!-- 1. Kategori -->
                 <div class="d-flex align-items-center gap-2">
                     <iconify-icon icon="ph:stack-duotone" class="text-danger fs-5"></iconify-icon>
                     <div>
                         <span class="d-block fw-bold text-muted text-uppercase" style="font-size: 0.7rem; letter-spacing: 0.5px;">Kategori</span>
-                        <span class="custom-small-font fw-bold text-dark text-uppercase"><?= esc($detail['kategori_layanan']) ?></span>
+                        <span class="custom-small-font fw-bold text-dark text-uppercase"><?= esc($detail['kategori_layanan'] ?? '-') ?></span>
+                    </div>
+                </div>
+
+                <!-- 2. Layanan -->
+                <div class="d-flex align-items-center gap-2">
+                    <iconify-icon icon="ph:folder-simple-duotone" class="text-danger fs-5"></iconify-icon>
+                    <div>
+                        <span class="d-block fw-bold text-muted text-uppercase" style="font-size: 0.7rem; letter-spacing: 0.5px;">Layanan</span>
+                        <span class="custom-small-font fw-bold text-dark text-uppercase"><?= esc($detail['per_kategori_layanan'] ?? '-') ?></span>
                     </div>
                 </div>
 
                 <div class="vr d-none d-lg-block opacity-25" style="height: 1.5rem;"></div>
 
-                <!-- 2. Pemohon -->
+                <!-- 3. Pemohon -->
                 <div class="d-flex align-items-center gap-2">
                     <iconify-icon icon="ph:user-circle-duotone" class="text-danger fs-5"></iconify-icon>
                     <div>
@@ -35,22 +44,23 @@
                         <span class="custom-small-font fw-bold text-dark text-uppercase"><?= esc($detail['nama_creator'] ?? '-') ?></span>
                     </div>
                 </div>
+            </div>
 
-                <div class="vr d-none d-lg-block opacity-25" style="height: 1.5rem;"></div>
-
-                <!-- 3. Waktu Pengajuan -->
+            <!-- Row 2: Informasi Waktu -->
+            <div class="d-flex flex-wrap align-items-center justify-content-center gap-4">
+                <!-- 4. Waktu Pengajuan -->
                 <div class="d-flex align-items-center gap-2">
                     <iconify-icon icon="ph:calendar-blank-duotone" class="text-muted fs-5"></iconify-icon>
                     <div>
                         <span class="d-block fw-bold text-muted text-uppercase" style="font-size: 0.7rem; letter-spacing: 0.5px;">Diajukan</span>
-                        <span class="custom-small-font text-dark fw-bold"><?= date('d M Y, H:i', strtotime($detail['created_at'])) ?></span>
+                        <span class="custom-small-font text-dark fw-bold"><?= date('d M Y, H:i', strtotime($detail['created_at'] ?? '-')) ?></span>
                     </div>
                 </div>
 
                 <?php if ($detail['closed_at']): ?>
                     <div class="vr d-none d-lg-block opacity-25" style="height: 1.5rem;"></div>
-                    
-                    <!-- 4. Waktu Selesai -->
+
+                    <!-- 5. Waktu Selesai -->
                     <div class="d-flex align-items-center gap-2">
                         <iconify-icon icon="ph:check-circle-duotone" class="text-success fs-5"></iconify-icon>
                         <div>
@@ -61,17 +71,17 @@
 
                     <div class="vr d-none d-lg-block opacity-25" style="height: 1.5rem;"></div>
 
-                    <!-- 5. Durasi Pengerjaan -->
+                    <!-- 6. Durasi Pengerjaan -->
                     <?php
-                        $awal  = new DateTime($detail['created_at']);
-                        $akhir = new DateTime($detail['closed_at']);
-                        $diff  = $awal->diff($akhir);
-                        
-                        $durasi = "";
-                        if ($diff->d > 0) $durasi .= $diff->d . " Hari ";
-                        if ($diff->h > 0) $durasi .= $diff->h . " Jam ";
-                        if ($diff->i > 0) $durasi .= $diff->i . " Menit";
-                        if ($durasi == "") $durasi = " < 1 Menit";
+                    $awal  = new DateTime($detail['created_at']);
+                    $akhir = new DateTime($detail['closed_at']);
+                    $diff  = $awal->diff($akhir);
+
+                    $parts = [];
+                    if ($diff->d > 0) $parts[] = $diff->d . " Hari";
+                    if ($diff->h > 0) $parts[] = $diff->h . " Jam";
+                    if ($diff->i > 0) $parts[] = $diff->i . " Menit";
+                    $durasi = empty($parts) ? "< 1 Menit" : implode(" ", $parts);
                     ?>
                     <div class="d-flex align-items-center gap-2">
                         <iconify-icon icon="ph:timer-duotone" class="text-primary fs-5"></iconify-icon>

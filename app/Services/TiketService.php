@@ -85,7 +85,8 @@ class TiketService
                 tikets.original_dokumen_name,tikets.is_escalated,
                 tikets.nip_creator, tikets.nama_creator,
                 layanans.per_kategori_layanan,
-                kategoris.kategori_layanan
+                kategoris.kategori_layanan,
+                layanans.per_kategori_layanan
             ')
             ->join('layanans', 'layanans.id = tikets.id_layanan', 'left')
             ->join('kategoris', 'kategoris.id = layanans.fk_kategori', 'left')
