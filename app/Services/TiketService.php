@@ -18,7 +18,7 @@ class TiketService
     }
 
     # Bagian get all data tiket dengan filtering Role
-    public function getDataTiket($roles = [], $nip = null)
+    public function getDataTiket($roles = [], $nip = null, $kategori = null, $status = null)
     {
         $query = $this->tiketModel
             ->select(
@@ -30,6 +30,14 @@ class TiketService
             ->join('layanans', 'layanans.id = tikets.id_layanan', 'left')
             ->join('kategoris', 'kategoris.id = layanans.fk_kategori', 'left')
             ->orderBy('tikets.created_at', 'DESC');
+
+        if ($kategori) {
+            $query->where('kategoris.id', $kategori);
+        }
+
+        if ($status) {
+            $query->where('tikets.tiket_status', $status);
+        }
 
         // 1. KABAG (SUPERADMIN / BAA): Melihat semua tiket
         if (in_array('SUPERADMIN', $roles) || in_array('BAA', $roles)) {

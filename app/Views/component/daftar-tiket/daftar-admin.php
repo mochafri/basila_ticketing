@@ -72,9 +72,15 @@ $statusColors = [
                 <?php endforeach; ?>
                 <?php if (empty($tiket['data'])): ?>
                     <tr>
-                        <td colspan="7" class="text-center py-5 text-muted">
-                            <iconify-icon icon="ph:empty-duotone" class="fs-1 d-block mb-2"></iconify-icon>
-                            Belum ada data tiket.
+                        <td colspan="7" class="text-center py-5">
+                            <div class="py-5">
+                                <iconify-icon icon="solar:document-add-bold-duotone" class="text-danger opacity-25 mb-3" style="font-size: 80px;"></iconify-icon>
+                                <h5 class="fw-bold text-dark">TIDAK ADA TIKET DITEMUKAN</h5>
+                                <p class="text-muted small mb-4">Coba sesuaikan filter Anda atau buat tiket baru.</p>
+                                <a href="<?= site_url('tiket') ?>" class="btn btn-outline-danger btn-sm rounded-pill px-4 fw-bold text-uppercase">
+                                    Bersihkan Filter
+                                </a>
+                            </div>
                         </td>
                     </tr>
                 <?php endif; ?>
