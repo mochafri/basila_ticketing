@@ -51,7 +51,9 @@ class StaffService
 
         $updateData = [
             'task_status' => 'Menunggu Approve',
-            'catatan_laporan_penyelesaian' => $data['laporan_task']
+            'catatan_laporan_penyelesaian' => $data['laporan_task'],
+            'is_downloadable' => $data['is_downloadable'] ?? 1,
+            'completed_at' => date('Y-m-d H:i:s')
         ];
 
         if ($file && $file->isValid() && !$file->hasMoved()) {

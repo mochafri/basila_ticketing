@@ -1,6 +1,28 @@
 <div class="d-flex align-items-center gap-3">
-    <iconify-icon icon="<?php if ($detail['tiket_status'] === 'Waiting'): ?>streamline-ultimate:task-list-approve<?php else: ?>ic:round-check<?php endif; ?>" class="text-white <?php if ($detail['tiket_status'] === 'Waiting'): ?> btn btn-secondary <?php else: ?> btn btn-success <?php endif; ?> "></iconify-icon>
-    <p class="m-0 fw-bold custom-small-font">approval kepala urusan (bu fira)</p>
+    <div class="timeline-icon-box <?= ($detail['tiket_status'] === 'Waiting') ? 'bg-secondary' : 'bg-success' ?> text-white">
+        <span class="step-num"><?= $step ?? 3 ?></span>
+        <iconify-icon icon="<?= ($detail['tiket_status'] === 'Waiting') ? 'streamline-ultimate:task-list-approve' : 'ic:round-check' ?>"></iconify-icon>
+    </div>
+    <div class="flex-grow-1">
+        <p class="m-0 fw-bold custom-small-font text-uppercase">approval kepala urusan (bu fira)</p>
+        <div class="d-flex flex-wrap gap-2 mt-1">
+            <?php if (!empty($detail['completed_at'])): ?>
+            <span class="custom-text text-muted small d-flex align-items-center gap-1">
+                <iconify-icon icon="ph:check-circle-bold" class="text-success"></iconify-icon>
+                Selesai: <?= format_datetime_indo($detail['completed_at']) ?>
+            </span>
+            <span class="custom-text text-muted small d-flex align-items-center gap-1">
+                <iconify-icon icon="ph:timer-bold" class="text-primary"></iconify-icon>
+                Durasi: <?= format_duration($detail['created_at'], $detail['completed_at']) ?>
+            </span>
+            <?php else: ?>
+            <span class="custom-text text-warning small d-flex align-items-center gap-1">
+                <iconify-icon icon="ph:clock-countdown-bold"></iconify-icon>
+                Sedang berjalan... (Mulai: <?= format_datetime_indo($detail['created_at']) ?>)
+            </span>
+            <?php endif; ?>
+        </div>
+    </div>
 </div>
 
 <?php
@@ -15,11 +37,31 @@ $semuaSelesai = !empty($taskStaffOnKaur) && count(array_filter($taskStaffOnKaur,
 ?>
 
 <div class="d-flex gap-3 w-100">
-    <iconify-icon icon="<?= ($semuaSelesai || $sudahSelesaiKaur) ? 'ph:check-bold' : 'hugeicons:plus-sign' ?>" class="btn h-25 <?= ($semuaSelesai || $sudahSelesaiKaur) ? 'btn-success text-white' : (in_array($detail['tiket_status'], ['Open', 'In Progress']) ? 'btn-danger text-white' : 'btn-light') ?>"></iconify-icon>
+    <div class="timeline-icon-box <?= ($semuaSelesai || $sudahSelesaiKaur) ? 'bg-success text-white' : (in_array($detail['tiket_status'], ['Open', 'In Progress']) ? 'bg-danger text-white' : 'bg-light text-dark') ?>">
+        <span class="step-num"><?= ($step ?? 3) + 1 ?></span>
+        <iconify-icon icon="<?= ($semuaSelesai || $sudahSelesaiKaur) ? 'ph:check-bold' : 'hugeicons:plus-sign' ?>"></iconify-icon>
+    </div>
 
     <div class="flex-grow-1">
         
-        <p class="m-0 fw-bold custom-small-font">Penugasan: pak bagas</p>
+        <p class="m-0 fw-bold custom-small-font text-uppercase">Penugasan: <?= esc($currentKaurAssign['kaur_name'] ?? 'Petugas') ?></p>
+        <div class="d-flex flex-wrap gap-2 mt-1 mb-2">
+            <?php if ($sudahSelesaiKaur): ?>
+                <span class="custom-text text-muted small d-flex align-items-center gap-1">
+                    <iconify-icon icon="ph:check-circle-bold" class="text-success"></iconify-icon>
+                    Selesai: <?= format_datetime_indo($currentKaurAssign['completed_at']) ?>
+                </span>
+                <span class="custom-text text-muted small d-flex align-items-center gap-1">
+                    <iconify-icon icon="ph:timer-bold" class="text-primary"></iconify-icon>
+                    Durasi: <?= format_duration($currentKaurAssign['started_at'], $currentKaurAssign['completed_at']) ?>
+                </span>
+            <?php elseif ($sudahMulaiKaur): ?>
+                <span class="custom-text text-warning small d-flex align-items-center gap-1">
+                    <iconify-icon icon="ph:clock-countdown-bold"></iconify-icon>
+                    Sedang berjalan... (Mulai: <?= format_datetime_indo($currentKaurAssign['started_at']) ?>)
+                </span>
+            <?php endif; ?>
+        </div>
 
         <?php if ($detail['tiket_status'] === 'Open' && !$sudahMulaiKaur): ?>
             <button class="btn btn-approve-kaur btn-danger rounded-3 w-100 mt-2 text-uppercase fw-bold custom-small-font py-3" style="letter-spacing: 3px;">terima & mulai penugasan</button>
@@ -76,6 +118,20 @@ $semuaSelesai = !empty($taskStaffOnKaur) && count(array_filter($taskStaffOnKaur,
                                             </button>
                                         </div>
                                         <p style="font-size: .7rem;" class="text-danger bg-danger bg-opacity-10 px-2 py-1 fw-bold text-center rounded m-0 w-50"><?= esc($task['assign_task_to_staff']) ?></p>
+                                        
+                                        <?php if (($task['task_status'] ?? '') === 'Selesai'): ?>
+                                        <div class="d-flex flex-wrap gap-2 my-2">
+                                            <span class="custom-text text-muted small d-flex align-items-center gap-1" style="font-size: 0.6rem;">
+                                                <iconify-icon icon="ph:clock-bold"></iconify-icon>
+                                                Selesai: <?= format_datetime_indo($task['completed_at']) ?>
+                                            </span>
+                                            <span class="custom-text text-muted small d-flex align-items-center gap-1" style="font-size: 0.6rem;">
+                                                <iconify-icon icon="ph:timer-bold" class="text-primary"></iconify-icon>
+                                                Durasi: <?= format_duration($task['started_at'], $task['completed_at']) ?>
+                                            </span>
+                                        </div>
+                                        <?php endif; ?>
+
                                         <div class="bg-light p-3 rounded border" style="min-width: 300px;">
                                             <p class="custom-text fw-medium">laporan penyelesaian staff</p>
                                             <p class="custom-small-font fw-semibold">"<?= esc($task['catatan_laporan_penyelesaian']) ?: 'Staf telah menyelesaikan tugas.' ?>"</p>
@@ -132,7 +188,10 @@ $semuaSelesai = !empty($taskStaffOnKaur) && count(array_filter($taskStaffOnKaur,
 </div>
 <?php if (in_array($detail['tiket_status'], ['Waiting', 'Open', 'In Progress', 'Closed'])): ?>
     <div class="d-flex align-items-center gap-3">
-        <iconify-icon icon="ph:flow-arrow" class="btn text-white <?= $detail['tiket_status'] === 'Closed' ? 'btn-success' : ($semuaSelesai ? 'btn-danger' : 'btn-secondary') ?>"></iconify-icon>
+    <div class="timeline-icon-box <?= $detail['tiket_status'] === 'Closed' ? 'bg-success' : ($semuaSelesai ? 'bg-danger' : 'bg-secondary') ?> text-white">
+        <span class="step-num"><?= ($step ?? 3) + 2 ?></span>
+        <iconify-icon icon="ph:flow-arrow"></iconify-icon>
+    </div>
         <div class="flex-grow-1 gap-2 d-flex flex-column">
             <p class="m-0 fw-bold custom-small-font">konfirmasi penyelesaian</p>
         </div>

@@ -1,5 +1,8 @@
 <div class="d-flex gap-3 w-100">
-    <iconify-icon icon="hugeicons:task-01" class="text-white btn btn-danger h-25"></iconify-icon>
+    <div class="timeline-icon-box bg-danger text-white">
+        <span class="step-num"><?= $step ?? 4 ?></span>
+        <iconify-icon icon="hugeicons:task-01"></iconify-icon>
+    </div>
     <div class="flex-grow-1">
         <?php if (!empty($taskStaff)): ?>
             <?php
@@ -13,7 +16,26 @@
             $currentStatus = $taskStaff['task_status'] ?? 'Sedang Pengerjaan';
             $config = $statusMapping[$currentStatus] ?? ['color' => 'secondary', 'icon' => 'ph:dot-bold'];
             ?>
-            <p class="m-0 fw-bold mb-2 custom-small-font">penugasan : <?= esc(strtoupper($taskStaff['assign_task_to_staff'])) ?></p>
+            <div class="flex-grow-1">
+                <p class="m-0 fw-bold custom-small-font text-uppercase">penugasan : <?= esc($taskStaff['assign_task_to_staff']) ?></p>
+                <div class="d-flex flex-wrap gap-2 mt-1">
+                    <?php if ($taskStaff['task_status'] === 'Selesai'): ?>
+                        <span class="custom-text text-muted small d-flex align-items-center gap-1">
+                            <iconify-icon icon="ph:check-circle-bold" class="text-success"></iconify-icon>
+                            Selesai: <?= format_datetime_indo($taskStaff['completed_at']) ?>
+                        </span>
+                        <span class="custom-text text-muted small d-flex align-items-center gap-1" title="Durasi dihitung dari waktu mulai hingga selesai" data-bs-toggle="tooltip">
+                            <iconify-icon icon="ph:timer-bold" class="text-primary"></iconify-icon>
+                            Durasi: <?= format_duration($taskStaff['started_at'], $taskStaff['completed_at']) ?>
+                        </span>
+                    <?php else: ?>
+                        <span class="custom-text text-warning small d-flex align-items-center gap-1">
+                            <iconify-icon icon="ph:clock-countdown-bold"></iconify-icon>
+                            Sedang berjalan... (Mulai: <?= format_datetime_indo($taskStaff['started_at']) ?>)
+                        </span>
+                    <?php endif; ?>
+                </div>
+            </div>
             <div class="rounded-3 w-100 d-flex flex-column gap-3 shadow-md border p-2">
                 <div class="d-flex gap-3 align-items-center p-3 rounded">
                     <iconify-icon icon="icon-park-outline:dot" class="text-warning fs-3"></iconify-icon>
@@ -86,8 +108,19 @@
                                         </span>
                                     </label>
                                     <p id="fileName" class="upload-filename custom-text text-center m-0"></p>
-
                                 </div>
+                                
+                                <!-- Toggle Izinkan Download -->
+                                <div class="w-100 mt-2 px-1">
+                                    <div class="form-check form-switch d-flex align-items-center gap-3 p-0">
+                                        <input class="form-check-input ms-0" type="checkbox" role="switch" id="isDownloadable" checked style="width: 2.5rem; height: 1.25rem; cursor: pointer;">
+                                        <div class="d-flex flex-column">
+                                            <label class="form-check-label fw-bold custom-small-font mb-0" for="isDownloadable" style="cursor: pointer;">Izinkan pemohon mengunduh file ini</label>
+                                            <small class="text-muted custom-text" style="font-size: 0.65rem;">Nonaktifkan jika file hanya untuk internal</small>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <button class="flex-fill btn btn-success" type="button" id="btnKirimLaporan">Kirim laporan</button>
                                 <button type="button" id="btnBatalPenyelesaian" class="flex-fill btn btn-light border">batal</button>
                             </div>
@@ -105,7 +138,10 @@
     </div>
 </div>
 <div class="d-flex align-items-center gap-3">
-    <iconify-icon icon="<?php if ($detail['tiket_status'] === 'In Progress'): ?>streamline-ultimate:task-list-approve<?php else: ?>ic:round-check<?php endif; ?>" class="text-white <?php if ($detail['tiket_status'] === 'In Progress'): ?>btn btn-secondary<?php else: ?>btn btn-success<?php endif; ?> "></iconify-icon>
+    <div class="timeline-icon-box <?= ($detail['tiket_status'] === 'In Progress') ? 'bg-secondary' : 'bg-success' ?> text-white">
+        <span class="step-num"><?= ($step ?? 4) + 1 ?></span>
+        <iconify-icon icon="<?= ($detail['tiket_status'] === 'In Progress') ? 'streamline-ultimate:task-list-approve' : 'ic:round-check' ?>"></iconify-icon>
+    </div>
     <p class="m-0 fw-bold custom-small-font">approval kepala urusan (pak bagas)</p>
 </div>
 

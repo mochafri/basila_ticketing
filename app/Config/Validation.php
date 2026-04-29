@@ -72,6 +72,10 @@ class Validation extends BaseConfig
         'user_id.*' => [
             'label' => 'User ID',
             'rules' => 'required|integer'
+        ],
+        'level_kesulitan' => [
+            'label' => 'Level Kesulitan',
+            'rules' => 'permit_empty|in_list[mudah,sedang,sulit]'
         ]
     ];
 

@@ -76,3 +76,7 @@ $routes->post('/selesaikan-tugas-kaur/(:num)', 'TicketController::selesaikanTuga
 
 # End point layanan
 $routes->post('/layanan/(:num)', 'MasterController:getLayanan/$1');
+
+# Laporan Kinerja Staff
+$routes->get('/laporan/kinerja', 'LaporanController::kinerja');
+$routes->get('/laporan/kinerja/detail/(:any)', 'LaporanController::detailKinerja/$1');
