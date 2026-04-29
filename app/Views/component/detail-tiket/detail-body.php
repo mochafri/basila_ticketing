@@ -7,20 +7,20 @@
         <!-- status 1 -->
         <?= $this->include('component/detail-tiket/ticket_created'); ?>
         <!-- status 2 -->
-        <?php if (session('role_name') === 'BAA'):  ?>
-        <?= $this->include('component/detail-tiket/approval_eskalasi', [
-            'kaur' => $kaur,
-            'detail' => $detail,
-            'kaurByTiketOpen' => $kaurByTiketOpen
-        ]); ?>
-        <?php endif; ?>
-        <!-- <p>-------------------------------komponen bu fira (approval_kabag.php)--------------------------</p> -->
-        <?php if (session('role_name') === 'SUPERADMIN'): ?>
+        <?php if (session('role_name') === 'BAA'): ?>
             <?= $this->include('component/detail-tiket/approval_kabag', [
                 'kaur' => $kaur,
                 'detail' => $detail,
                 'kaurByTiketOpen' => $kaurByTiketOpen,
                 'allTaskStaffOnKaur' => $allTaskStaffOnKaur
+            ]); ?>
+        <?php endif; ?>
+
+        <?php if (session('role_name') === 'SUPERADMIN'): ?>
+            <?= $this->include('component/detail-tiket/approval_eskalasi', [
+                'kaur' => $kaur,
+                'detail' => $detail,
+                'kaurByTiketOpen' => $kaurByTiketOpen
             ]); ?>
         <?php endif; ?>
         <!-- <p>-------------------------------end komponen bu fira-----------</p> -->

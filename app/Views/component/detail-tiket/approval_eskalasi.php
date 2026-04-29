@@ -5,7 +5,7 @@
             <p class="m-0 fw-bold mb-2 custom-small-font">approval eskalasi</p>
             <div class="p-4 bg-light rounded-3 w-100 d-flex gap-3 flex-column shadow-md border">
                 <p class="m-0 fw-medium custom-text text-danger italic">Tiket ini sedang dalam proses eskalasi dan membutuhkan persetujuan.</p>
-                <?php if (session('role_name') === 'BAA'): ?>
+                <?php if (session('role_name') === 'SUPERADMIN'): ?>
                     <div class="d-flex gap-2 flex-wrap mt-2">
                         <button type="button"
                             class="btn btn-approve-escalated btn-success flex-fill p-4 text-uppercase fw-bold rounded-4">Setujui Eskalasi</button>
@@ -13,7 +13,7 @@
                             class="btn btn-reject-escalated btn-danger flex-fill p-4 text-uppercase fw-bold rounded-4">Tolak Eskalasi</button>
                     </div>
                 <?php else: ?>
-                    <p class="m-0 text-muted custom-small-font fst-italic">Menunggu persetujuan dari pihak BAA...</p>
+                    <p class="m-0 text-muted custom-small-font fst-italic">Menunggu persetujuan dari pihak Admin (Pak Tora)...</p>
                 <?php endif; ?>
             </div>
         </div>
