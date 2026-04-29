@@ -29,10 +29,12 @@ class TicketController extends BaseController
     {
         $roles = [session('role_name')];
         $nip = session('user_identifier');
+        $search = $this->request->getGet('search');
 
         return view('tiket/daftar/index', [
             'title' => 'Daftar Tiket',
-            'tiket' => $this->tiketService->getDataTiket($roles, $nip),
+            'tiket' => $this->tiketService->getDataTiket($roles, $nip, $search),
+            'search' => $search
         ]);
     }
 
