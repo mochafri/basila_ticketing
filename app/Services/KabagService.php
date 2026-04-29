@@ -217,13 +217,19 @@ class KabagService
             ->where('fk_tiket', $id)
             ->findAll();
 
+        $anyFinished = false;
         foreach ($taskKaur as $kaur) {
-            if ($kaur['flag'] !== 'Finish') {
-                return [
-                    'status' => 'fail',
-                    'message' => "Kepala bagian " . $kaur['kaur_name'] . " belum menyelesaikan tugasnya"
-                ];
+            if ($kaur['flag'] === 'Finish') {
+                $anyFinished = true;
+                break;
             }
+        }
+
+        if (!$anyFinished) {
+            return [
+                'status' => 'fail',
+                'message' => "Belum ada Kepala Urusan (Kaur) yang menyelesaikan tugasnya."
+            ];
         }
 
         $db->transStart();
