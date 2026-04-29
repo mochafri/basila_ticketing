@@ -28,16 +28,7 @@ class TicketController extends BaseController
     public function index(): string
     {
         $roles = [session('role_name')];
-        $loginUser = strtolower(session('login_username') ?? '');
         $nip = session('user_identifier');
-
-        // Elevasi hak akses untuk user admin agar bisa melihat semua tiket
-        if ($loginUser === 'admin' || $nip === '000000') {
-            if (!in_array('SUPERADMIN', $roles)) {
-                $roles[] = 'SUPERADMIN';
-            }
-        }
-
         $kategori = $this->request->getGet('kategori');
         $status = $this->request->getGet('status');
         $search = $this->request->getGet('search');

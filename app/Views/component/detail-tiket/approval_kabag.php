@@ -1,10 +1,3 @@
-<?php 
-    $roleName  = $roleName ?? session('role_name');
-    $loginUser = $loginUser ?? strtolower(session('login_username') ?? '');
-    $userId    = $userId ?? session('user_identifier');
-    $isAdmin   = $isAdmin ?? ($roleName === 'SUPERADMIN' || $loginUser === 'admin' || $userId === '000000');
-    $isReadOnly = $isReadOnly ?? ($loginUser === 'admin' && $roleName !== 'SUPERADMIN');
-?>
 <?php if (($detail['tiket_status'] === 'Open' && empty($kaurByTiketOpen)) || $detail['tiket_status'] === 'Approve Escalated'): ?>
     <div class="d-flex gap-3 w-100">
         <div class="timeline-icon-box <?= ($detail['tiket_status'] === 'Waiting') ? 'bg-danger' : 'bg-success' ?> text-white">
@@ -12,7 +5,7 @@
             <iconify-icon icon="<?= ($detail['tiket_status'] === 'Waiting') ? 'streamline-ultimate:task-list-approve' : 'ic:round-check' ?>"></iconify-icon>
         </div>
         <div class="flex-grow-1">
-            <p class="m-0 fw-bold mb-2 custom-small-font">approval kepala bagian (bu fira)</p>
+            <p class="m-0 fw-bold mb-2 custom-small-font">approval kepala urusan (bu fira)</p>
             <div class="p-4 bg-light rounded-3 w-100 d-flex gap-3 flex-column shadow-md border">
                 <p class="m-0 fw-medium custom-text">Pilih delegasi kepala bagian</p>
                 <div class="d-flex gap-2 flex-wrap">
@@ -42,7 +35,6 @@
                     </select>
                 </div>
 
-                <?php if (!($isReadOnly ?? false)): ?>
                 <div class="d-flex gap-2 flex-wrap mt-4">
                     <button type="button"
                         class="btn btn-approve btn-success flex-fill p-4 text-uppercase fw-bold rounded-4">DELEGASIKAN TUGAS</button>
@@ -50,11 +42,6 @@
                         class="btn btn-escalated btn-primary flex-fill p-4 text-uppercase fw-bold rounded-4">eskalasi</button>
                     <button class="btn btn-reject btn-danger flex-fill p-4 text-uppercase fw-bold rounded-4">tolak</button>
                 </div>
-                <?php else: ?>
-                <div class="mt-4 p-3 bg-white rounded-3 border text-center">
-                    <span class="text-muted small fw-bold text-uppercase"><iconify-icon icon="ph:info-bold" class="align-middle me-1"></iconify-icon> Mode Observer: Hanya dapat memantau</span>
-                </div>
-                <?php endif; ?>
             </div>
         </div>
     </div>
@@ -66,7 +53,7 @@
             <iconify-icon icon="<?= ($detail['tiket_status'] === 'Waiting') ? 'streamline-ultimate:task-list-approve' : 'ic:round-check' ?>"></iconify-icon>
         </div>
         <div class="flex-grow-1">
-            <p class="m-0 fw-bold custom-small-font text-uppercase">approval kepala bagian (bu fira)</p>
+            <p class="m-0 fw-bold custom-small-font text-uppercase">approval kepala urusan (bu fira)</p>
             <div class="d-flex flex-wrap gap-2 mt-1">
                 <span class="custom-text text-muted small d-flex align-items-center gap-1">
                     <iconify-icon icon="ph:check-circle-bold" class="text-success"></iconify-icon>
@@ -182,7 +169,7 @@ if ($hasFinish): ?>
                                         <?php endif; ?>
                                     </div>
                                 </div>
-                                <?php if ($detail['tiket_status'] !== 'Closed' && !($isReadOnly ?? false)): ?>
+                                <?php if ($detail['tiket_status'] !== 'Closed'): ?>
                                     <button type="button" class="btn btn-sm btn-outline-danger btn-revisi-kaur-individual fw-bold px-3"
                                         data-id="<?= $kr['id'] ?>" data-name="<?= $kr['kaur_name'] ?>" style="font-size: 0.7rem;">
                                         REVISI
@@ -203,17 +190,13 @@ if ($hasFinish): ?>
     </div>
     <div class="flex-grow-1 gap-2 d-flex flex-column">
         <p class="m-0 fw-bold custom-small-font">konfirmasi penyelesaian</p>
-        <?php if ($detail['tiket_status'] === 'In Progress' && !($isReadOnly ?? false)): ?>
+        <?php if ($detail['tiket_status'] === 'In Progress'): ?>
             <div class="d-flex flex-wrap gap-2">
                 <?php if (in_array('Finish', array_column($kaurByTiketOpen, 'flag'))): ?>
                     <button
                         class="btn btn-tutup-tiket btn-success flex-fill text-uppercase fw-bold rounded-3 custom-small-font py-3 px-4">tutup
                         tiket (selesai)</button>
                 <?php endif; ?>
-            </div>
-        <?php elseif ($detail['tiket_status'] === 'In Progress' && ($isReadOnly ?? false)): ?>
-            <div class="p-2 text-muted small fst-italic">
-                Menunggu konfirmasi penyelesaian dari Kabag...
             </div>
         <?php endif; ?>
     </div>

@@ -80,23 +80,22 @@
 
             </li>
 
-            <?php 
-                $roleName  = session('role_name');
-                $loginUser = strtolower(session('login_username') ?? '');
-                $userId    = session('user_identifier');
-                $isAdmin   = ($roleName === 'SUPERADMIN' || $loginUser === 'admin' || $userId === '000000');
-            ?>
-
-            <?php if ($isAdmin): ?>
             <!-- MASTER DATA -->
             <li class="mb-2">
+
                 <div class="menu-item side-task p-2 rounded d-flex align-items-center" data-bs-toggle="collapse"
                     data-bs-target="#kelolaMasterData" role="button">
+
+                    <!-- Icon kiri -->
                     <div class="d-flex align-items-center gap-2">
                         <iconify-icon icon="hugeicons:database" width="20"></iconify-icon>
                         <span>Master Data</span>
                     </div>
-                    <iconify-icon icon="material-symbols:chevron-right-rounded" class="ms-auto arrow-icon"></iconify-icon>
+
+                    <!-- Arrow kanan -->
+                    <iconify-icon icon="material-symbols:chevron-right-rounded" class="ms-auto arrow-icon">
+                    </iconify-icon>
+
                 </div>
 
                 <ul class="collapse list-unstyled ps-4 mt-2" id="kelolaMasterData">
@@ -107,13 +106,14 @@
                     </li>
                     <li>
                         <div class="submenu-item p-2 rounded">
-                            <a href="<?= site_url('kategori/'); ?>" class="text-decoration-none d-block">• Data Kategori</a>
+                            <a href="<?= site_url('kategori/'); ?>" class="text-decoration-none d-block">• Data
+                                Kategori</a>
                         </div>
                     </li>
+                
                 </ul>
+
             </li>
-            <?php endif; ?>
-            <?php if ($isAdmin): ?>
              <!-- LAPORAN -->
             <li class="mb-2">
                 <div class="menu-item side-task p-2 rounded d-flex align-items-center" data-bs-toggle="collapse"
@@ -132,7 +132,6 @@
                     </li>
                 </ul>
             </li>
-            <?php endif; ?>
             <!-- RIWAYAT -->
             <li class="mb-2">
                 <div class="menu-item p-2 rounded d-flex align-items-center gap-2">

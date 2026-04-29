@@ -1,10 +1,3 @@
-<?php 
-    $roleName  = $roleName ?? session('role_name');
-    $loginUser = $loginUser ?? strtolower(session('login_username') ?? '');
-    $userId    = $userId ?? session('user_identifier');
-    $isAdmin   = $isAdmin ?? ($roleName === 'SUPERADMIN' || $loginUser === 'admin' || $userId === '000000');
-    $isReadOnly = $isReadOnly ?? ($loginUser === 'admin' && $roleName !== 'SUPERADMIN');
-?>
 <div class="d-flex gap-3 w-100">
     <div class="timeline-icon-box bg-danger text-white">
         <span class="step-num"><?= $step ?? 4 ?></span>
@@ -73,7 +66,7 @@
                 </div>
                 <!-- button selesaikan tugas -->
                 <div id="containerBtnSelesaikan" class="d-flex align-items-center justify-content-end flex-grow-1 p-2">
-                    <?php if($taskStaff['task_status'] !== 'Selesai' && $taskStaff['task_status'] !== 'Menunggu Approve' && !($isReadOnly ?? false)): ?>
+                    <?php if($taskStaff['task_status'] !== 'Selesai' && $taskStaff['task_status'] !== 'Menunggu Approve'): ?>
                     <button id="btnSelesaikanTugas" type="button" class="btn btn-danger text-uppercase custom-small-font fw-medium py-2 px-4 me-3">Selesaikan Tugas</button>
                     <?php endif; ?>
                 </div>
@@ -144,7 +137,6 @@
         <?php endif; ?>
     </div>
 </div>
-<?php if (!($hideContext ?? false)): ?>
 <div class="d-flex align-items-center gap-3">
     <div class="timeline-icon-box <?= ($detail['tiket_status'] === 'In Progress') ? 'bg-secondary' : 'bg-success' ?> text-white">
         <span class="step-num"><?= ($step ?? 4) + 1 ?></span>
@@ -152,7 +144,6 @@
     </div>
     <p class="m-0 fw-bold custom-small-font">approval kepala urusan (pak bagas)</p>
 </div>
-<?php endif; ?>
 
 <script>
     // ini adalah script untuk menampilkan nama file yang diunggah pada label setelah user memilih file, bisa dipindahkan nanti

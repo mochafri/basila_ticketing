@@ -1,10 +1,3 @@
-<?php 
-    $roleName  = $roleName ?? session('role_name');
-    $loginUser = $loginUser ?? strtolower(session('login_username') ?? '');
-    $userId    = $userId ?? session('user_identifier');
-    $isAdmin   = $isAdmin ?? ($roleName === 'SUPERADMIN' || $loginUser === 'admin' || $userId === '000000');
-    $isReadOnly = $isReadOnly ?? ($loginUser === 'admin' && $roleName !== 'SUPERADMIN');
-?>
 <div class="card border-0">
     <div class="card-body p-5 d-flex flex-column gap-4 text-uppercase">
         <div class="d-flex align-items-center gap-3">
@@ -15,46 +8,61 @@
             </a>
         </div>
         <?php $step = 1; ?>
-        <!-- 1. Pembuatan Tiket (Selalu Muncul) -->
+        <!-- status 1 -->
         <?= $this->include('component/detail-tiket/ticket_created', ['step' => $step++]); ?>
-
-        <!-- 2. Eskalasi (Jika ada eskalasi atau user adalah admin) -->
-        <?php if ($isAdmin || $detail['is_escalated'] || $detail['tiket_status'] === 'Escalated Process'): ?>
-            <?= $this->include('component/detail-tiket/approval_eskalasi', [
-                'step' => $step++,
-                'hideContext' => $isAdmin
-            ]); ?>
+        <!-- status 2 -->
+        <?php if (session('role_name') === 'BAA'):  ?>
+        <?= $this->include('component/detail-tiket/approval_eskalasi', [
+            'kaur' => $kaur,
+            'detail' => $detail,
+            'kaurByTiketOpen' => $kaurByTiketOpen
+        ]); ?>
         <?php endif; ?>
-
-        <!-- 3. Approval Kabag / BAA (Jika user admin/BAA atau sudah melewati tahap ini) -->
-        <?php if ($isAdmin || $roleName === 'BAA'): ?>
+        <!-- <p>-------------------------------komponen bu fira (approval_kabag.php)--------------------------</p> -->
+        <?php if (session('role_name') === 'SUPERADMIN'): ?>
             <?= $this->include('component/detail-tiket/approval_kabag', [
-                'step' => $step,
-                'hideContext' => $isAdmin
+                'kaur' => $kaur,
+                'detail' => $detail,
+                'kaurByTiketOpen' => $kaurByTiketOpen,
+                'allTaskStaffOnKaur' => $allTaskStaffOnKaur,
+                'step' => $step
             ]); ?>
             <?php $step += 3; ?>
         <?php endif; ?>
 
-        <!-- 4. Approval & Penugasan Kaur (Jika user admin/Kaur atau sudah di-assign) -->
-        <?php if ($isAdmin || $roleName === 'KEPALA URUSAN ADMINISTRASI AKADEMIK' || !empty($kaurByTiketOpen)): ?>
+        <?php if (session('role_name') === 'SUPERADMIN'): ?>
+            <?= $this->include('component/detail-tiket/approval_eskalasi', [
+                'kaur' => $kaur,
+                'detail' => $detail,
+                'kaurByTiketOpen' => $kaurByTiketOpen
+            ]); ?>
+        <?php endif; ?>
+        <!-- <p>-------------------------------end komponen bu fira-----------</p> -->
+        <!-- status 3 -->
+        <!-- <p>-------------------------------komponen pak bagas/bu farida (approval_kaur.php)--------------------------</p> -->
+        <?php if (session('role_name') === 'KEPALA URUSAN ADMINISTRASI AKADEMIK'): ?>
             <?= $this->include('component/detail-tiket/approval_kaur', [
-                'step' => $step,
-                'hideContext' => $isAdmin
+                'staff' => $staff,
+                'detail' => $detail,
+                'taskStaffOnKaur' => $taskStaffOnKaur,
+                'kaurByTiketOpen' => $kaurByTiketOpen,
+                'step' => $step
             ]); ?>
             <?php $step += 3; ?>
         <?php endif; ?>
-
-        <!-- 5. Pengerjaan Staff (Jika user admin/Staff atau sudah ada task) -->
-        <?php if ($isAdmin || in_array($roleName, ['PEGAWAI', 'ADMIN AKADEMIK']) || !empty($taskStaff) || !empty($allTaskStaffOnKaur)): ?>
+        <!-- <p>-------------------------------end komponen pak bagas/bu farida-----------</p> -->
+        <!-- status 4 / staff-->
+        <!-- <p>-------------------------------komponen staff (submission_staff.php)--------------------------</p> -->
+        <?php if (session('role_name') === 'PEGAWAI' || session('role_name') === 'ADMIN AKADEMIK'): ?>
             <?= $this->include('component/detail-tiket/submission_staff', [
-                'step' => $step,
-                'hideContext' => $isAdmin
+                'taskStaff' => $taskStaff,
+                'step' => $step
             ]); ?>
             <?php $step += 2; ?>
         <?php endif; ?>
+        <!-- <p>-------------------------------end komponen staff-----------</p> -->
 
-        <!-- 6. Tampilan untuk Mahasiswa (Hanya ringkasan status) -->
-        <?php if ($roleName === "MAHASISWA"): ?>
+        <?php if (session('role_name') === "MAHASISWA"): ?>
             <?= $this->include('component/detail-tiket/submission_mahasiswa', [
                 'step' => $step++,
                 'allTaskStaffOnKaur' => $allTaskStaffOnKaur ?? []

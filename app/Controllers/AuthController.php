@@ -40,7 +40,6 @@ class AuthController extends BaseController
                 'roles' => $service['data_role'],
                 'token' => $service['token'],
                 'username' => $service['profile']['fullname'] ?? 'Admin',
-                'login_username' => $data['username'],
                 'user_identifier' => $service['profile']['numberid'] ?? '1987654321',
                 'profilephoto' => $service['profile']['photo'] ?? null,
                 'isLoggedIn' => true
