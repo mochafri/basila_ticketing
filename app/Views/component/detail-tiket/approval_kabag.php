@@ -1,4 +1,4 @@
-<?php if ($detail['tiket_status'] === 'Waiting' || $detail['tiket_status'] === 'Approve Escalated'): ?>
+<?php if (($detail['tiket_status'] === 'Open' && empty($kaurByTiketOpen)) || $detail['tiket_status'] === 'Approve Escalated'): ?>
     <div class="d-flex gap-3 w-100">
         <iconify-icon icon="<?php if ($detail['tiket_status'] === 'Waiting'): ?>streamline-ultimate:task-list-approve<?php else: ?>ic:round-check<?php endif; ?>" class="text-white h-25 <?php if ($detail['tiket_status'] === 'Waiting'): ?>btn btn-danger<?php else: ?>btn btn-success<?php endif; ?>"></iconify-icon>
         <div class="flex-grow-1">
@@ -23,9 +23,7 @@
                 </div>
                 <div class="d-flex gap-2 flex-wrap mt-4">
                     <button type="button"
-                        class="btn btn-approve btn-success flex-fill p-4 text-uppercase fw-bold rounded-4">setujui
-                        &
-                        tugaskan</button>
+                        class="btn btn-approve btn-success flex-fill p-4 text-uppercase fw-bold rounded-4">DELEGASIKAN TUGAS</button>
                     <button type="button"
                         class="btn btn-escalated btn-primary flex-fill p-4 text-uppercase fw-bold rounded-4">eskalasi</button>
                     <button class="btn btn-reject btn-danger flex-fill p-4 text-uppercase fw-bold rounded-4">tolak</button>
@@ -34,7 +32,7 @@
         </div>
     </div>
 <?php endif; ?>
-<?php if ($detail['tiket_status'] === 'Open'): ?>
+<?php if ($detail['tiket_status'] === 'Open' && !empty($kaurByTiketOpen)): ?>
     <div class="d-flex align-items-center gap-3">
         <iconify-icon icon="<?php if ($detail['tiket_status'] === 'Waiting'): ?>streamline-ultimate:task-list-approve<?php else: ?>ic:round-check<?php endif; ?>" class="text-white <?php if ($detail['tiket_status'] === 'Waiting'): ?> btn btn-secondary <?php else: ?> btn btn-success <?php endif; ?> "></iconify-icon>
         <p class="m-0 fw-bold custom-small-font">approval kepala urusan (bu fira)</p>

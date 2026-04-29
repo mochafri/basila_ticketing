@@ -130,7 +130,7 @@ class TicketController extends BaseController
             ]);
         }
 
-        $result = $this->kabagService->approveTiket($data, $slug);
+        $result = $this->kabagService->assignTiket($data, $slug);
 
         if ($result['status'] === 'success') {
             return $this->response->setStatusCode(200)->setJSON($result);

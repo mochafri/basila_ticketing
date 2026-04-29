@@ -4,13 +4,8 @@ $icon = '';
 $btnClass = '';
 
     switch ($detail['tiket_status']) {
-        case 'Waiting':
-            $statusText = 'Sedang ditinjau : Kepala Bagian (Bu Fhira)';
-            $icon = 'streamline-ultimate:task-list-approve';
-            $btnClass = 'btn-danger';
-            break;
         case 'Open':
-            $statusText = 'Sedang ditinjau : Kepala Urusan (Bu Farida / Pak Bagas)';
+            $statusText = empty($kaurByTiketOpen) ? 'Sedang ditinjau : Kepala Bagian (Pendelegasian Tugas)' : 'Sedang ditinjau : Kepala Urusan (Bu Farida / Pak Bagas)';
             $icon = 'streamline-ultimate:task-list-approve';
             $btnClass = 'btn-warning';
             break;

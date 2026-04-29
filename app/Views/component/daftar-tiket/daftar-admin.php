@@ -4,15 +4,20 @@
         <thead>
             <tr>
                 <th>ID</th>
-                <th>JUDUL PERMOHONAN</th>
-                <th>KATEGORI</th>
+                <th>NIM PEMOHON</th>
+                <th>KATEGORI / LAYANAN</th>
+                <th>DESKRIPSI</th>
                 <th>TANGGAL</th>
                 <th>STATUS</th>
                 <th>AKSI</th>
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($tiket['data'] as $data):
+            <?php 
+                $page = $tiket['pager']->getCurrentPage();
+                $perPage = $tiket['pager']->getPerPage();
+                $i = 1 + ($page - 1) * $perPage;
+                foreach ($tiket['data'] as $data):
                 $statusClass = '';
                 switch ($data['tiket_status']) {
                     case 'Waiting':
@@ -35,14 +40,18 @@
                 }
             ?>
                 <tr>
-                    <td class="tiket-id"><?= $data['id'] ?></td>
+                    <td class="tiket-id"><?= $i++ ?></td>
                     <td class="tiket-judul">
-                        <?= $data['judul_permohonan'] ?>
+                        <?= $data['nip_creator'] ?>
                     </td>
                     <td class="tiket-kategori">
-                        <div class="tiket-kategori-wrapper"></div>
-                        <iconify-icon icon="hugeicons:layers-01"></iconify-icon>
-                        <?= $data['kategori_layanan'] ?>
+                        <div class="d-flex flex-column">
+                            <span class="fw-bold text-dark text-uppercase custom-small-font"><?= $data['kategori_layanan'] ?></span>
+                            <span class="text-muted italic custom-small-font"><?= $data['per_kategori_layanan'] ?></span>
+                        </div>
+                    </td>
+                    <td class="custom-small-font text-muted">
+                        <?= strlen($data['deskripsi_permohonan']) > 50 ? substr(esc($data['deskripsi_permohonan']), 0, 50) . '...' : esc($data['deskripsi_permohonan']) ?>
                     </td>
                     <td class="tiket-tanggal">
                         <?= date('Y-m-d', strtotime($data['created_at'])) ?>
