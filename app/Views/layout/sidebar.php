@@ -28,7 +28,7 @@
         </h5>
 
         <small id="sidebar-nim">
-            <?= session()->get('nim') ?? 'NIM' ?>
+            <?= session()->get('user_identifier') ?? 'NIM' ?>
         </small>
     </div>
 
