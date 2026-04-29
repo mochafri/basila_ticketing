@@ -323,26 +323,6 @@ li a {
 
 /* role option end */
 
-/* transition form penyelesaian start */
-
-.smooth-collapse {
-    display: grid;
-    grid-template-rows: 0fr;
-    transition: grid-template-rows 1s cubic-bezier(0.19, 1, 0.22, 1), opacity 1s cubic-bezier(0.19, 1, 0.22, 1);
-    opacity: 0;
-}
-
-.smooth-collapse.show {
-    grid-template-rows: 1fr;
-    opacity: 1;
-}
-
-.smooth-collapse-inner {
-    overflow: hidden;
-}
-
-/* transition form penyelesaian end */
-
 /* Dashboard Start*/
 
 .dashboard-wrapper {
@@ -883,6 +863,13 @@ li a {
     letter-spacing: 1px;
 }
 
+.bg-status-waiting { background-color: #6c757d !important; color: white !important; }
+.bg-status-open { background-color: #0dcaf0 !important; color: white !important; }
+.bg-status-inprogress { background-color: #ffc107 !important; color: black !important; }
+.bg-status-closed { background-color: #198754 !important; color: white !important; }
+.bg-status-rejected { background-color: #dc3545 !important; color: white !important; }
+
+
 .tiket-btn-aksi {
     width: 38px;
     height: 38px;
@@ -939,3 +926,138 @@ li a {
 }
 
 /* end style halaman detail tiket */
+
+.smooth-collapse {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s ease;
+    overflow: hidden;
+}
+
+.smooth-collapse.show {
+    grid-template-rows: 1fr;
+}
+
+.smooth-collapse-inner {
+    min-height: 0;
+}
+
+/* Timeline Styles (Riwayat) */
+.timeline-compact {
+    position: relative;
+    padding-left: 25px;
+    margin-left: 10px;
+}
+
+.timeline-compact::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: #dee2e6;
+}
+
+.timeline-item-compact {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: -30px;
+    top: 4px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid #dc3545;
+    z-index: 1;
+}
+
+.timeline-item-compact:last-child {
+    margin-bottom: 0;
+}
+
+.log-meta {
+    font-size: 0.65rem;
+    letter-spacing: 0.5px;
+}
+
+.log-title {
+    font-size: 0.75rem;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.log-msg {
+    font-size: 0.75rem;
+    color: #6c757d;
+    line-height: 1.4;
+    background: #f8f9fa;
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin-top: 5px;
+}
+
+/* Pagination Premium */
+.pagination-premium {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+    gap: 10px;
+    align-items: center;
+}
+
+.pagination-premium li a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 14px;
+    background: #ffffff;
+    color: #6b7280;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+    border: 1px solid #e5e7eb;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.pagination-premium li a:hover {
+    background: #f9fafb;
+    color: var(--primaryColor);
+    border-color: var(--primaryColor);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.pagination-premium li.active a {
+    background: linear-gradient(135deg, var(--primaryColor), #b02a37);
+    color: #ffffff;
+    border-color: transparent;
+    box-shadow: 0 8px 20px rgba(220, 53, 69, 0.3);
+}
+
+.pagination-premium li.active a:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(220, 53, 69, 0.4);
+}
+
+.pagination-premium iconify-icon {
+    font-size: 20px;
+}
+
+.pager-info {
+    padding: 8px 16px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border: 1px solid #f1f3f7;
+}
+
+.pager-info b {
+    color: var(--primaryColor);
+}

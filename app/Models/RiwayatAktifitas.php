@@ -4,16 +4,21 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class AssignTask extends Model
+class RiwayatAktifitas extends Model
 {
-    protected $table            = 'assign_to_staff';
+    protected $table            = 'riwayat_aktifitas';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [
-        'task_instruction', 'assign_task_to_staff', 'task_status', 'taks_dokumen', 'fk_assign_to_kaur', 'nip_staff', 'catatan_laporan_penyelesaian'
+    protected $allowedFields = [
+        'activity_title',
+        'message',
+        'created_by',
+        'fk_tiket',
+        'created_at',
+        'updated_at'
     ];
 
     protected bool $allowEmptyInserts = false;
@@ -23,7 +28,7 @@ class AssignTask extends Model
     protected array $castHandlers = [];
 
     // Dates
-    protected $useTimestamps = false;
+    protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';

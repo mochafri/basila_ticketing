@@ -1,4 +1,4 @@
-import { getLayananById, postTiket } from "./app.js";
+import { getLayananById, postTiket } from "/assets/js/app.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     const layananSelect = document.querySelector('.layanan');
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     const res = await postTiket(judul, kategori, layanan, deskripsi, file);
-                    
+
                     if (res.status === 'success') {
                         Swal.fire({
                             icon: "success",

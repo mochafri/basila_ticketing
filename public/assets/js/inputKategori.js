@@ -1,4 +1,4 @@
-import { postKategori } from "./app.js";
+import { postKategori } from "/assets/js/app.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('.btn-kategori').addEventListener('click', async () => {

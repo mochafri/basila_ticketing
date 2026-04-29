@@ -58,7 +58,7 @@ class Tiket extends Migration
             ],
             'tiket_status' => [
                 'type' => 'ENUM',
-                'constraint' => ['Waiting', 'Open', 'In Progress', 'Closed', 'Rejected'],
+                'constraint' => ['Waiting', 'Open', 'Escalated Process', 'Approve Escalated', 'In Progress', 'Closed', 'Rejected'],
                 'default' => 'Waiting'
             ],
             'catatan' => [

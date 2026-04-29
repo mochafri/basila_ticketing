@@ -5,27 +5,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const slug = segments.pop();
     const parseSlug = parseInt(slug);
 
-const btnApproveKaur = document.querySelector('.btn-approve-kaur');
+    const btnApproveKaur = document.querySelector('.btn-approve-kaur');
 
-if (btnApproveKaur) {
-    btnApproveKaur.addEventListener('click', async () => {
-        btnApproveKaur.innerHTML = 'Loading...';
-        btnApproveKaur.disabled = true;
+    if (btnApproveKaur) {
+        btnApproveKaur.addEventListener('click', async () => {
+            btnApproveKaur.innerHTML = 'Loading...';
+            btnApproveKaur.disabled = true;
 
-        const res = await approveKaur(parseSlug);
+            const res = await approveKaur(parseSlug);
 
-        if (res.status === 'success') {
-            btnApproveKaur.style.display = 'none';
+            if (res.status === 'success') {
+                btnApproveKaur.style.display = 'none';
 
-            if (formDelegasi) formDelegasi.style.display = 'block';
-            if (btnSelesai) btnSelesai.style.display = 'block';
-        } else {
-            console.error(res.message || 'Gagal menerima penugasan');
-            btnApproveKaur.disabled = false;
-            btnApproveKaur.innerHTML = 'Terima & Mulai Penugasan';
-        }
-    });
-}
+                if (formDelegasi) formDelegasi.style.display = 'block';
+                if (btnSelesai) btnSelesai.style.display = 'block';
+            } else {
+                console.error(res.message || 'Gagal menerima penugasan');
+                btnApproveKaur.disabled = false;
+                btnApproveKaur.innerHTML = 'Terima & Mulai Penugasan';
+            }
+        });
+    }
 
     const formDelegasi = document.querySelector('.delegasi-wrapper');
     const btnSelesai = document.querySelector('.btn-selesaikan-penugasan');
@@ -76,14 +76,22 @@ if (btnApproveKaur) {
                 if (result.isConfirmed) {
                     const res = await assignToStaff(parseSlug, instruksi, namaStaff, nipStaff);
                     if (res.status === 'success' || res.status === 200) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Berhasil!',
-                            text: res.message || 'Berhasil memberikan tugas ke staf terkait',
-                            timer: 1500,
-                            showConfirmButton: false
-                        });
-                        // Optional: Clear selection or refresh element manually
+                        if (res.duplicates && res.duplicates.length > 0) {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Peringatan Penugasan!',
+                                html: `Berhasil menugaskan staf baru.<br><br><small class="text-muted">Catatan: Staf berikut sudah ditugaskan sebelumnya dan tidak ditambahkan lagi: <br><b>${res.duplicates.join(', ')}</b></small>`,
+                            }).then(() => location.reload());
+                        } else {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: res.message || 'Berhasil memberikan tugas ke staf terkait',
+                                timer: 1500,
+                                showConfirmButton: false
+                            }).then(() => location.reload());
+                        }
+                        
                         btnAssignStaff.innerHTML = '+';
                         btnAssignStaff.disabled = false;
                         document.querySelector('.instruksi').value = '';
@@ -179,9 +187,27 @@ if (btnApproveKaur) {
             const targetBtn = e.target.closest('.btn-edit-instruction');
             const taskId = targetBtn.getAttribute('data-id');
             const oldInstruction = targetBtn.getAttribute('data-instruction');
-            
-            const newInstruction = prompt('Ubah instruksi penugasan:', oldInstruction);
-            if (newInstruction !== null && newInstruction.trim() !== '') {
+
+            const {
+                value: newInstruction
+            } = await Swal.fire({
+                title: 'Ubah Instruksi',
+                input: 'textarea',
+                inputLabel: 'Masukan instruksi penugasan baru',
+                inputValue: oldInstruction,
+                inputPlaceholder: 'Tulis instruksi di sini...',
+                showCancelButton: true,
+                cancelButtonText: 'Batal',
+                confirmButtonText: 'Simpan Perubahan',
+                confirmButtonColor: '#3085d6',
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'Instruksi tidak boleh kosong!'
+                    }
+                }
+            });
+
+            if (newInstruction) {
                 targetBtn.disabled = true;
                 const res = await editInstructionTask(taskId, newInstruction.trim());
                 if (res.status === 'success') {
