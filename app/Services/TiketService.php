@@ -18,7 +18,7 @@ class TiketService
     }
 
     # Bagian get all data tiket dengan filtering Role
-    public function getDataTiket($roles = [], $nip = null, $kategori = null, $status = null)
+    public function getDataTiket($roles = [], $nip = null, $kategori = null, $status = null, $search = null)
     {
         $query = $this->tiketModel
             ->select(
@@ -39,6 +39,17 @@ class TiketService
             $query->where('tikets.tiket_status', $status);
         }
 
+        if ($search) {
+            $query->groupStart()
+                ->like('tikets.id', $search)
+                ->orLike('tikets.judul_permohonan', $search)
+                ->orLike('tikets.deskripsi_permohonan', $search)
+                ->orLike('tikets.nama_creator', $search)
+                ->orLike('kategoris.kategori_layanan', $search)
+                ->orLike('layanans.per_kategori_layanan', $search)
+                ->groupEnd();
+        }
+
         // 1. KABAG (SUPERADMIN / BAA): Melihat semua tiket
         if (in_array('SUPERADMIN', $roles) || in_array('BAA', $roles)) {
             return [
@@ -46,19 +57,17 @@ class TiketService
                 'pager' => $query->pager,
             ];
         }
+
         // 2. KAUR: Melihat tiket yang didelegasikan kepadanya (Kecuali status Waiting)
         if (in_array('KEPALA URUSAN ADMINISTRASI AKADEMIK', $roles)) {
             return [
                 'data' => $query->join('assign_to_kaur', 'assign_to_kaur.fk_tiket = tikets.id')
                     ->where('assign_to_kaur.nip_kaur', $nip)
-                    ->where('tikets.tiket_status !=', 'Waiting')
                     ->paginate(10),
                 'pager' => $query->pager,
             ];
         }
         // 3. STAFF & MAHASISWA (Pelapor): 
-        // - Melihat tiket yang mereka buat sendiri (nip_creator) -> STATUS APA SAJA
-        // - Melihat tiket dimana mereka ditugaskan sebagai staff (nip_staff) -> HANYA JIKA BUKAN WAITING
         return [
             'data' => $query->join('assign_to_kaur', 'assign_to_kaur.fk_tiket = tikets.id', 'left')
                 ->join('assign_to_staff', 'assign_to_staff.fk_assign_to_kaur = assign_to_kaur.id', 'left')
@@ -66,7 +75,6 @@ class TiketService
                 ->where('tikets.nip_creator', $nip)
                 ->orGroupStart()
                 ->where('assign_to_staff.nip_staff', $nip)
-                ->where('tikets.tiket_status !=', 'Waiting')
                 ->groupEnd()
                 ->groupEnd()
                 ->distinct()
@@ -81,11 +89,17 @@ class TiketService
         return $this->tiketModel
             ->select('
                 tikets.id, tikets.judul_permohonan, tikets.deskripsi_permohonan, 
+<<<<<<< HEAD
                 tikets.tiket_status, tikets.created_at, tikets.completed_at, tikets.dokumen_lampiran, 
                 tikets.original_dokumen_name,tikets.is_escalated, tikets.level_kesulitan,
+=======
+                tikets.tiket_status, tikets.created_at, tikets.closed_at, tikets.dokumen_lampiran, 
+                tikets.original_dokumen_name,tikets.is_escalated,
+>>>>>>> origin/Ilham
                 tikets.nip_creator, tikets.nama_creator,
                 layanans.per_kategori_layanan,
-                kategoris.kategori_layanan
+                kategoris.kategori_layanan,
+                layanans.per_kategori_layanan
             ')
             ->join('layanans', 'layanans.id = tikets.id_layanan', 'left')
             ->join('kategoris', 'kategoris.id = layanans.fk_kategori', 'left')
@@ -120,14 +134,15 @@ class TiketService
             'dokumen_lampiran' => $filePath,
             'original_dokumen_name' => $originalName,
             'nip_creator' => session('user_identifier'),
-            'nama_creator' => session('username')
+            'nama_creator' => session('username'),
+            'tiket_status' => 'Open'
         ]);
 
         $insertId = $this->tiketModel->getInsertID();
 
         $this->riwayatAktifitas->insert([
-            'activity_title' => 'Laporan Tugas',
-            'message' => 'Staf telah mengunggah laporan penyelesaian tugas.',
+            'activity_title' => 'Pembuatan Tiket',
+            'message' => 'Tiket diajukan oleh pemohon.',
             'created_by' => $username,
             'fk_tiket' => $insertId
         ]);

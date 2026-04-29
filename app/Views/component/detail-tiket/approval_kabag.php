@@ -1,4 +1,4 @@
-<?php if ($detail['tiket_status'] === 'Waiting' || $detail['tiket_status'] === 'Approve Escalated'): ?>
+<?php if (($detail['tiket_status'] === 'Open' && empty($kaurByTiketOpen)) || $detail['tiket_status'] === 'Approve Escalated'): ?>
     <div class="d-flex gap-3 w-100">
         <div class="timeline-icon-box <?= ($detail['tiket_status'] === 'Waiting') ? 'bg-danger' : 'bg-success' ?> text-white">
             <span class="step-num"><?= $step ?? 2 ?></span>
@@ -37,9 +37,7 @@
 
                 <div class="d-flex gap-2 flex-wrap mt-4">
                     <button type="button"
-                        class="btn btn-approve btn-success flex-fill p-4 text-uppercase fw-bold rounded-4">setujui
-                        &
-                        tugaskan</button>
+                        class="btn btn-approve btn-success flex-fill p-4 text-uppercase fw-bold rounded-4">DELEGASIKAN TUGAS</button>
                     <button type="button"
                         class="btn btn-escalated btn-primary flex-fill p-4 text-uppercase fw-bold rounded-4">eskalasi</button>
                     <button class="btn btn-reject btn-danger flex-fill p-4 text-uppercase fw-bold rounded-4">tolak</button>

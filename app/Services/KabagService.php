@@ -25,7 +25,7 @@ class KabagService
     }
 
     # Update data tiket approve by kabag
-    public function approveTiket(array $data, $id)
+    public function assignTiket(array $data, $id)
     {
         $db = \Config\Database::connect();
 
@@ -240,7 +240,8 @@ class KabagService
         $db->transStart();
 
         $update = $this->tiketModel->update($id, [
-            'tiket_status' => 'Closed'
+            'tiket_status' => 'Closed',
+            'closed_at'    => date('Y-m-d H:i:s')
         ]);
 
         if (!$update) {

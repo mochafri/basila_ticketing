@@ -29,16 +29,17 @@ class TicketController extends BaseController
     {
         $roles = [session('role_name')];
         $nip = session('user_identifier');
-        
         $kategori = $this->request->getGet('kategori');
         $status = $this->request->getGet('status');
+        $search = $this->request->getGet('search');
 
         return view('tiket/daftar/index', [
             'title' => 'Daftar Tiket',
-            'tiket' => $this->tiketService->getDataTiket($roles, $nip, $kategori, $status),
+            'tiket' => $this->tiketService->getDataTiket($roles, $nip, $kategori, $status, $search),
             'categories' => $this->kategoriService->getKategori(),
             'filter_kategori' => $kategori,
-            'filter_status' => $status
+            'filter_status' => $status,
+            'search' => $search
         ]);
     }
 
@@ -134,7 +135,7 @@ class TicketController extends BaseController
             ]);
         }
 
-        $result = $this->kabagService->approveTiket($data, $slug);
+        $result = $this->kabagService->assignTiket($data, $slug);
 
         if ($result['status'] === 'success') {
             return $this->response->setStatusCode(200)->setJSON($result);

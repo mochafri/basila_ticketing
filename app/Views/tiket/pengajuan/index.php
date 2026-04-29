@@ -8,7 +8,7 @@
                 <div class="card-body p-5">
                     <div class="row header mb-5">
                         <div class="col-6">
-                            <h2 class="text-uppercase fw-bold">Pengajuan Tiket Layanan</h2>
+                            <h2 class="text-uppercase fw-bold">Permohonan Tiket Layanan</h2>
                         </div>
                     </div>
                     <div class="row g-4 needs-validation">
