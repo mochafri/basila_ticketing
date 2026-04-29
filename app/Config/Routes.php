@@ -56,6 +56,7 @@ $routes->post('/role-choice', 'RoleOptionController::chooseRole');
 #Endpoint logout
 $routes->post('logout', 'AuthController::logout');
 $routes->get('logout', 'AuthController::logout');
+$routes->get('switch-role/(:any)', 'AuthController::switchRole/$1');
 
 # Coba endPoint approve reject sama eskalasi
 $routes->post('/reject-tiket/(:num)', 'TicketController::rejectTiket/$1');

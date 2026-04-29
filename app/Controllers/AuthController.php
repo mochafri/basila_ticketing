@@ -97,4 +97,33 @@ class AuthController extends BaseController
         return redirect()->to('/signin'); // arahkan ke login
     }
 
+    public function switchRole($roleId)
+    {
+        if (!session('isLoggedIn')) {
+            return redirect()->to('/signin');
+        }
+
+        $roles = session('roles');
+        if (!$roles) {
+            return redirect()->to('/signin');
+        }
+
+        $foundRole = null;
+        foreach ($roles as $role) {
+            if ($role['id'] == $roleId) {
+                $foundRole = $role;
+                break;
+            }
+        }
+
+        if ($foundRole) {
+            session()->set([
+                'role_id' => $foundRole['id'],
+                'role_name' => $foundRole['role']
+            ]);
+            return redirect()->to('/dashboard');
+        }
+
+        return redirect()->back()->with('error', 'Role tidak valid.');
+    }
 }

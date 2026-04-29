@@ -43,7 +43,32 @@
                                 <h6 class="mb-0 text-dark">
                                     <?= session()->get('username') ?? 'Username' ?>
                                 </h6>
-                                <?= session()->get('role_name') ?? 'Role' ?>
+                                <div class="dropdown">
+                                    <button class="btn btn-sm dropdown-toggle p-0 text-muted border-0 bg-transparent d-flex align-items-center gap-1" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 0.75rem; font-weight: 600;" title="<?= session()->get('role_name') ?>">
+                                        <span class="text-truncate d-inline-block" style="max-width: 120px;">
+                                            <?= session()->get('role_name') ?? 'Role' ?>
+                                        </span>
+                                    </button>
+                                    <ul class="dropdown-menu shadow border-0 rounded-3 mt-2" style="font-size: 0.75rem; min-width: 180px; max-width: 250px;">
+                                        <li class="dropdown-header text-uppercase opacity-50" style="font-size: 0.65rem; letter-spacing: 0.5px;">Ganti Role</li>
+                                        <?php 
+                                        $session_roles = session()->get('roles') ?? [];
+                                        foreach($session_roles as $r): 
+                                            $isActive = ($r['role'] === session('role_name'));
+                                        ?>
+                                            <li>
+                                                <a class="dropdown-item <?= $isActive ? 'active bg-danger' : '' ?> d-flex align-items-center justify-content-between gap-3 py-2" href="<?= $isActive ? '#' : site_url('switch-role/' . $r['id']) ?>" title="<?= $r['role'] ?>">
+                                                    <span class="text-truncate d-inline-block" style="max-width: 150px;">
+                                                        <?= $r['role'] ?>
+                                                    </span>
+                                                    <?php if($isActive): ?>
+                                                        <iconify-icon icon="solar:check-circle-bold" class="flex-shrink-0"></iconify-icon>
+                                                    <?php endif; ?>
+                                                </a>
+                                            </li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                </div>
                             </div>
 
                         </div>
