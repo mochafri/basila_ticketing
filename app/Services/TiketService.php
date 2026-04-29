@@ -31,8 +31,8 @@ class TiketService
             ->join('kategoris', 'kategoris.id = layanans.fk_kategori', 'left')
             ->orderBy('tikets.created_at', 'DESC');
 
-        // 1. KABAG (SUPERADMIN): Melihat semua tiket
-        if (in_array('SUPERADMIN', $roles)) {
+        // 1. KABAG (SUPERADMIN / BAA): Melihat semua tiket
+        if (in_array('SUPERADMIN', $roles) || in_array('BAA', $roles)) {
             return [
                 'data' => $query->paginate(10),
                 'pager' => $query->pager,

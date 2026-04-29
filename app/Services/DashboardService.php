@@ -13,8 +13,8 @@ class DashboardService
 
     private function applyRoleFilters($query, $roles, $nip)
     {
-        // 1. KABAG (SUPERADMIN): Melihat semua tiket
-        if (in_array('SUPERADMIN', $roles)) {
+        // 1. KABAG (SUPERADMIN / BAA): Melihat semua tiket
+        if (in_array('SUPERADMIN', $roles) || in_array('BAA', $roles)) {
             return $query;
         }
 
