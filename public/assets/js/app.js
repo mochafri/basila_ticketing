@@ -90,7 +90,7 @@ export async function closeTicket(id) {
 // --- KABAG SERVICE ---
 
 // approve tiket dari kabag ke kaur
-export async function approveTiket(id, userId, nama) {
+export async function approveTiket(id, userId, nama, levelKesulitan) {
     const res = await fetch(`/approve-tiket/${id}`, {
         method: 'POST',
         headers: {
@@ -100,7 +100,8 @@ export async function approveTiket(id, userId, nama) {
         body: JSON.stringify({
             user_id: userId, 
             assign_to_kaur: nama,
-            approve: 'buk fira'
+            approve: 'buk fira',
+            level_kesulitan: levelKesulitan
         })
     });
     return await res.json();
@@ -261,9 +262,10 @@ export async function selesaikanTugasKaur(id) {
 // --- STAFF SERVICE ---
 
 // staff upload hasil tugas / laporan
-export async function uploadTask(id, dokumenTask, laporanTask) {
+export async function uploadTask(id, dokumenTask, laporanTask, isDownloadable) {
     const formData = new FormData();
     formData.append('laporan_task', laporanTask);
+    formData.append('is_downloadable', isDownloadable);
     
     if (dokumenTask) {
         formData.append('dokumen_task', dokumenTask);

@@ -17,4 +17,5 @@
         </div>
     </div>
 </div>
+<?= $this->include('component/detail-tiket/user-manual-modal'); ?>
 <?= $this->endSection() ?>

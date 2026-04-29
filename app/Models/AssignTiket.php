@@ -16,6 +16,8 @@ class AssignTiket extends Model
         'kaur_name',
         'nip_kaur',
         'flag',
+        'started_at',
+        'completed_at',
         'fk_tiket'
     ];
 

@@ -12,6 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
             // Get the file
             const uploadFile = document.getElementById('uploadBukti').files[0];
 
+            // Get the value of isDownloadable
+            const isDownloadable = document.getElementById('isDownloadable').checked ? 1 : 0;
+
             if (!laporanTask) {
                 Swal.fire({
                     icon: 'warning',
@@ -35,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 cancelButtonText: "Batal"
             }).then(async (result) => {
                 if (result.isConfirmed) {
-                    const res = await uploadTask(parseSlug, uploadFile, laporanTask);
+                    const res = await uploadTask(parseSlug, uploadFile, laporanTask, isDownloadable);
                     if (res.status === 'success') {
                         Swal.fire({
                             icon: 'success',

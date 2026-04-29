@@ -21,12 +21,18 @@ $statusColors = [
                     <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary">Pengaju</th>
                     <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary">Tanggal</th>
                     <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary text-center">Status</th>
+                    <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary text-center">Level</th>
                     <th class="pe-4 py-3 text-uppercase custom-small-font fw-bold text-secondary text-end">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($tiket['data'] as $data): 
                     $color = $statusColors[$data['tiket_status']] ?? 'secondary';
+                    $levelColor = [
+                        'mudah' => 'success',
+                        'sedang' => 'warning',
+                        'sulit' => 'danger'
+                    ][$data['level_kesulitan'] ?? ''] ?? 'secondary';
                 ?>
                     <tr>
                         <td class="ps-4">
@@ -58,6 +64,15 @@ $statusColors = [
                                 <iconify-icon icon="ph:dot-bold" class="fs-5"></iconify-icon>
                                 <?= $data['tiket_status'] ?>
                             </span>
+                        </td>
+                        <td class="text-center">
+                            <?php if ($data['level_kesulitan']): ?>
+                                <span class="badge bg-<?= $levelColor ?> px-2 py-1 rounded-pill fw-bold text-uppercase" style="font-size: 0.55rem; letter-spacing: 0.5px;">
+                                    <?= $data['level_kesulitan'] ?>
+                                </span>
+                            <?php else: ?>
+                                <span class="text-muted small fst-italic">-</span>
+                            <?php endif; ?>
                         </td>
                         <td class="pe-4 text-end">
                             <a href="<?= site_url('tiket/'. $data['id']) ?>" class="btn btn-sm btn-outline-danger rounded-3 p-1 px-2 d-inline-flex align-items-center justify-content-center">

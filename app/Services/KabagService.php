@@ -43,9 +43,13 @@ class KabagService
 
         $db->transStart();
 
+        $now = date('Y-m-d H:i:s');
+        
         $this->tiketModel->update($id, [
             'tiket_status' => 'Open',
-            'approve_by' => $data['approve']
+            'approve_by' => $data['approve'],
+            'level_kesulitan' => $data['level_kesulitan'] ?? null,
+            'completed_at' => $now
         ]);
 
         $insertedCount = 0;
@@ -69,7 +73,8 @@ class KabagService
             $this->assignTiket->insert([
                 'kaur_name' => $kaur,
                 'nip_kaur' => $nip,
-                'fk_tiket' => $id
+                'fk_tiket' => $id,
+                'started_at' => $now
             ]);
 
             $insertedCount++;

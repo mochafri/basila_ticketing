@@ -110,8 +110,27 @@
                                 Kategori</a>
                         </div>
                     </li>
+                
                 </ul>
 
+            </li>
+             <!-- LAPORAN -->
+            <li class="mb-2">
+                <div class="menu-item side-task p-2 rounded d-flex align-items-center" data-bs-toggle="collapse"
+                    data-bs-target="#kelolaLaporan" role="button">
+                    <div class="d-flex align-items-center gap-2">
+                        <iconify-icon icon="hugeicons:analytics-up" width="20"></iconify-icon>
+                        <span>Laporan</span>
+                    </div>
+                    <iconify-icon icon="material-symbols:chevron-right-rounded" class="ms-auto arrow-icon"></iconify-icon>
+                </div>
+                <ul class="collapse list-unstyled ps-4 mt-2" id="kelolaLaporan">
+                    <li>
+                        <div class="submenu-item p-2 rounded">
+                            <a href="<?= site_url('laporan/kinerja'); ?>" class="text-decoration-none d-block">• Kinerja Staff</a>
+                        </div>
+                    </li>
+                </ul>
             </li>
             <!-- RIWAYAT -->
             <li class="mb-2">

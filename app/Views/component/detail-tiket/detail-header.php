@@ -17,6 +17,21 @@
                 <iconify-icon icon="ph:dot-bold" class="fs-5"></iconify-icon>
                 <?= $detail['tiket_status'] ?>
             </span>
+
+            <?php if (!empty($detail['level_kesulitan'])): 
+                $levelColors = [
+                    'mudah' => 'success',
+                    'sedang' => 'warning',
+                    'sulit' => 'danger'
+                ];
+                $lColor = $levelColors[$detail['level_kesulitan']] ?? 'secondary';
+            ?>
+                <span class="badge bg-<?= $lColor ?> bg-opacity-10 text-<?= $lColor ?> px-3 py-2 rounded-pill fw-bold text-uppercase d-inline-flex align-items-center gap-1" style="font-size: 0.65rem; letter-spacing: 0.5px;">
+                    <iconify-icon icon="ph:gauge-duotone" class="fs-5"></iconify-icon>
+                    Level: <?= $detail['level_kesulitan'] ?>
+                </span>
+            <?php endif; ?>
+
             <span class="text-muted font-monospace" style="font-size: 0.7rem;">#<?= $detail['id'] ?></span>
         </div>
 

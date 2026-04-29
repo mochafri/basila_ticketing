@@ -1,6 +1,9 @@
 <?php if ($detail['tiket_status'] === 'Waiting' || $detail['tiket_status'] === 'Approve Escalated'): ?>
     <div class="d-flex gap-3 w-100">
-        <iconify-icon icon="<?php if ($detail['tiket_status'] === 'Waiting'): ?>streamline-ultimate:task-list-approve<?php else: ?>ic:round-check<?php endif; ?>" class="text-white h-25 <?php if ($detail['tiket_status'] === 'Waiting'): ?>btn btn-danger<?php else: ?>btn btn-success<?php endif; ?>"></iconify-icon>
+        <div class="timeline-icon-box <?= ($detail['tiket_status'] === 'Waiting') ? 'bg-danger' : 'bg-success' ?> text-white">
+            <span class="step-num"><?= $step ?? 2 ?></span>
+            <iconify-icon icon="<?= ($detail['tiket_status'] === 'Waiting') ? 'streamline-ultimate:task-list-approve' : 'ic:round-check' ?>"></iconify-icon>
+        </div>
         <div class="flex-grow-1">
             <p class="m-0 fw-bold mb-2 custom-small-font">approval kepala urusan (bu fira)</p>
             <div class="p-4 bg-light rounded-3 w-100 d-flex gap-3 flex-column shadow-md border">
@@ -21,6 +24,17 @@
                         <p class="text-muted mb-0 w-100">Data delegasi kepala urusan tidak tersedia.</p>
                     <?php endif; ?>
                 </div>
+
+                <div class="mt-4">
+                    <p class="m-0 fw-medium custom-text mb-2">Level Kesulitan Tiket</p>
+                    <select id="level_kesulitan" class="form-select p-3 rounded-3 fw-bold text-uppercase custom-small-font border-0 shadow-sm" style="cursor: pointer; background-color: #fff;">
+                        <option value="" selected disabled>-- Pilih Level Kesulitan --</option>
+                        <option value="mudah">🟢 Mudah</option>
+                        <option value="sedang">🟡 Sedang</option>
+                        <option value="sulit">🔴 Sulit</option>
+                    </select>
+                </div>
+
                 <div class="d-flex gap-2 flex-wrap mt-4">
                     <button type="button"
                         class="btn btn-approve btn-success flex-fill p-4 text-uppercase fw-bold rounded-4">setujui
@@ -34,28 +48,70 @@
         </div>
     </div>
 <?php endif; ?>
-<?php if ($detail['tiket_status'] === 'Open'): ?>
-    <div class="d-flex align-items-center gap-3">
-        <iconify-icon icon="<?php if ($detail['tiket_status'] === 'Waiting'): ?>streamline-ultimate:task-list-approve<?php else: ?>ic:round-check<?php endif; ?>" class="text-white <?php if ($detail['tiket_status'] === 'Waiting'): ?> btn btn-secondary <?php else: ?> btn btn-success <?php endif; ?> "></iconify-icon>
-        <p class="m-0 fw-bold custom-small-font">approval kepala urusan (bu fira)</p>
+<?php if (in_array($detail['tiket_status'], ['Open', 'In Progress', 'Closed'])): ?>
+    <div class="d-flex gap-3 w-100">
+        <div class="timeline-icon-box <?= ($detail['tiket_status'] === 'Waiting') ? 'bg-secondary' : 'bg-success' ?> text-white">
+            <span class="step-num"><?= $step ?? 2 ?></span>
+            <iconify-icon icon="<?= ($detail['tiket_status'] === 'Waiting') ? 'streamline-ultimate:task-list-approve' : 'ic:round-check' ?>"></iconify-icon>
+        </div>
+        <div class="flex-grow-1">
+            <p class="m-0 fw-bold custom-small-font text-uppercase">approval kepala urusan (bu fira)</p>
+            <div class="d-flex flex-wrap gap-2 mt-1">
+                <span class="custom-text text-muted small d-flex align-items-center gap-1">
+                    <iconify-icon icon="ph:check-circle-bold" class="text-success"></iconify-icon>
+                    Selesai: <?= format_datetime_indo($detail['completed_at']) ?>
+                </span>
+                <span class="custom-text text-muted small d-flex align-items-center gap-1">
+                    <iconify-icon icon="ph:timer-bold" class="text-primary"></iconify-icon>
+                    Durasi: <?= format_duration($detail['created_at'], $detail['completed_at']) ?>
+                </span>
+            </div>
+        </div>
     </div>
 <?php endif; ?>
 <div class="d-flex align-items-center gap-3">
-    <iconify-icon icon="<?php if ($detail['tiket_status'] === 'Waiting'): ?>streamline-ultimate:task-list-approve<?php else: ?>hugeicons:task-done-01<?php endif; ?>" class="text-white <?php if ($detail['tiket_status'] === 'Waiting'): ?> btn btn-secondary <?php elseif ($detail['tiket_status'] === 'Open'): ?> btn btn-danger <?php else: ?> btn btn-success <?php endif; ?> "></iconify-icon>
-    <p class="m-0 fw-bold custom-small-font">
-        penugasan :
-        <span id="penugasan-list" class="text-secondary fw-normal fst-italic">
-            <?php if (!empty($kaurByTiketOpen)): ?>
-                <?php foreach ($kaurByTiketOpen as $k): ?>
-                    <span class="badge bg-secondary">
-                        <?= strtoupper($k['kaur_name']) ?>
-                    </span>
-                <?php endforeach; ?>
-            <?php else: ?>
-                Belum ada pilihan
+    <div class="timeline-icon-box <?= ($detail['tiket_status'] === 'Waiting') ? 'bg-secondary' : (($detail['tiket_status'] === 'Open') ? 'bg-danger' : 'bg-success') ?> text-white">
+        <span class="step-num"><?= ($step ?? 2) + 1 ?></span>
+        <iconify-icon icon="<?= ($detail['tiket_status'] === 'Waiting') ? 'streamline-ultimate:task-list-approve' : 'hugeicons:task-done-01' ?>"></iconify-icon>
+    </div>
+    <div class="flex-grow-1">
+        <p class="m-0 fw-bold custom-small-font text-uppercase">
+            penugasan :
+            <span id="penugasan-list" class="text-secondary fw-normal fst-italic">
+                <?php if (!empty($kaurByTiketOpen)): ?>
+                    <?php foreach ($kaurByTiketOpen as $k): ?>
+                        <span class="badge bg-secondary">
+                            <?= strtoupper($k['kaur_name']) ?>
+                        </span>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    Belum ada pilihan
+                <?php endif; ?>
+            </span>
+        </p>
+        <div class="d-flex flex-wrap gap-2 mt-1">
+            <?php 
+                $kaurFinished = array_filter($kaurByTiketOpen, fn($k) => $k['flag'] === 'Finish');
+                $maxCompleted = !empty($kaurFinished) ? max(array_column($kaurFinished, 'completed_at')) : null;
+                $allFinished = !empty($kaurByTiketOpen) && count($kaurFinished) === count($kaurByTiketOpen);
+            ?>
+            <?php if ($allFinished): ?>
+                <span class="custom-text text-muted small d-flex align-items-center gap-1">
+                    <iconify-icon icon="ph:check-circle-bold" class="text-success"></iconify-icon>
+                    Selesai: <?= format_datetime_indo($maxCompleted) ?>
+                </span>
+                <span class="custom-text text-muted small d-flex align-items-center gap-1">
+                    <iconify-icon icon="ph:timer-bold" class="text-primary"></iconify-icon>
+                    Durasi: <?= format_duration($detail['completed_at'], $maxCompleted) ?>
+                </span>
+            <?php elseif (!empty($kaurByTiketOpen)): ?>
+                <span class="custom-text text-warning small d-flex align-items-center gap-1">
+                    <iconify-icon icon="ph:clock-countdown-bold"></iconify-icon>
+                    Sedang berjalan... (Mulai: <?= format_datetime_indo($detail['completed_at']) ?>)
+                </span>
             <?php endif; ?>
-        </span>
-    </p>
+        </div>
+    </div>
 </div>
 <?php
 $hasFinish = in_array('Finish', array_column($kaurByTiketOpen, 'flag'));
@@ -71,7 +127,9 @@ if ($hasFinish): ?>
 
     if ($finishedKaurCount > 0): ?>
         <div class="d-flex gap-3 w-100">
-            <iconify-icon icon="solar:clipboard-check-bold" class="text-white btn h-25 btn-success"></iconify-icon>
+            <div class="timeline-icon-box bg-success text-white">
+                <iconify-icon icon="solar:clipboard-check-bold"></iconify-icon>
+            </div>
             <div class="flex-grow-1">
                 <p class="m-0 fw-bold custom-small-font mb-2">HASIL TUGAS KAUR</p>
                 <div class="list-group list-group-flush border rounded-3 shadow-sm bg-white overflow-hidden">
@@ -81,7 +139,10 @@ if ($hasFinish): ?>
                                 <div class="flex-grow-1 me-3">
                                     <div class="d-flex align-items-center gap-2 mb-2">
                                         <span class="fw-bold text-uppercase small text-dark"><?= esc($kr['kaur_name']) ?></span>
-                                        <span class="badge bg-success-subtle text-success border border-success" style="font-size: 0.6rem;">SELESAI</span>
+                                        <span class="badge bg-success-subtle text-success border border-success me-2" style="font-size: 0.6rem;">SELESAI</span>
+                                        <span class="custom-text text-muted" style="font-size: 0.65rem;">
+                                            ⏱️ <?= format_duration($kr['started_at'], $kr['completed_at']) ?>
+                                        </span>
                                     </div>
 
                                     <div class="ps-2 border-start border-2">
@@ -92,7 +153,10 @@ if ($hasFinish): ?>
                                                 $hasStaffTask = true;
                                         ?>
                                                 <div class="mb-2 small">
-                                                    <div class="text-primary fw-bold" style="font-size: 0.75rem;"><?= esc($tsk['assign_task_to_staff']) ?></div>
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <div class="text-primary fw-bold" style="font-size: 0.75rem;"><?= esc($tsk['assign_task_to_staff']) ?></div>
+                                                        <span class="text-muted" style="font-size: 0.6rem;">(⏱️ <?= format_duration($tsk['started_at'], $tsk['completed_at']) ?>)</span>
+                                                    </div>
                                                     <p class="text-muted m-0 small"><?= esc($tsk['catatan_laporan_penyelesaian']) ?: 'Tidak ada catatan.' ?></p>
                                                     <?php if (!empty($tsk['taks_dokumen'])): ?>
                                                         <a href="<?= base_url('/tiket/file/admin/' . $tsk['taks_dokumen']) ?>" target="_blank" class="text-decoration-none fw-bold small text-info"><iconify-icon icon="ph:paperclip-bold" class="align-middle"></iconify-icon> Dokumen</a>
@@ -122,9 +186,10 @@ if ($hasFinish): ?>
     <?php endif; ?>
 <?php endif; ?>
 <div class="d-flex gap-3 w-100">
-    <iconify-icon icon="<?= $detail['tiket_status'] === 'Closed' ? 'ph:check-bold' : 'ph:flow-arrow' ?>"
-        class="text-white btn h-25 
-        <?= $detail['tiket_status'] === 'Closed' ? 'btn-success' : ($detail['tiket_status'] === 'In Progress' ? 'btn-danger' : 'btn-secondary') ?> "></iconify-icon>
+    <div class="timeline-icon-box <?= $detail['tiket_status'] === 'Closed' ? 'bg-success' : ($detail['tiket_status'] === 'In Progress' ? 'bg-danger' : 'bg-secondary') ?> text-white">
+        <span class="step-num"><?= ($step ?? 2) + 2 ?></span>
+        <iconify-icon icon="<?= $detail['tiket_status'] === 'Closed' ? 'ph:check-bold' : 'ph:flow-arrow' ?>"></iconify-icon>
+    </div>
     <div class="flex-grow-1 gap-2 d-flex flex-column">
         <p class="m-0 fw-bold custom-small-font">konfirmasi penyelesaian</p>
         <?php if ($detail['tiket_status'] === 'In Progress'): ?>

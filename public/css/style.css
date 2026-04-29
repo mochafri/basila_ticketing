@@ -1061,3 +1061,105 @@ li a {
 .pager-info b {
     color: var(--primaryColor);
 }
+/* ================= USER MANUAL MODAL ================= */
+.user-manual-modal .modal-content {
+    border-radius: 1.25rem !important;
+    overflow: hidden;
+    border: none;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1) !important;
+}
+
+.user-manual-modal .modal-header {
+    background-color: #0d6efd !important;
+    color: #fff !important;
+    padding: 1.5rem !important;
+    border: none;
+}
+
+.user-manual-modal .modal-title {
+    font-weight: 700;
+    text-transform: none !important;
+}
+
+.user-manual-modal .modal-body {
+    padding: 1.5rem !important;
+    background-color: #fff !important;
+}
+
+.user-manual-modal .manual-container {
+    background-color: #f8f9fa;
+    border-left: 4px solid #0d6efd;
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+}
+
+.user-manual-modal .manual-heading {
+    font-weight: 700;
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    text-transform: none !important;
+}
+
+.user-manual-modal .manual-section {
+    margin-bottom: 1rem;
+}
+
+.user-manual-modal .manual-section:last-child {
+    margin-bottom: 0;
+}
+
+.user-manual-modal .manual-subheading {
+    color: #0d6efd;
+    display: block;
+    margin-bottom: 0.25rem;
+    font-weight: 700;
+    text-transform: none !important;
+}
+
+.user-manual-modal .manual-text {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #444 !important;
+    line-height: 1.6;
+    text-transform: none !important;
+}
+
+.user-manual-modal .modal-footer {
+    background-color: #f8f9fa;
+    border: none;
+    padding: 1rem;
+}
+
+.user-manual-modal .no-transform {
+    text-transform: none !important;
+}
+
+/* ================= TIMELINE STEP NUMBERING ================= */
+.timeline-icon-box {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-weight: 700;
+    color: white;
+    min-width: 60px;
+    height: 38px;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.timeline-icon-box .step-num {
+    font-size: 0.95rem;
+    border-right: 1px solid rgba(255, 255, 255, 0.4);
+    padding-right: 8px;
+    margin-right: 2px;
+    line-height: 1;
+}
+
+.timeline-icon-box iconify-icon {
+    font-size: 1.2rem;
+}

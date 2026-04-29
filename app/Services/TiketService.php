@@ -23,7 +23,7 @@ class TiketService
         $query = $this->tiketModel
             ->select(
                 'tikets.id, tikets.judul_permohonan, tikets.deskripsi_permohonan, tikets.tiket_status, 
-                tikets.created_at, tikets.nip_creator, tikets.nama_creator,
+                tikets.created_at, tikets.nip_creator, tikets.nama_creator, tikets.level_kesulitan,
                 layanans.per_kategori_layanan,
                 kategoris.kategori_layanan'
             )
@@ -73,8 +73,8 @@ class TiketService
         return $this->tiketModel
             ->select('
                 tikets.id, tikets.judul_permohonan, tikets.deskripsi_permohonan, 
-                tikets.tiket_status, tikets.created_at, tikets.dokumen_lampiran, 
-                tikets.original_dokumen_name,tikets.is_escalated,
+                tikets.tiket_status, tikets.created_at, tikets.completed_at, tikets.dokumen_lampiran, 
+                tikets.original_dokumen_name,tikets.is_escalated, tikets.level_kesulitan,
                 tikets.nip_creator, tikets.nama_creator,
                 layanans.per_kategori_layanan,
                 kategoris.kategori_layanan

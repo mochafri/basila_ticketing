@@ -156,12 +156,22 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnApprove) {
         btnApprove.addEventListener('click', async () => {
             const selected = document.querySelectorAll('input[name="kaur_id[]"]:checked');
+            const levelKesulitan = document.getElementById('level_kesulitan').value;
 
             if (selected.length === 0) {
                 Swal.fire({
                     icon: 'warning',
                     title: 'Peringatan!',
                     text: 'Pilih kaur dulu'
+                });
+                return;
+            }
+
+            if (!levelKesulitan) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Peringatan!',
+                    text: 'Pilih level kesulitan dulu'
                 });
                 return;
             }
@@ -191,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 cancelButtonText: "Batal"
             }).then(async (result) => {
                 if (result.isConfirmed) {
-                    const res = await approveTiket(parseSlug, idKaurList, namaKaurList);
+                    const res = await approveTiket(parseSlug, idKaurList, namaKaurList, levelKesulitan);
                     if (res.status === 'success' || res.status === 200) {
                         if (res.duplicates && res.duplicates.length > 0) {
                             Swal.fire({
