@@ -35,6 +35,7 @@ class AuthService
         $get_profile = env('URL_PROFILE');
 
         $response = $this->client->post($url, [
+            'timeout' => 5,
             'form_params' => [
                 'username' => $data['username'],
                 'password' => $data['password'],
@@ -48,6 +49,7 @@ class AuthService
             if ($token) {
                 // GET PROFILE
                 $response_profile = $this->client->get($get_profile, [
+                    'timeout' => 5,
                     'headers' => [
                         'Authorization' => 'Bearer ' . $token
                     ]
@@ -56,6 +58,7 @@ class AuthService
 
                 // GET ROLE DARI API
                 $response_role = $this->client->get($this->get_role, [
+                    'timeout' => 5,
                     'headers' => [
                         'Authorization' => 'Bearer ' . $token
                     ]
