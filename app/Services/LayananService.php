@@ -15,7 +15,10 @@ class LayananService
 
     public function getLayanan()
     {
-        return $this->layananModel->findAll();
+        return $this->layananModel
+            ->select('layanans.*, kategoris.kategori_layanan')
+            ->join('kategoris', 'kategoris.id = layanans.fk_kategori')
+            ->findAll();
     }
     
     public function getLayananById($id)
@@ -58,6 +61,19 @@ class LayananService
         ] : [
             'status' => 'fail',
             'message' => 'Gagal menambahkan layanan'
+        ];
+    }
+
+    public function delete($id)
+    {
+        $deleteData = $this->layananModel->delete($id);
+
+        return $deleteData ? [
+            'status' => 'success',
+            'message' => 'Layanan berhasil dihapus'
+        ] : [
+            'status' => 'fail',
+            'message' => 'Layanan gagal dihapus'
         ];
     }
 }

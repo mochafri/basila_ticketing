@@ -13,14 +13,15 @@ class KategoriService
     public function getKategori()
     {
         return $this->kategoriModel
-            ->select('id, kategori_layanan')
+            ->select('id, kategori_layanan, deskripsi')
             ->findAll();
     }
 
     public function create(array $data)
     {
         $insertData = $this->kategoriModel->insert([
-            'kategori_layanan' => $data['nama_kategori']
+            'kategori_layanan' => $data['nama_kategori'],
+            'deskripsi' => $data['deskripsi'] ?? null
         ]);
 
         return $insertData ? [

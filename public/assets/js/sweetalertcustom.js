@@ -6,85 +6,6 @@ const inputLayanan = document.querySelector("#inputLayanan");
 const selectKategori = document.querySelector(".select-kategori");
 
 // =====================
-// TAMBAH KATEGORI
-// =====================
-btnKategori.addEventListener("click", function () {
-  if (inputKategori.value.trim() === "") {
-    Swal.fire({
-      icon: "error",
-      title: "Gagal!",
-      text: "Silahkan isi kategori yang ingin ditambahkan!",
-    });
-    return;
-  }
-
-  Swal.fire({
-    title: "Apakah Anda yakin ingin menambahkan kategori ini?",
-    icon: "question",
-    showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Ya, tambahkan!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      Swal.fire({
-        icon: "success",
-        title: "Berhasil!",
-        text: "Kategori berhasil ditambahkan!",
-        timer: 1500,
-        showConfirmButton: false,
-      }).then(() => {
-        location.reload();
-      });
-    }
-  });
-});
-
-// =====================
-// TAMBAH LAYANAN
-// =====================
-btnLayanan.addEventListener("click", function () {
-  if (inputLayanan.value.trim() === "") {
-    Swal.fire({
-      icon: "error",
-      title: "Gagal!",
-      text: "Silahkan isi nama layanan yang ingin ditambahkan!",
-    });
-    return;
-  }
-
-  if (selectKategori.selectedIndex === 0) {
-    Swal.fire({
-      icon: "error",
-      title: "Gagal!",
-      text: "Silahkan pilih kategori terlebih dahulu!",
-    });
-    return;
-  }
-
-  Swal.fire({
-    title: "Apakah Anda yakin ingin menambahkan layanan ini?",
-    icon: "question",
-    showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Ya, tambahkan!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      Swal.fire({
-        icon: "success",
-        title: "Berhasil!",
-        text: "Layanan berhasil ditambahkan!",
-        timer: 1500,
-        showConfirmButton: false,
-      }).then(() => {
-        location.reload();
-      });
-    }
-  });
-});
-
-// =====================
 // HAPUS KATEGORI
 // =====================
 btnDeletes.forEach((btn) => {
@@ -129,6 +50,63 @@ btnDeletes.forEach((btn) => {
                 icon: "error",
                 title: "Gagal!",
                 text: data.message || "Kategori gagal dihapus!",
+              });
+            }
+          })
+          .catch(() => {
+            Swal.fire({
+              icon: "error",
+              title: "Error!",
+              text: "Terjadi kesalahan, coba lagi!",
+            });
+          });
+      }
+    });
+  });
+});
+// =====================
+// HAPUS LAYANAN
+// =====================
+document.querySelectorAll(".btn-delete-layanan").forEach((btn) => {
+  btn.addEventListener("click", function () {
+    const id = this.getAttribute("data-id");
+
+    Swal.fire({
+      title: "Apakah Anda yakin ingin menghapus layanan ini?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Ya, hapus!",
+      cancelButtonText: "Batal",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(`${BASE_URL}master-data/delete-layanan/${id}`, {
+          method: "DELETE",
+          headers: {
+            "X-Requested-With": "XMLHttpRequest",
+            "X-CSRF-TOKEN": document
+              .querySelector('meta[name="X-CSRF-TOKEN"]')
+              .getAttribute("content"),
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.status === "success") {
+              Swal.fire({
+                icon: "success",
+                title: "Berhasil!",
+                text: "Layanan berhasil dihapus!",
+                timer: 1500,
+                showConfirmButton: false,
+              }).then(() => {
+                location.reload();
+              });
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "Gagal!",
+                text: data.message || "Layanan gagal dihapus!",
               });
             }
           })

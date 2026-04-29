@@ -61,6 +61,7 @@ class MasterDataController extends BaseController
         return view('manajemen/kategori/index', [
             'title' => 'Data Kategori',
             'kategori' => service('kategori')->getKategori(),
+            'allLayanan' => $layanan,
             'group' => $group
         ]);
     }
@@ -109,6 +110,14 @@ class MasterDataController extends BaseController
     public function deleteKategori($id)
     {
         $result = service('kategori')->delete($id);
+
+        $statusCode = $result['status'] === 'success' ? 200 : 500;
+
+        return $this->response->setStatusCode($statusCode)->setJSON($result);
+    }
+    public function deleteLayanan($id)
+    {
+        $result = service('layanan')->delete($id);
 
         $statusCode = $result['status'] === 'success' ? 200 : 500;
 

@@ -7,7 +7,7 @@ const tokenCSRF = document
 // --- MASTER SERVICE ---
 
 // buat kategori
-export async function postKategori(namaKategori) {
+export async function postKategori(namaKategori, deskripsi) {
     const res = await fetch('/create-kategori', {
         method: 'POST',
         headers: {
@@ -15,13 +15,12 @@ export async function postKategori(namaKategori) {
             'X-CSRF-TOKEN': tokenCSRF
         },
         body: JSON.stringify({
-            nama_kategori: namaKategori
+            nama_kategori: namaKategori,
+            deskripsi: deskripsi
         })
     });
 
-    if (res) {
-        console.log('berhasil');
-    }
+    return await res.json();
 }
 
 // buat layanan
@@ -38,9 +37,7 @@ export async function postLayanan(namaLayanan, idKategori) {
         })
     });
 
-    if (res) {
-        console.log('berhasil');
-    }
+    return await res.json();
 }
 
 // ambil layanan by id

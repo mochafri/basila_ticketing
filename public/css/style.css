@@ -752,6 +752,17 @@ li a {
     color: var(--primaryColor);
 }
 
+.category-box-card {
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.category-box-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(225, 29, 72, 0.2);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1) !important;
+}
+
 /* Master Data End */
 
 /* sidebarToggle icon */

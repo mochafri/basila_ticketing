@@ -13,7 +13,8 @@ class Kategori extends Model
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'kategori_layanan'
+        'kategori_layanan',
+        'deskripsi'
     ];
 
     protected bool $allowEmptyInserts = false;
