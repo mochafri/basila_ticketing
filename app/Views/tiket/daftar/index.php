@@ -52,7 +52,7 @@
                     <select name="status" class="form-select custom-input bg-white border-0 shadow-sm rounded-pill px-4" style="height: 45px; font-size: 0.85rem; font-weight: 600;">
                         <option value="" <?= empty($filter_status) ? 'selected' : '' ?>>SEMUA STATUS</option>
                         <?php 
-                        $statuses = ['Waiting', 'On Progress', 'Selesai', 'Reject'];
+                        $statuses = ['Open', 'Waiting', 'In Progress', 'Closed', 'Rejected', 'Approve Escalated'];
                         foreach($statuses as $s): ?>
                             <option value="<?= $s ?>" <?= (isset($filter_status) && $filter_status == $s) ? 'selected' : '' ?>>
                                 <?= strtoupper($s) ?>

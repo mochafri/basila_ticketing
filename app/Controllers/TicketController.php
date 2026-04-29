@@ -178,7 +178,7 @@ class TicketController extends BaseController
         return response()->setStatusCode($statusCode)->setJSON($result);
     }
 
-    public function asssignTiket($slug)
+    public function assignTiket($slug)
     {
         $data = $this->request->getJSON(true);
 

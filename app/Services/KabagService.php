@@ -241,7 +241,7 @@ class KabagService
 
         $update = $this->tiketModel->update($id, [
             'tiket_status' => 'Closed',
-            'closed_at'    => date('Y-m-d H:i:s')
+            'completed_at'    => date('Y-m-d H:i:s')
         ]);
 
         if (!$update) {

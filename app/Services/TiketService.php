@@ -89,7 +89,7 @@ class TiketService
         return $this->tiketModel
             ->select('
                 tikets.id, tikets.judul_permohonan, tikets.deskripsi_permohonan, 
-                tikets.tiket_status, tikets.created_at, tikets.completed_at, tikets.closed_at, tikets.dokumen_lampiran, 
+                tikets.tiket_status, tikets.created_at, tikets.completed_at, tikets.dokumen_lampiran, 
                 tikets.original_dokumen_name,tikets.is_escalated, tikets.level_kesulitan,
                 tikets.nip_creator, tikets.nama_creator,
                 layanans.per_kategori_layanan,

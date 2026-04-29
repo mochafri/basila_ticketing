@@ -65,6 +65,21 @@ class Tiket extends Migration
                 'type' => 'TEXT',
                 'null' => true
             ],
+            'level_kesulitan' => [
+                'type' => 'ENUM',
+                'constraint' => ['mudah', 'sedang', 'sulit'],
+                'null' => true
+            ],
+            'nip_creator' => [
+                'type' => 'VARCHAR',
+                'constraint' => '255',
+                'null' => true
+            ],
+            'nama_creator' => [
+                'type' => 'VARCHAR',
+                'constraint' => '255',
+                'null' => true
+            ],
             'created_at' => [
                 'type' => 'DATETIME',
                 'null' => true,
@@ -73,7 +88,7 @@ class Tiket extends Migration
                 'type' => 'DATETIME',
                 'null' => true,
             ],
-            'closed_at' => [
+            'completed_at' => [
                 'type' => 'DATETIME',
                 'null' => true,
             ],
