@@ -58,7 +58,7 @@
                         </div>
                         <div>
                             <h6 class="fw-bold text-uppercase m-0 mb-1" style="font-size: 0.85rem; letter-spacing: 0.5px;"><?= esc($detail['nama_creator'] ?? '-') ?></h6>
-                            <p class="text-muted small m-0" style="font-size: 0.75rem;">NIP: <?= esc($detail['nip_creator'] ?? '-') ?></p>
+                            <p class="text-muted small m-0" style="font-size: 0.75rem;">NIP / NIM: <?= esc($detail['nip_creator'] ?? '-') ?></p>
                         </div>
                     </div>
                 </div>
