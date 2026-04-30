@@ -3,7 +3,7 @@ const tokenCSRF = document.querySelector('meta[name="X-CSRF-TOKEN"]').getAttribu
 // --- ESKALASI SERVICE FUNCTIONS ---
 
 async function approveEscalated(id) {
-    const res = await fetch(`/approve-escalated/${id}`, {
+    const res = await fetch(`/approve-eskalasi/${id}`, {
         method: 'POST',
         headers: {
             'X-CSRF-TOKEN': tokenCSRF
@@ -13,7 +13,7 @@ async function approveEscalated(id) {
 }
 
 async function rejectEscalated(id, catatan) {
-    const res = await fetch(`/reject-escalated/${id}`, {
+    const res = await fetch(`/reject-eskalasi/${id}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'Application/json',
@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnApproveEscalated = document.querySelector('.btn-approve-escalated');
     if (btnApproveEscalated) {
         btnApproveEscalated.addEventListener('click', async () => {
+            console.log('click');
             btnApproveEscalated.innerHTML = 'Loading...';
             btnApproveEscalated.disabled = true;
 

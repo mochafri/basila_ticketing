@@ -35,7 +35,7 @@
 ?>
 
 <?php if ($role === 'SUPERADMIN'): ?>
-    <script type="module" src="<?= base_url('assets/js/approveKabag.js') ?>"></script>
+    <script type="module" src="<?= base_url('assets/js/approveEskalasi.js') ?>"></script>
 <?php elseif ($role === 'BAA'): ?>
     <script type="module" src="<?= base_url('assets/js/approveEskalasi.js') ?>"></script>
     <script type="module" src="<?= base_url('assets/js/approveKabag.js') ?>"></script>

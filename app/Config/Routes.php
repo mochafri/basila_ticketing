@@ -65,6 +65,10 @@ $routes->post('/approve-tiket/(:num)', 'TicketController::approveTiket/$1');
 $routes->post('/tutup-tiket/(:num)', 'TicketController::closeTicket/$1');
 $routes->post('revisi-kaur', 'TicketController::revisiKaur');
 
+# Approve + Reject eskalasi
+$routes->post('/approve-eskalasi/(:num)', 'TicketController::approveEscalated/$1');
+$routes->post('/reject-eskalasi/(:num)', 'TicketController::rejectEscalated/$1');
+
 # Assign task ke staff
 $routes->post('/approve-task/(:num)', 'TicketController::approveTask/$1');
 $routes->post('/assign-staff/(:num)', 'TicketController::assignTiket/$1');
