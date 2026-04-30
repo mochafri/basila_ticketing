@@ -40,7 +40,7 @@ class AssignTiketToStaff extends Migration
                 'constraint' => '255',
                 'null' => true
             ],
-            'is_acc_from_kaur' => [
+            'is_kaur_accepted' => [
                 'type'       => 'BOOLEAN',
                 'default'    => false,
             ],
