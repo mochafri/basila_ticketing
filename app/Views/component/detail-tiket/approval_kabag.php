@@ -5,7 +5,7 @@
             <iconify-icon icon="<?= ($detail['tiket_status'] === 'Waiting') ? 'streamline-ultimate:task-list-approve' : 'ic:round-check' ?>"></iconify-icon>
         </div>
         <div class="flex-grow-1">
-            <p class="m-0 fw-bold mb-2 custom-small-font">approval kepala urusan (bu fira)</p>
+            <p class="m-0 fw-bold mb-2 custom-small-font">approval kepala bagian (bu fira)</p>
             <div class="p-4 bg-light rounded-3 w-100 d-flex gap-3 flex-column shadow-md border">
                 <p class="m-0 fw-medium custom-text">Pilih delegasi kepala bagian</p>
                 <div class="d-flex gap-2 flex-wrap">
@@ -53,7 +53,7 @@
             <iconify-icon icon="<?= ($detail['tiket_status'] === 'Waiting') ? 'streamline-ultimate:task-list-approve' : 'ic:round-check' ?>"></iconify-icon>
         </div>
         <div class="flex-grow-1">
-            <p class="m-0 fw-bold custom-small-font text-uppercase">approval kepala urusan (bu fira)</p>
+            <p class="m-0 fw-bold custom-small-font text-uppercase">approval kepala bagian (bu fira)</p>
             <div class="d-flex flex-wrap gap-2 mt-1">
                 <span class="custom-text text-muted small d-flex align-items-center gap-1">
                     <iconify-icon icon="ph:check-circle-bold" class="text-success"></iconify-icon>

@@ -1,7 +1,9 @@
-import { postKategori } from "/assets/js/app.js";
+import { postKategori } from "./app.js";
 
 document.addEventListener('DOMContentLoaded', () => {
-    document.querySelector('.btn-kategori').addEventListener('click', async () => {
+    const btnKategori = document.querySelector('.btn-kategori');
+    if (btnKategori) {
+        btnKategori.addEventListener('click', async () => {
         const namaKategori = document.querySelector('#inputKategori').value;
         const deskripsi = document.querySelector('#inputDeskripsi').value;
 
@@ -31,4 +33,5 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+}
 }); 

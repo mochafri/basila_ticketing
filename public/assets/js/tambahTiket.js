@@ -1,4 +1,4 @@
-import { getLayananById, postTiket } from "/assets/js/app.js";
+import { getLayananById, postTiket } from "./app.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     const layananSelect = document.querySelector('.layanan');
@@ -68,22 +68,25 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    document.querySelector('.kategori').addEventListener('change', async (e) => {
-        const idKategori = e.target.value;
+    const kategoriSelect = document.querySelector('.kategori');
+    if (kategoriSelect) {
+        kategoriSelect.addEventListener('change', async (e) => {
+            const idKategori = e.target.value;
 
-        if (!idKategori) {
-            return;
-        }
+            if (!idKategori) {
+                return;
+            }
 
-        const data = await getLayananById(idKategori);
+            const data = await getLayananById(idKategori);
 
-        if (data.status === 'success' && Array.isArray(data.data)) {
-            data.data.forEach(layanan => {
-                const opt = document.createElement('option');
-                opt.value = layanan.id;
-                opt.text = layanan.per_kategori_layanan;
-                layananSelect.append(opt);
-            });
-        }
-    });
+            if (data.status === 'success' && Array.isArray(data.data) && layananSelect) {
+                data.data.forEach(layanan => {
+                    const opt = document.createElement('option');
+                    opt.value = layanan.id;
+                    opt.text = layanan.per_kategori_layanan;
+                    layananSelect.append(opt);
+                });
+            }
+        });
+    }
 });

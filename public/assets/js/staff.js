@@ -1,4 +1,4 @@
-import { uploadTask } from "/assets/js/app.js";
+import { uploadTask } from "./app.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     const segments = window.location.pathname.split('/');

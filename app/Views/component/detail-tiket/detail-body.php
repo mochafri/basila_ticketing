@@ -11,7 +11,7 @@
         <!-- status 1 -->
         <?= $this->include('component/detail-tiket/ticket_created', ['step' => $step++]); ?>
         <!-- status 2 -->
-        <?php if (session('role_name') === 'BAA'):  ?>
+        <?php if (session('role_name') === 'SUPERADMIN'):  ?>
         <?= $this->include('component/detail-tiket/approval_eskalasi', [
             'kaur' => $kaur,
             'detail' => $detail,
@@ -19,7 +19,7 @@
         ]); ?>
         <?php endif; ?>
         <!-- <p>-------------------------------komponen bu fira (approval_kabag.php)--------------------------</p> -->
-        <?php if (session('role_name') === 'SUPERADMIN'): ?>
+        <?php if (session('role_name') === 'BAA'): ?>
             <?= $this->include('component/detail-tiket/approval_kabag', [
                 'kaur' => $kaur,
                 'detail' => $detail,
@@ -30,13 +30,7 @@
             <?php $step += 3; ?>
         <?php endif; ?>
 
-        <?php if (session('role_name') === 'SUPERADMIN'): ?>
-            <?= $this->include('component/detail-tiket/approval_eskalasi', [
-                'kaur' => $kaur,
-                'detail' => $detail,
-                'kaurByTiketOpen' => $kaurByTiketOpen
-            ]); ?>
-        <?php endif; ?>
+
         <!-- <p>-------------------------------end komponen bu fira-----------</p> -->
         <!-- status 3 -->
         <!-- <p>-------------------------------komponen pak bagas/bu farida (approval_kaur.php)--------------------------</p> -->
