@@ -1,4 +1,76 @@
-import { approveKaur, assignToStaff, verifikasiTugasTask, revisiTugasTask, selesaikanTugasKaur, editInstructionTask } from './app.js';
+const tokenCSRF = document.querySelector('meta[name="X-CSRF-TOKEN"]').getAttribute('content');
+
+// --- KAUR SERVICE FUNCTIONS ---
+
+async function approveKaur(id) {
+    const res = await fetch(`/approve-task/${id}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': tokenCSRF
+        }
+    });
+    return await res.json();
+}
+
+async function assignToStaff(id, instruksi, namaStaff, nipStaff) {
+    const res = await fetch(`/assign-staff/${id}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'Application/json',
+            'X-CSRF-TOKEN': tokenCSRF
+        },
+        body: JSON.stringify({
+            task_instruction: instruksi,
+            assign_task_to_staff: namaStaff,
+            user_id: nipStaff
+        })
+    });
+    return await res.json();
+}
+
+async function editInstructionTask(id, instruction) {
+    const res = await fetch(`/edit-instruction/${id}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'Application/json',
+            'X-CSRF-TOKEN': tokenCSRF
+        },
+        body: JSON.stringify({
+            instruction: instruction
+        })
+    });
+    return await res.json();
+}
+
+async function verifikasiTugasTask(id) {
+    const res = await fetch(`/verifikasi-tugas/${id}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': tokenCSRF
+        }
+    });
+    return res;
+}
+
+async function revisiTugasTask(id) {
+    const res = await fetch(`/revisi-tugas/${id}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': tokenCSRF
+        }
+    });
+    return res;
+}
+
+async function selesaikanTugasKaur(id) {
+    const res = await fetch(`/selesaikan-tugas-kaur/${id}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': tokenCSRF
+        }
+    });
+    return await res.json();
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     const segments = window.location.pathname.split('/');

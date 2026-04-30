@@ -66,13 +66,15 @@
 
                 <ul class="collapse list-unstyled ps-4 mt-2" id="kelolaTiket">
                     <li>
-                        <div class="submenu-item p-2 rounded">
-                            <a href="<?= site_url('tiket'); ?>" class="text-decoration-none d-block">• Daftar Tiket</a>
+                        <div class="submenu-item p-2 rounded d-flex align-items-center gap-2">
+                            <iconify-icon icon="icon-park-outline:dot" width="15" class="text-secondary"></iconify-icon>
+                            <a href="<?= site_url('tiket'); ?>" class="text-decoration-none d-block">Daftar Tiket</a>
                         </div>
                     </li>
                     <li>
-                        <div class="submenu-item p-2 rounded">
-                            <a href="<?= site_url('tiket/create'); ?>" class="text-decoration-none d-block">• Permohonan
+                        <div class="submenu-item p-2 rounded d-flex align-items-center gap-2">
+                            <iconify-icon icon="icon-park-outline:dot" width="15" class="text-secondary"></iconify-icon>
+                            <a href="<?= site_url('tiket/create'); ?>" class="text-decoration-none d-block">Permohonan
                                 Tiket</a>
                         </div>
                     </li>
@@ -101,13 +103,15 @@
 
                 <ul class="collapse list-unstyled ps-4 mt-2" id="kelolaMasterData">
                     <li>
-                        <div class="submenu-item p-2 rounded">
-                            <a href="<?= site_url('user/'); ?>" class="text-decoration-none d-block">• Data User</a>
+                        <div class="submenu-item p-2 rounded d-flex align-items-center gap-2">
+                            <iconify-icon icon="icon-park-outline:dot" width="15" class="text-secondary"></iconify-icon>
+                            <a href="<?= site_url('user/'); ?>" class="text-decoration-none d-block">Data User</a>
                         </div>
                     </li>
                     <li>
-                        <div class="submenu-item p-2 rounded">
-                            <a href="<?= site_url('kategori/'); ?>" class="text-decoration-none d-block">• Data
+                        <div class="submenu-item p-2 rounded d-flex align-items-center gap-2">
+                            <iconify-icon icon="icon-park-outline:dot" width="15" class="text-secondary"></iconify-icon>
+                            <a href="<?= site_url('kategori/'); ?>" class="text-decoration-none d-block">Data
                                 Kategori</a>
                         </div>
                     </li>

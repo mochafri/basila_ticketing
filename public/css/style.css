@@ -146,8 +146,9 @@ li a {
     background-color: var(--primaryColor);
 }
 
-.sidebar-menu .submenu-item:hover a {
-    color: #fff;
+.sidebar-menu .submenu-item:hover a,
+.sidebar-menu .submenu-item:hover iconify-icon {
+    color: #fff !important;
 }
 
 /* ================= ACTIVE ================= */
@@ -167,8 +168,9 @@ li a {
     background-color: var(--primaryColor);
 }
 
-.sidebar-menu .submenu-item.active a {
-    color: #fff;
+.sidebar-menu .submenu-item.active a,
+.sidebar-menu .submenu-item.active iconify-icon {
+    color: #fff !important;
 }
 
 /* Text */

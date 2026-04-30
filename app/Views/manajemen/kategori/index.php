@@ -124,7 +124,9 @@
         <?php endforeach; ?>
     </div>
 </div>
-<script>
-    const BASE_URL = "<?= base_url() ?>";
-</script>
+<?= $this->endSection(); ?>
+
+<?= $this->section('script'); ?>
+    <script type="module" src="<?= base_url('assets/js/inputKategori.js') ?>"></script>
+    <script type="module" src="<?= base_url('assets/js/inputLayanan.js') ?>"></script>
 <?= $this->endSection(); ?>

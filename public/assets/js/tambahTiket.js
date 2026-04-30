@@ -1,4 +1,31 @@
-import { getLayananById, postTiket } from "./app.js";
+const tokenCSRF = document.querySelector('meta[name="X-CSRF-TOKEN"]').getAttribute('content');
+
+// --- TIKET SERVICE FUNCTIONS ---
+
+async function getLayananById(id) {
+    const res = await fetch(`/get-layanan/${id}`);
+    const data = await res.json();
+    return data;
+}
+
+async function postTiket(judul, kategori, layanan, deskripsi, dokumenLampiran) {
+    const formData = new FormData();
+    formData.append('judul', judul);
+    formData.append('kategori', kategori);
+    formData.append('layanan', parseInt(layanan));
+    formData.append('deskripsi', deskripsi);
+    if(dokumenLampiran) formData.append('lampiran_dokumen', dokumenLampiran);
+
+    const res = await fetch('/create-tiket', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': tokenCSRF
+        },
+        body: formData
+    });
+
+    return await res.json();
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     const layananSelect = document.querySelector('.layanan');
@@ -10,14 +37,13 @@ document.addEventListener('DOMContentLoaded', () => {
             btnSubmit.innerHTML = 'Loading...';
             btnSubmit.disabled = true;
 
-            const judul = document.querySelector('#validationCustom01').value;
             const kategori = document.querySelector('.kategori').value;
             const layanan = document.querySelector('.layanan').value;
             const deskripsi = document.querySelector('#validationTextarea').value;
             const dokumenLampiran = document.querySelector('#inputGroupFile02');
             const file = dokumenLampiran.files ? dokumenLampiran.files[0] : null;
 
-            if (!judul || !kategori || !layanan || !deskripsi) {
+            if (!kategori || !layanan || !deskripsi) {
                 Swal.fire({
                     icon: "warning",
                     title: "Peringatan!",
@@ -39,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 cancelButtonText: "Batal"
             }).then(async (result) => {
                 if (result.isConfirmed) {
-                    const res = await postTiket(judul, kategori, layanan, deskripsi, file);
+                    const res = await postTiket('', kategori, layanan, deskripsi, file);
 
                     if (res.status === 'success') {
                         Swal.fire({

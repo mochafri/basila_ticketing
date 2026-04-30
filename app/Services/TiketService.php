@@ -121,11 +121,20 @@ class TiketService
 
         $db->transStart();
 
+        $idLayanan = $data['layanan'];
+        $judul = $data['judul'] ?? '';
+
+        if (empty($judul)) {
+            $layananModel = model('Layanan');
+            $layananData = $layananModel->find($idLayanan);
+            $judul = $layananData['per_kategori_layanan'] ?? 'Tiket Layanan';
+        }
+
         $this->tiketModel->insert([
-            'judul_permohonan' => $data['judul'],
+            'judul_permohonan' => $judul,
             'deskripsi_permohonan' => $data['deskripsi'],
             'id_kategori' => $data['kategori'],
-            'id_layanan' => $data['layanan'],
+            'id_layanan' => $idLayanan,
             'dokumen_lampiran' => $filePath,
             'original_dokumen_name' => $originalName,
             'nip_creator' => session('user_identifier'),

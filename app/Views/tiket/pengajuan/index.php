@@ -12,14 +12,7 @@
                         </div>
                     </div>
                     <div class="row g-4 needs-validation">
-                        <div class="col-md-12">
-                            <label for="validationCustom01" class="form-label text-uppercase ">Judul permohonan</label>
-                            <input type="text" name="judul" class="form-control" id="validationCustom01" value=""
-                                required placeholder="Masukkan judul permohonan...">
-                            <div class="valid-feedback">
-                                Looks good!
-                            </div>
-                        </div>
+
                         <div class="col-md-6">
                             <label for="validationCustom04" class="form-label text-uppercase">kategori layanan</label>
                             <select class="form-select kategori" name="kategori" id="validationCustom04" required>
@@ -83,6 +76,10 @@
     </div>
 </div>
 
+<?= $this->endSection() ?>
+
+<?= $this->section('script'); ?>
+<script type="module" src="<?= base_url('assets/js/tambahTiket.js') ?>"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const checkBox = document.getElementById('invalidCheck');
@@ -95,4 +92,4 @@
         });
     });
 </script>
-<?= $this->endSection() ?>
+<?= $this->endSection(); ?>

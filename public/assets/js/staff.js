@@ -1,4 +1,25 @@
-import { uploadTask } from "./app.js";
+const tokenCSRF = document.querySelector('meta[name="X-CSRF-TOKEN"]').getAttribute('content');
+
+// --- STAFF SERVICE FUNCTIONS ---
+
+async function uploadTask(id, dokumenTask, laporanTask, isDownloadable) {
+    const formData = new FormData();
+    formData.append('laporan_task', laporanTask);
+    formData.append('is_downloadable', isDownloadable);
+    
+    if (dokumenTask) {
+        formData.append('dokumen_task', dokumenTask);
+    }
+
+    const res = await fetch(`/upload-task/${id}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': tokenCSRF
+        },
+        body: formData
+    });
+    return await res.json();
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     const segments = window.location.pathname.split('/');

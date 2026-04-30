@@ -1,4 +1,22 @@
-import { postKategori } from "./app.js";
+const tokenCSRF = document.querySelector('meta[name="X-CSRF-TOKEN"]').getAttribute('content');
+
+// --- MASTER SERVICE FUNCTIONS ---
+
+async function postKategori(namaKategori, deskripsi) {
+    const res = await fetch('/create-kategori', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'Application/json',
+            'X-CSRF-TOKEN': tokenCSRF
+        },
+        body: JSON.stringify({
+            nama_kategori: namaKategori,
+            deskripsi: deskripsi
+        })
+    });
+
+    return await res.json();
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     const btnKategori = document.querySelector('.btn-kategori');

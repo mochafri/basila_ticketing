@@ -1,4 +1,31 @@
-import { approveEscalated, rejectEscalated } from "./app.js";
+const tokenCSRF = document.querySelector('meta[name="X-CSRF-TOKEN"]').getAttribute('content');
+
+// --- ESKALASI SERVICE FUNCTIONS ---
+
+async function approveEscalated(id) {
+    const res = await fetch(`/approve-escalated/${id}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': tokenCSRF
+        }
+    });
+    return await res.json();
+}
+
+async function rejectEscalated(id, catatan) {
+    const res = await fetch(`/reject-escalated/${id}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'Application/json',
+            'X-CSRF-TOKEN': tokenCSRF
+        },
+        body: JSON.stringify({
+            catatan: catatan
+        })
+    });
+
+    return await res.json();
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     const segments = window.location.pathname.split('/');

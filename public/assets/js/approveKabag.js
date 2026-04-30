@@ -1,4 +1,73 @@
-import { reject, escalated, approveTiket, closeTicket, revisiKaur } from "/assets/js/app.js";
+const tokenCSRF = document.querySelector('meta[name="X-CSRF-TOKEN"]').getAttribute('content');
+
+// --- KABAG SERVICE FUNCTIONS ---
+
+async function approveTiket(id, userId, nama, levelKesulitan) {
+    const res = await fetch(`/approve-tiket/${id}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'Application/json',
+            'X-CSRF-TOKEN': tokenCSRF
+        },
+        body: JSON.stringify({
+            user_id: userId, 
+            assign_to_kaur: nama,
+            approve: 'buk fira',
+            level_kesulitan: levelKesulitan
+        })
+    });
+    return await res.json();
+}
+
+async function reject(id, catatan) {
+    const res = await fetch(`/reject-tiket/${id}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'Application/json',
+            'X-CSRF-TOKEN': tokenCSRF
+        },
+        body: JSON.stringify({
+            catatan: catatan
+        })
+    });
+    return await res.json();
+}
+
+async function escalated(id) {
+    const res = await fetch(`/escalated-tiket/${id}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'Application/json',
+            'X-CSRF-TOKEN': tokenCSRF
+        }
+    });
+    return await res.json();
+}
+
+async function revisiKaur(id, catatan) {
+    const res = await fetch(`/revisi-kaur`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'Application/json',
+            'X-CSRF-TOKEN': tokenCSRF
+        },
+        body: JSON.stringify({
+            assign_id: id,
+            catatan: catatan
+        })
+    });
+    return await res.json();
+}
+
+async function closeTicket(id) {
+    const res = await fetch(`/tutup-tiket/${id}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': tokenCSRF
+        }
+    });
+    return await res.json();
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     const segments = window.location.pathname.split('/');

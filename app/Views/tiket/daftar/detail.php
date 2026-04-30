@@ -19,3 +19,20 @@
 </div>
 <?= $this->include('component/detail-tiket/user-manual-modal'); ?>
 <?= $this->endSection() ?>
+
+<?= $this->section('script'); ?>
+<?php 
+    $role = session('role_name');
+?>
+
+<?php if ($role === 'SUPERADMIN'): ?>
+    <script type="module" src="<?= base_url('assets/js/approveKabag.js') ?>"></script>
+<?php elseif ($role === 'BAA'): ?>
+    <script type="module" src="<?= base_url('assets/js/approveEskalasi.js') ?>"></script>
+    <script type="module" src="<?= base_url('assets/js/approveKabag.js') ?>"></script>
+<?php elseif ($role === 'KEPALA URUSAN ADMINISTRASI AKADEMIK'): ?>
+    <script type="module" src="<?= base_url('assets/js/approveKaur.js') ?>"></script>
+<?php elseif (in_array($role, ['PEGAWAI', 'ADMIN AKADEMIK'])): ?>
+    <script type="module" src="<?= base_url('assets/js/staff.js') ?>"></script>
+<?php endif; ?>
+<?= $this->endSection(); ?>

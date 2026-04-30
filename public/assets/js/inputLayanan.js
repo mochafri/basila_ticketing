@@ -1,4 +1,22 @@
-import { postLayanan } from "./app.js";
+const tokenCSRF = document.querySelector('meta[name="X-CSRF-TOKEN"]').getAttribute('content');
+
+// --- MASTER SERVICE FUNCTIONS ---
+
+async function postLayanan(namaLayanan, idKategori) {
+    const res = await fetch('/create-layanan', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'Application/json',
+            'X-CSRF-TOKEN': tokenCSRF
+        },
+        body: JSON.stringify({
+            nama_layanan: namaLayanan,
+            kategori_id: idKategori
+        })
+    });
+
+    return await res.json();
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     const btnLayanan = document.querySelector('.btn-layanan');
