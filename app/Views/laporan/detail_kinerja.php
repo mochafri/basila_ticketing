@@ -20,7 +20,7 @@
             $avgDuration = count($completedTasks) > 0 ? $totalDuration / count($completedTasks) : 0;
         ?>
         <div class="col-md-4">
-            <div class="card border-0 shadow-sm rounded-4 bg-primary text-white p-4">
+            <div class="card border-0 shadow-sm rounded-4 bg-danger-custom text-white p-4">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
                         <p class="text-white text-opacity-75 text-uppercase fw-bold mb-1" style="font-size: 0.7rem;">Total Tugas Selesai</p>
@@ -31,7 +31,7 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card border-0 shadow-sm rounded-4 bg-danger text-white p-4">
+            <div class="card border-0 shadow-sm rounded-4 bg-success-custom text-white p-4">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
                         <p class="text-white text-opacity-75 text-uppercase fw-bold mb-1" style="font-size: 0.7rem;">Rata-rata Kecepatan</p>
@@ -42,7 +42,7 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card border-0 shadow-sm rounded-4 bg-dark text-white p-4">
+            <div class="card border-0 shadow-sm rounded-4 bg-blue-custom text-white p-4">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
                         <p class="text-white text-opacity-75 text-uppercase fw-bold mb-1" style="font-size: 0.7rem;">Total Waktu Kerja</p>
@@ -60,7 +60,11 @@
             <table class="table table-hover align-middle mb-0">
                 <thead class="bg-light border-bottom">
                     <tr>
+                        <th class="ps-4 py-3 text-uppercase custom-small-font fw-bold text-secondary">No</th>
                         <th class="ps-4 py-3 text-uppercase custom-small-font fw-bold text-secondary">Judul Tugas / Instruksi</th>
+                        <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary text-center">ID Tiket</th>
+                        <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary text-center">Kategori</th>
+                        <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary text-center">Layanan</th>
                         <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary">Mulai</th>
                         <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary">Selesai</th>
                         <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary text-center">Status</th>
@@ -68,10 +72,30 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($detail as $task): ?>
+                    <?php 
+                    $i = 1;
+                    foreach ($detail as $task): ?>
                         <tr>
                             <td class="ps-4">
+                                <div class=""><?= $i++ ?></div>
+                            </td>
+                            <td class="ps-4">
                                 <div class="fw-bold text-dark text-uppercase small"><?= esc($task['task_instruction'] ?: $task['judul_permohonan']) ?></div>
+                            </td>
+                            <td class="text-center">
+                                <a href="<?= site_url('tiket/' . $task['ticket_id']) ?>" class="text-decoration-none fw-bold text-primary small">
+                                    #<?= esc($task['ticket_id']) ?>
+                                </a>
+                            </td>
+                            <td class="text-center">
+                                <span class="badge bg-info bg-opacity-10 text-info px-2 py-1 rounded-pill custom-small-font fw-bold">
+                                    <?= esc($task['kategori_layanan'] ?? '-') ?>
+                                </span>
+                            </td>
+                            <td class="text-center">
+                                <span class="badge bg-secondary bg-opacity-10 text-secondary px-2 py-1 rounded-pill custom-small-font fw-bold">
+                                    <?= esc($task['per_kategori_layanan'] ?? '-') ?>
+                                </span>
                             </td>
                             <td>
                                 <div class="custom-small-font text-muted"><?= format_datetime_indo($task['started_at']) ?></div>
