@@ -21,14 +21,20 @@ class TiketService
     public function getDataTiket($roles = [], $nip = null, $kategori = null, $status = null, $search = null)
     {
         $query = $this->tiketModel
-            ->select(
-                'tikets.id, tikets.judul_permohonan, tikets.deskripsi_permohonan, tikets.tiket_status, 
-                tikets.created_at, tikets.nip_creator, tikets.nama_creator, tikets.level_kesulitan,
+            ->select('
+                tikets.id, 
+                tikets.judul_permohonan, 
+                tikets.deskripsi_permohonan, 
+                tikets.tiket_status, 
+                tikets.created_at, 
+                tikets.nip_creator, 
+                tikets.nama_creator, 
+                tikets.level_kesulitan,
                 layanans.per_kategori_layanan,
-                kategoris.kategori_layanan'
-            )
+                kategoris.kategori_layanan
+            ')
             ->join('layanans', 'layanans.id = tikets.id_layanan', 'left')
-            ->join('kategoris', 'kategoris.id = layanans.fk_kategori', 'left')
+            ->join('kategoris', 'kategoris.id = tikets.id_kategori', 'left')
             ->orderBy('tikets.created_at', 'DESC');
 
         if ($kategori) {
@@ -59,7 +65,7 @@ class TiketService
         }
 
         // 2. KAUR: Melihat tiket yang didelegasikan kepadanya (Kecuali status Waiting)
-        if (in_array('KEPALA URUSAN ADMINISTRASI AKADEMIK', $roles)) {
+        if (in_array('KEPALA URUSAN ADMINISTRASI AKADEMIK', $roles) || in_array('ADMIN DATA MAHASISWA FAKULTAS', $roles)) {
             return [
                 'data' => $query->join('assign_to_kaur', 'assign_to_kaur.fk_tiket = tikets.id')
                     ->where('assign_to_kaur.nip_kaur', $nip)
@@ -88,16 +94,23 @@ class TiketService
     {
         return $this->tiketModel
             ->select('
-                tikets.id, tikets.judul_permohonan, tikets.deskripsi_permohonan, 
-                tikets.tiket_status, tikets.created_at, tikets.completed_at, tikets.dokumen_lampiran, 
-                tikets.original_dokumen_name,tikets.is_escalated, tikets.level_kesulitan,
-                tikets.nip_creator, tikets.nama_creator,
+                tikets.id, 
+                tikets.judul_permohonan, 
+                tikets.deskripsi_permohonan, 
+                tikets.tiket_status, 
+                tikets.created_at, 
+                tikets.completed_at, 
+                tikets.dokumen_lampiran, 
+                tikets.original_dokumen_name,
+                tikets.is_escalated, 
+                tikets.level_kesulitan,
+                tikets.nip_creator, 
+                tikets.nama_creator,
                 layanans.per_kategori_layanan,
-                kategoris.kategori_layanan,
-                layanans.per_kategori_layanan
+                kategoris.kategori_layanan
             ')
             ->join('layanans', 'layanans.id = tikets.id_layanan', 'left')
-            ->join('kategoris', 'kategoris.id = layanans.fk_kategori', 'left')
+            ->join('kategoris', 'kategoris.id = tikets.id_kategori', 'left')
             ->find($id);
     }
 

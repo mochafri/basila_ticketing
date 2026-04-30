@@ -39,6 +39,19 @@ $btnClass = '';
     <div class="flex-grow-1">
         <p class="m-0 fw-bold custom-small-font text-uppercase"><?= $statusText ?></p>
         
+        <?php if ($detail['tiket_status'] === 'Closed' && !empty($detail['completed_at'])): ?>
+            <div class="d-flex flex-wrap gap-3 mt-1">
+                <span class="custom-text text-muted small d-flex align-items-center gap-1">
+                    <iconify-icon icon="ph:check-circle-bold" class="text-success"></iconify-icon>
+                    Selesai: <?= format_datetime_indo($detail['completed_at']) ?>
+                </span>
+                <span class="custom-text text-muted small d-flex align-items-center gap-1" title="Total durasi pengerjaan tiket" data-bs-toggle="tooltip">
+                    <iconify-icon icon="ph:timer-bold" class="text-primary"></iconify-icon>
+                    Durasi: <?= format_duration($detail['created_at'], $detail['completed_at']) ?>
+                </span>
+            </div>
+        <?php endif; ?>
+        
         <?php if ($detail['tiket_status'] === 'Closed' && !empty($allTaskStaffOnKaur)): ?>
             <div class="mt-3 p-4 bg-light rounded-4 border shadow-sm">
                 <p class="m-0 fw-bold custom-small-font mb-3 text-dark">HASIL PENYELESAIAN TUGAS</p>

@@ -11,7 +11,7 @@ class AddIsDownloadableToAssignToStaff extends Migration
         $fields = [
             'is_downloadable' => [
                 'type'       => 'BOOLEAN',
-                'default'    => false,
+                'default'    => true,
                 'after'      => 'taks_dokumen'
             ],
         ];

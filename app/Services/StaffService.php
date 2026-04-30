@@ -20,23 +20,26 @@ class StaffService
         $getID = $this->assignTiket->where('fk_tiket', $id)->first();
 
         if (!isset($getID)) {
-            return null;
+            return [];
         }
 
         $data = $this->assignTaskStaff
-            ->where('fk_assign_to_kaur', $getID['id'])
-            ->where('nip_receive_task', $nip)
+            ->select('tiket_on_progress.*, assign_to_kaur.completed_at as kaur_completed_at, assign_to_kaur.started_at as kaur_started_at, assign_to_kaur.kaur_name, assign_to_kaur.flag as kaur_flag')
+            ->join('assign_to_kaur', 'assign_to_kaur.id = tiket_on_progress.fk_assign_to_kaur')
+            ->where('assign_to_kaur.fk_tiket', $id)
+            ->where('tiket_on_progress.nip_receive_task', $nip)
             ->first();
 
-        return $data ?? null;
+        return $data ?? [];
     }
 
+    # Update task juga berlaku untuk kaur meng update tugas yang dikerjakan nya,jika tiket dikerjakan sendiri
     public function updateTask($id, array $data, $file, $nip)
     {
         $db = \Config\Database::connect();
 
         $staffData = $this->assignTaskStaff
-            ->select('tiket_on_progress.id, tiket_on_progress.is_acc_from_kaur')
+            ->select('tiket_on_progress.id, tiket_on_progress.is_acc_from_kaur, tiket_on_progress.fk_assign_to_kaur')
             ->join('assign_to_kaur', 'assign_to_kaur.id = tiket_on_progress.fk_assign_to_kaur')
             ->where('assign_to_kaur.fk_tiket', $id)
             ->where('tiket_on_progress.nip_receive_task', $nip)
@@ -77,28 +80,37 @@ class StaffService
                 'message' => 'Gagal update tugas'
             ];
         }
-        
+
+        # Jika tiket dikerjakan oleh kaur, otomatis selesaikan juga penugasan Kaur-nya (flag = Finish)
         if($isKaurMandiri){
+            
+            $this->assignTiket->builder()
+                ->where('id', $staffData['fk_assign_to_kaur'])
+                ->update([
+                    'flag' => 'Finish',
+                    'completed_at' => date('Y-m-d H:i:s')
+                ]);
+
+            $this->riwayatAktifitas->insert([
+                'activity_title' => 'Tugas Selesai',
+                'message' => 'Kepala Urusan telah menyelesaikan tugas mandiri dan mengunggah laporan penyelesaian.',
+                'created_by' => 'Kepala Urusan',
+                'fk_tiket' => $id
+            ]);
+        } else {
             $this->riwayatAktifitas->insert([
                 'activity_title' => 'Laporan Tugas',
-                'message' => 'Kaur telah menyelesaikan laporan penyelesaian tugas.',
+                'message' => 'Staf telah mengunggah laporan penyelesaian tugas.',
                 'created_by' => 'Staf',
                 'fk_tiket' => $id
             ]);
         }
 
-        $this->riwayatAktifitas->insert([
-            'activity_title' => 'Laporan Tugas',
-            'message' => 'Staf telah mengunggah laporan penyelesaian tugas.',
-            'created_by' => 'Staf',
-            'fk_tiket' => $id
-        ]);
-
         $db->transComplete();
 
         return $db->transStatus() ? [
             'status' => 'success',
-            'message' => 'Berhasil upload tugas'
+            'message' => $isKaurMandiri ? 'Berhasil menyelesaikan tugas mandiri' : 'Berhasil upload tugas'
         ] : [
             'status' => 'fail',
             'message' => 'Gagal upload tugas'

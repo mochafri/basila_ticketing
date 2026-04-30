@@ -138,4 +138,14 @@ class Validation extends BaseConfig
     // --------------------------------------------------------------------
     // Rules
     // --------------------------------------------------------------------
+    public array $workLogRule = [
+        'deskripsi' => [
+            'label' => 'Deskripsi Pekerjaan',
+            'rules' => 'required|string|min_length[5]'
+        ],
+        'bukti' => [
+            'label' => 'Bukti Pekerjaan',
+            'rules' => 'permit_empty|uploaded[bukti]|mime_in[bukti,image/png,image/jpeg,application/pdf]|max_size[bukti,10240]'
+        ],
+    ];
 }

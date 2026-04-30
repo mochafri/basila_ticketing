@@ -318,8 +318,40 @@ class TicketController extends BaseController
 
         $result = $this->eskalasiService->rejectEscalated($slug, $data['catatan']);
         $statusCode = $result['status'] === 'success' ? 200 : 400;
-
         return $this->response->setStatusCode($statusCode)->setJSON($result);
+    }
+
+    public function submitWorkLog($id)
+    {
+        $data = $this->request->getPost();
+        $file = $this->request->getFile('bukti');
+
+        if (!$this->validateData($data, 'workLogRule')) {
+            return $this->response->setStatusCode(422)->setJSON([
+                'status' => 'fail',
+                'message' => $this->validator->getErrors()
+            ]);
+        }
+
+        $result = $this->riwayatService->addLog(
+            $id,
+            'Catatan Pekerjaan',
+            $data['deskripsi'],
+            session('username') ?? 'Staff',
+            $file
+        );
+
+        if ($result) {
+            return $this->response->setStatusCode(200)->setJSON([
+                'status' => 'success',
+                'message' => 'Berhasil menambahkan catatan pekerjaan'
+            ]);
+        }
+
+        return $this->response->setStatusCode(500)->setJSON([
+            'status' => 'fail',
+            'message' => 'Gagal menambahkan catatan pekerjaan'
+        ]);
     }
     public function addLogNote($id)
     {

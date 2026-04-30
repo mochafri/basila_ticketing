@@ -55,10 +55,15 @@ class LaporanService
         $builder = $this->assignTaskStaff->builder();
         $builder->select('
             tiket_on_progress.*,
-            tikets.judul_permohonan
+            tikets.id as ticket_id,
+            tikets.judul_permohonan,
+            kategoris.kategori_layanan,
+            layanans.per_kategori_layanan
         ');
         $builder->join('assign_to_kaur', 'assign_to_kaur.id = tiket_on_progress.fk_assign_to_kaur');
         $builder->join('tikets', 'tikets.id = assign_to_kaur.fk_tiket');
+        $builder->join('kategoris', 'kategoris.id = tikets.id_kategori');
+        $builder->join('layanans', 'layanans.id = tikets.id_layanan');
         $builder->where('tiket_on_progress.nip_receive_task', $nip);
 
         if (!empty($filters['status'])) {

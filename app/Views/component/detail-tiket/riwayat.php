@@ -13,12 +13,28 @@
                     <div class="timeline-item-compact">
                         <div class="timeline-marker"></div>
                         <div class="d-flex justify-content-between align-items-center mb-1">
-                            <span class="text-danger fw-bold text-uppercase log-meta"><?= esc($r['created_by']) ?></span>
-                            <span class="text-muted log-meta"><?= date('d M, H:i', strtotime($r['created_at'])) ?></span>
+                            <span class="text-danger fw-bold text-uppercase log-meta" style="font-size: 0.6rem;"><?= esc($r['created_by']) ?></span>
+                            <span class="text-muted log-meta" style="font-size: 0.6rem;" title="<?= format_datetime_indo($r['created_at']) ?>"><?= time_ago($r['created_at']) ?></span>
                         </div>
-                        <span class="fw-bold text-uppercase log-title"><?= esc($r['activity_title']) ?></span>
-                        <div class="log-msg">
+                        <span class="fw-bold text-uppercase log-title" style="font-size: 0.7rem;"><?= esc($r['activity_title']) ?></span>
+                        <div class="log-msg" style="font-size: 0.7rem;">
                             <?= esc($r['message']) ?>
+                            <?php 
+                                $isMahasiswa = session('role_name') === 'MAHASISWA';
+                                $isCreator = session('user_identifier') === ($detail['nip_creator'] ?? '');
+                                $isInternal = in_array(session('role_name'), ['SUPERADMIN', 'BAA', 'KEPALA URUSAN ADMINISTRASI AKADEMIK', 'PEGAWAI', 'ADMIN AKADEMIK']);
+                                
+                                // Sembunyikan jika MAHASISWA, atau jika dia Pemohon (kecuali dia Admin)
+                                $showAttachment = !empty($r['attachment']) && (!$isMahasiswa && !($isCreator && !$isInternal));
+                            ?>
+                            <?php if ($showAttachment): ?>
+                                <div class="mt-2">
+                                    <a href="<?= base_url('tiket/file/admin/' . $r['attachment']) ?>" target="_blank" class="text-danger text-decoration-none d-flex align-items-center gap-1 fw-bold" style="font-size: 0.65rem;">
+                                        <iconify-icon icon="ph:paperclip-bold"></iconify-icon>
+                                        <?= esc($r['original_attachment_name'] ?? 'Lihat Lampiran') ?>
+                                    </a>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 <?php endforeach; ?>

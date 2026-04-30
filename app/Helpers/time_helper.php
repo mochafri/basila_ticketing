@@ -68,3 +68,33 @@ if (!function_exists('format_datetime_indo')) {
         return "{$d} {$m} {$y}, {$t} WIB";
     }
 }
+
+if (!function_exists('time_ago')) {
+    function time_ago($datetime)
+    {
+        if (!$datetime) return '-';
+        
+        $time = strtotime($datetime);
+        $diff = time() - $time;
+        
+        if ($diff < 1) return 'baru saja';
+        
+        $intervals = [
+            31536000 => 'tahun',
+            2592000  => 'bulan',
+            604800   => 'minggu',
+            86400    => 'hari',
+            3600     => 'jam',
+            60       => 'menit',
+            1        => 'detik'
+        ];
+        
+        foreach ($intervals as $secs => $str) {
+            $d = $diff / $secs;
+            if ($d >= 1) {
+                $r = round($d);
+                return $r . ' ' . $str . ' yang lalu';
+            }
+        }
+    }
+}
