@@ -1,6 +1,6 @@
 <div class="d-flex align-items-center gap-3">
     <div class="timeline-icon-box <?= ($detail['tiket_status'] === 'Waiting') ? 'bg-secondary' : 'bg-success' ?> text-white">
-        <span class="step-num"><?= $step ?? 3 ?></span>
+        <span class="step-num">2</span>
         <iconify-icon icon="<?= ($detail['tiket_status'] === 'Waiting') ? 'streamline-ultimate:task-list-approve' : 'ic:round-check' ?>"></iconify-icon>
     </div>
     <div class="flex-grow-1">
@@ -38,7 +38,7 @@ $semuaSelesai = !empty($taskStaffOnKaur) && count(array_filter($taskStaffOnKaur,
 
 <div class="d-flex gap-3 w-100">
     <div class="timeline-icon-box <?= ($semuaSelesai || $sudahSelesaiKaur) ? 'bg-success text-white' : (in_array($detail['tiket_status'], ['Open', 'In Progress']) ? 'bg-danger text-white' : 'bg-light text-dark') ?>">
-        <span class="step-num"><?= ($step ?? 3) + 1 ?></span>
+        <span class="step-num">3</span>
         <iconify-icon icon="<?= ($semuaSelesai || $sudahSelesaiKaur) ? 'ph:check-bold' : 'hugeicons:plus-sign' ?>"></iconify-icon>
     </div>
 
@@ -189,7 +189,7 @@ $semuaSelesai = !empty($taskStaffOnKaur) && count(array_filter($taskStaffOnKaur,
 <?php if (in_array($detail['tiket_status'], ['Waiting', 'Open', 'In Progress', 'Closed'])): ?>
     <div class="d-flex align-items-center gap-3">
     <div class="timeline-icon-box <?= $detail['tiket_status'] === 'Closed' ? 'bg-success' : ($semuaSelesai ? 'bg-danger' : 'bg-secondary') ?> text-white">
-        <span class="step-num"><?= ($step ?? 3) + 2 ?></span>
+        <span class="step-num">4</span>
         <iconify-icon icon="ph:flow-arrow"></iconify-icon>
     </div>
         <div class="flex-grow-1 gap-2 d-flex flex-column">

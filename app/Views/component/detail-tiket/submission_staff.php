@@ -1,6 +1,6 @@
 <div class="d-flex gap-3 w-100">
     <div class="timeline-icon-box bg-danger text-white">
-        <span class="step-num"><?= $step ?? 4 ?></span>
+        <span class="step-num">2</span>
         <iconify-icon icon="hugeicons:task-01"></iconify-icon>
     </div>
     <div class="flex-grow-1">
@@ -139,7 +139,7 @@
 </div>
 <div class="d-flex align-items-center gap-3">
     <div class="timeline-icon-box <?= ($detail['tiket_status'] === 'In Progress') ? 'bg-secondary' : 'bg-success' ?> text-white">
-        <span class="step-num"><?= ($step ?? 4) + 1 ?></span>
+        <span class="step-num">3</span>
         <iconify-icon icon="<?= ($detail['tiket_status'] === 'In Progress') ? 'streamline-ultimate:task-list-approve' : 'ic:round-check' ?>"></iconify-icon>
     </div>
     <p class="m-0 fw-bold custom-small-font">approval kepala urusan (pak bagas)</p>

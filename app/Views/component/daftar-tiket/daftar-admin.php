@@ -15,7 +15,7 @@ $statusColors = [
         <table class="table table-hover align-middle mb-0">
             <thead class="bg-light border-bottom">
                 <tr>
-                    <th class="ps-4 py-3 text-uppercase custom-small-font fw-bold text-secondary" style="width: 80px;">ID</th>
+                    <th class="ps-4 py-3 text-uppercase custom-small-font fw-bold text-secondary" style="width: 80px;">No</th>
                     <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary">Kategori</th>
                     <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary">Layanan</th>
                     <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary">Pengaju</th>
@@ -26,7 +26,9 @@ $statusColors = [
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($tiket['data'] as $data): 
+                <?php 
+                $i = (($tiket['pager']->getCurrentPage() - 1) * $tiket['pager']->getPerPage()) + 1;
+                foreach ($tiket['data'] as $data): 
                     $color = $statusColors[$data['tiket_status']] ?? 'secondary';
                     $levelColor = [
                         'mudah' => 'success',
@@ -36,7 +38,7 @@ $statusColors = [
                 ?>
                     <tr>
                         <td class="ps-4">
-                            <span class="font-monospace fw-bold text-muted small">#<?= $data['id'] ?></span>
+                            <span class="font-monospace fw-bold text-muted small"><?= $i++ ?></span>
                         </td>
 
                         <td>

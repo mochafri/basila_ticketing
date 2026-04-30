@@ -29,8 +29,8 @@ $statusColors = [
     </div>
 <?php else: ?>
     <?php
-    $page = $tiket['pager']->getCurrentPage();
-    $perPage = $tiket['pager']->getPerPage();
+    $i = (($tiket['pager']->getCurrentPage() - 1) * $tiket['pager']->getPerPage()) + 1;
+
     foreach ($tiket['data'] as $data):
         $color = $statusColors[$data['tiket_status']] ?? 'secondary';
     ?>
@@ -41,7 +41,7 @@ $statusColors = [
                     <div class="row align-items-center">
                         <div class="col-md-8">
                             <div class="d-flex align-items-center gap-3 mb-2">
-                                <span class="font-monospace fw-bold text-muted small">#<?= $data['id'] ?></span>
+                                <span class="font-monospace fw-bold text-muted small"><?= $i++ ?></span>
                                 <span class="badge bg-<?= $color ?> bg-opacity-10 text-<?= $color ?> px-3 py-1 rounded-pill fw-bold text-uppercase d-inline-flex align-items-center gap-1" style="font-size: 0.6rem; letter-spacing: 0.5px;">
                                     <iconify-icon icon="ph:dot-bold" class="fs-5"></iconify-icon>
                                     <?= $data['tiket_status'] ?>
