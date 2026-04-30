@@ -330,10 +330,10 @@ if (!empty($taskStaffOnKaur)) {
                                     <iconify-icon icon="<?= $task['task_status'] === 'Selesai' ? 'ph:check-bold' : 'icon-park-outline:dot' ?>" class="<?= $task['task_status'] === 'Selesai' ? 'text-success' : 'text-warning' ?> fs-3"></iconify-icon>
                                     <div class="d-flex flex-column gap-2 flex-grow-1">
                                         <div class="d-flex align-items-center gap-2">
-                                            <p class="custom-small-font fw-bold m-0"><?= esc($task['task_instruction'] ?: $task['judul_permohonan']) ?></p>
+                                            <p class="custom-small-font fw-bold m-0"><?= esc($task['task_instruction']) ?></p>
                                             <button class="btn btn-sm btn-outline-secondary border-0 p-1 btn-edit-instruction"
                                                 data-id="<?= esc($task['id']) ?>"
-                                                data-instruction="<?= esc($task['task_instruction'] ?: $task['judul_permohonan']) ?>"
+                                                data-instruction="<?= esc($task['task_instruction']) ?>"
                                                 title="Edit Instruksi">
                                                 <iconify-icon icon="ph:pencil-simple-line-bold"></iconify-icon>
                                             </button>
@@ -429,10 +429,10 @@ if (!empty($taskStaffOnKaur)) {
                                     <iconify-icon icon="icon-park-outline:dot" class="text-warning fs-3"></iconify-icon>
                                     <div class="d-flex flex-column gap-2 flex-grow-1">
                                         <div class="d-flex align-items-center gap-2">
-                                            <span class="custom-small-font fw-bold"><?= esc($task['task_instruction'] ?: $task['judul_permohonan']) ?></span>
+                                            <span class="custom-small-font fw-bold"><?= esc($task['task_instruction'] ?: 'TIDAK ADA INSTRUKSI') ?></span>
                                             <button class="btn btn-sm btn-outline-secondary border-0 p-1 btn-edit-instruction"
                                                 data-id="<?= esc($task['id']) ?>"
-                                                data-instruction="<?= esc($task['task_instruction'] ?: $task['judul_permohonan']) ?>"
+                                                data-instruction="<?= esc($task['task_instruction']) ?>"
                                                 title="Edit Instruksi">
                                                 <iconify-icon icon="ph:pencil-simple-line-bold"></iconify-icon>
                                             </button>

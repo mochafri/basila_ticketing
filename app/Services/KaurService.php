@@ -249,7 +249,7 @@ class KaurService
                 tiket_on_progress.received_by, tiket_on_progress.nip_receive_task,tiket_on_progress.fk_assign_to_kaur, tiket_on_progress.is_downloadable,
                 tiket_on_progress.started_at, tiket_on_progress.completed_at, tiket_on_progress.original_task_name, tiket_on_progress.catatan_revisi, tiket_on_progress.is_acc_from_kaur,
                 assign_to_kaur.kaur_name, assign_to_kaur.fk_tiket as id_tiket,
-                tikets.judul_permohonan, tikets.tiket_status
+                tikets.deskripsi_permohonan, tikets.tiket_status
             ')
             ->join('assign_to_kaur', 'assign_to_kaur.id = tiket_on_progress.fk_assign_to_kaur')
             ->join('tikets', 'tikets.id = assign_to_kaur.fk_tiket')
@@ -267,7 +267,7 @@ class KaurService
                 tiket_on_progress.received_by,tiket_on_progress.fk_assign_to_kaur,
                 tiket_on_progress.started_at, tiket_on_progress.completed_at, tiket_on_progress.original_task_name, tiket_on_progress.catatan_revisi, tiket_on_progress.is_acc_from_kaur,
                 assign_to_kaur.kaur_name, assign_to_kaur.fk_tiket as id_tiket,
-                tikets.judul_permohonan, tikets.tiket_status
+                tikets.deskripsi_permohonan, tikets.tiket_status
             ')
             ->join('assign_to_kaur', 'assign_to_kaur.id = tiket_on_progress.fk_assign_to_kaur')
             ->join('tikets', 'tikets.id = assign_to_kaur.fk_tiket')

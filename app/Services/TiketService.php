@@ -23,7 +23,6 @@ class TiketService
         $query = $this->tiketModel
             ->select('
                 tikets.id, 
-                tikets.judul_permohonan, 
                 tikets.deskripsi_permohonan, 
                 tikets.tiket_status, 
                 tikets.created_at, 
@@ -48,7 +47,6 @@ class TiketService
         if ($search) {
             $query->groupStart()
                 ->like('tikets.id', $search)
-                ->orLike('tikets.judul_permohonan', $search)
                 ->orLike('tikets.deskripsi_permohonan', $search)
                 ->orLike('tikets.nama_creator', $search)
                 ->orLike('kategoris.kategori_layanan', $search)
@@ -95,7 +93,6 @@ class TiketService
         return $this->tiketModel
             ->select('
                 tikets.id, 
-                tikets.judul_permohonan, 
                 tikets.deskripsi_permohonan, 
                 tikets.tiket_status, 
                 tikets.created_at, 
@@ -135,16 +132,8 @@ class TiketService
         $db->transStart();
 
         $idLayanan = $data['layanan'];
-        $judul = $data['judul'] ?? '';
-
-        if (empty($judul)) {
-            $layananModel = model('Layanan');
-            $layananData = $layananModel->find($idLayanan);
-            $judul = $layananData['per_kategori_layanan'] ?? 'Tiket Layanan';
-        }
 
         $this->tiketModel->insert([
-            'judul_permohonan' => $judul,
             'deskripsi_permohonan' => $data['deskripsi'],
             'id_kategori' => $data['kategori'],
             'id_layanan' => $idLayanan,

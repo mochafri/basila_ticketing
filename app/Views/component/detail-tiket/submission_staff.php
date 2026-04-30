@@ -40,7 +40,7 @@
                 <div class="d-flex gap-3 align-items-center p-3 rounded">
                     <iconify-icon icon="icon-park-outline:dot" class="text-warning fs-3"></iconify-icon>
                     <div class="d-flex flex-column gap-2">
-                        <span class="custom-small-font fw-bold">Instruksi: <?= esc($taskStaff['task_instruction']) ?></span>
+                        <span class="custom-small-font fw-bold">Instruksi: <?= esc($taskStaff['task_instruction'] ?: 'TIDAK ADA INSTRUKSI') ?></span>
                         <div class="d-flex gap-2">
                             <span style="font-size: .65rem;" class="text-danger bg-danger bg-opacity-10 px-3 py-1 fw-bold text-center rounded-pill text-uppercase">
                                 <iconify-icon icon="ph:user-bold" class="me-1"></iconify-icon>

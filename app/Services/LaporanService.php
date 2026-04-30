@@ -56,7 +56,6 @@ class LaporanService
         $builder->select('
             tiket_on_progress.*,
             tikets.id as ticket_id,
-            tikets.judul_permohonan,
             kategoris.kategori_layanan,
             layanans.per_kategori_layanan
         ');

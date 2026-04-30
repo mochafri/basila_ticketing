@@ -102,10 +102,6 @@ class Validation extends BaseConfig
     ];
 
     public array $tiketRule = [
-        'judul' => [
-            'label' => 'Judul',
-            'rules' => 'permit_empty|string|max_length[255]'
-        ],
         'kategori' => [
             'label' => 'Kategori',
             'rules' => 'required|integer'

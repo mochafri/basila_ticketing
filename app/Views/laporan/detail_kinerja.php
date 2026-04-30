@@ -80,7 +80,7 @@
                                 <div class=""><?= $i++ ?></div>
                             </td>
                             <td class="ps-4">
-                                <div class="fw-bold text-dark text-uppercase small"><?= esc($task['task_instruction'] ?: $task['judul_permohonan']) ?></div>
+                                <div class="fw-bold text-dark text-uppercase small"><?= esc($task['task_instruction'] ?: 'TIDAK ADA INSTRUKSI') ?></div>
                             </td>
                             <td class="text-center">
                                 <a href="<?= site_url('tiket/' . $task['ticket_id']) ?>" class="text-decoration-none fw-bold text-primary small">

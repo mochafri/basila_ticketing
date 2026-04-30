@@ -13,7 +13,7 @@ class Tiket extends Model
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'id_kategori', 'id_layanan', 'judul_permohonan', 'deskripsi_permohonan', 
+        'id_kategori', 'id_layanan', 'deskripsi_permohonan', 
         'dokumen_lampiran', 'original_dokumen_name', 'is_escalated', 'tiket_status',
         'level_kesulitan', 'approve_by', 'nip_creator', 'nama_creator', 'completed_at'
     ];
