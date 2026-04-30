@@ -48,7 +48,7 @@ $btnClass = '';
                             <div class="p-3 bg-white rounded-3 border-start border-4 border-success shadow-sm">
                                 <div class="d-flex align-items-center gap-2 mb-2">
                                     <iconify-icon icon="ph:check-circle-fill" class="text-success fs-5"></iconify-icon>
-                                    <span class="fw-bold custom-small-font text-dark text-uppercase"><?= esc($task['assign_task_to_staff']) ?></span>
+                                    <span class="fw-bold custom-small-font text-dark text-uppercase"><?= esc($task['received_by']) ?></span>
                                 </div>
                                 <p class="m-0 custom-text text-muted mb-3 fst-italic">"<?= esc($task['catatan_laporan_penyelesaian']) ?: 'Tugas telah diselesaikan.' ?>"</p>
                                 

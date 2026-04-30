@@ -41,14 +41,14 @@ class AddWorkflowTimestampsV2 extends Migration
 
         // Add started_at and completed_at to assign_to_staff
         $staffFields = [];
-        if (!$this->db->fieldExists('started_at', 'assign_to_staff')) {
+        if (!$this->db->fieldExists('started_at', 'tiket_on_progress')) {
             $staffFields['started_at'] = [
                 'type' => 'DATETIME',
                 'null' => true,
                 'after' => 'task_status'
             ];
         }
-        if (!$this->db->fieldExists('completed_at', 'assign_to_staff')) {
+        if (!$this->db->fieldExists('completed_at', 'tiket_on_progress')) {
             $staffFields['completed_at'] = [
                 'type' => 'DATETIME',
                 'null' => true,
@@ -56,7 +56,7 @@ class AddWorkflowTimestampsV2 extends Migration
             ];
         }
         if (!empty($staffFields)) {
-            $this->forge->addColumn('assign_to_staff', $staffFields);
+            $this->forge->addColumn('tiket_on_progress', $staffFields);
         }
     }
 

@@ -25,7 +25,7 @@ class StaffService
 
         $data = $this->assignTaskStaff
             ->where('fk_assign_to_kaur', $getID['id'])
-            ->where('nip_staff', $nip)
+            ->where('nip_receive_task', $nip)
             ->first();
 
         return $data ?? null;
@@ -36,29 +36,33 @@ class StaffService
         $db = \Config\Database::connect();
 
         $staffData = $this->assignTaskStaff
-            ->select('assign_to_staff.id')
-            ->join('assign_to_kaur', 'assign_to_kaur.id = assign_to_staff.fk_assign_to_kaur')
+            ->select('tiket_on_progress.id, tiket_on_progress.is_acc_from_kaur')
+            ->join('assign_to_kaur', 'assign_to_kaur.id = tiket_on_progress.fk_assign_to_kaur')
             ->where('assign_to_kaur.fk_tiket', $id)
-            ->where('assign_to_staff.nip_staff', $nip)
+            ->where('tiket_on_progress.nip_receive_task', $nip)
             ->first();
 
         if (!$staffData) {
             return [
                 'status' => 'fail',
-                'message' => 'Data penugasan staff tidak ditemukan'
+                'message' => 'Data penugasan tidak ditemukan'
             ];
         }
 
+        # Jika dikerjakan sendiri oleh kaur, status langsung Selesai. Jika staff, Menunggu Approve.
+        $isKaurMandiri = (isset($staffData['is_acc_from_kaur']) && (int)$staffData['is_acc_from_kaur'] === 1);
+
         $updateData = [
-            'task_status' => 'Menunggu Approve',
+            'task_status' => $isKaurMandiri ? 'Selesai' : 'Menunggu Approve',
             'catatan_laporan_penyelesaian' => $data['laporan_task'],
+            'catatan_revisi' => null,
             'is_downloadable' => $data['is_downloadable'] ?? 1,
             'completed_at' => date('Y-m-d H:i:s')
         ];
 
         if ($file && $file->isValid() && !$file->hasMoved()) {
             $updateData['taks_dokumen'] = $file->getRandomName();
-            $updateData['original_task_dokumen'] = $file;
+            $updateData['original_task_name'] = $file->getClientName();
             $file->move(WRITEPATH . 'uploads/tiket/admin/', $updateData['taks_dokumen']);
         }
 
@@ -72,6 +76,15 @@ class StaffService
                 'status' => 'fail',
                 'message' => 'Gagal update tugas'
             ];
+        }
+        
+        if($isKaurMandiri){
+            $this->riwayatAktifitas->insert([
+                'activity_title' => 'Laporan Tugas',
+                'message' => 'Kaur telah menyelesaikan laporan penyelesaian tugas.',
+                'created_by' => 'Staf',
+                'fk_tiket' => $id
+            ]);
         }
 
         $this->riwayatAktifitas->insert([

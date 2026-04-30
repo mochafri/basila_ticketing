@@ -7,19 +7,19 @@
         <p class="m-0 fw-bold custom-small-font text-uppercase">approval kepala urusan (bu fira)</p>
         <div class="d-flex flex-wrap gap-2 mt-1">
             <?php if (!empty($detail['completed_at'])): ?>
-            <span class="custom-text text-muted small d-flex align-items-center gap-1">
-                <iconify-icon icon="ph:check-circle-bold" class="text-success"></iconify-icon>
-                Selesai: <?= format_datetime_indo($detail['completed_at']) ?>
-            </span>
-            <span class="custom-text text-muted small d-flex align-items-center gap-1">
-                <iconify-icon icon="ph:timer-bold" class="text-primary"></iconify-icon>
-                Durasi: <?= format_duration($detail['created_at'], $detail['completed_at']) ?>
-            </span>
+                <span class="custom-text text-muted small d-flex align-items-center gap-1">
+                    <iconify-icon icon="ph:check-circle-bold" class="text-success"></iconify-icon>
+                    Selesai: <?= format_datetime_indo($detail['completed_at']) ?>
+                </span>
+                <span class="custom-text text-muted small d-flex align-items-center gap-1">
+                    <iconify-icon icon="ph:timer-bold" class="text-primary"></iconify-icon>
+                    Durasi: <?= format_duration($detail['created_at'], $detail['completed_at']) ?>
+                </span>
             <?php else: ?>
-            <span class="custom-text text-warning small d-flex align-items-center gap-1">
-                <iconify-icon icon="ph:clock-countdown-bold"></iconify-icon>
-                Sedang berjalan... (Mulai: <?= format_datetime_indo($detail['created_at']) ?>)
-            </span>
+                <span class="custom-text text-warning small d-flex align-items-center gap-1">
+                    <iconify-icon icon="ph:clock-countdown-bold"></iconify-icon>
+                    Sedang berjalan... (Mulai: <?= format_datetime_indo($detail['created_at']) ?>)
+                </span>
             <?php endif; ?>
         </div>
     </div>
@@ -29,11 +29,22 @@
 $nipMe = session('user_identifier');
 $currentKaurAssign = array_filter($kaurByTiketOpen, fn($k) => $k['nip_kaur'] === $nipMe);
 $currentKaurAssign = !empty($currentKaurAssign) ? reset($currentKaurAssign) : null;
-$sudahMulaiKaur = ($currentKaurAssign['flag'] ?? '') === 'Start';
+$sudahMulaiKaur = in_array($currentKaurAssign['flag'] ?? '', ['Start', 'Progress']);
 $sudahSelesaiKaur = ($currentKaurAssign['flag'] ?? '') === 'Finish';
 
 // Cek apakah ada staff dan SEMUA task_status-nya 'Selesai'
 $semuaSelesai = !empty($taskStaffOnKaur) && count(array_filter($taskStaffOnKaur, fn($task) => $task['task_status'] !== 'Selesai')) === 0;
+
+// Cari tugas yang dikerjakan sendiri oleh kaur
+$mySelfTask = null;
+if (!empty($taskStaffOnKaur)) {
+    foreach ($taskStaffOnKaur as $t) {
+        if ($t['is_acc_from_kaur'] == 1 && $t['nip_receive_task'] === $nipMe) {
+            $mySelfTask = $t;
+            break;
+        }
+    }
+}
 ?>
 
 <div class="d-flex gap-3 w-100">
@@ -43,7 +54,7 @@ $semuaSelesai = !empty($taskStaffOnKaur) && count(array_filter($taskStaffOnKaur,
     </div>
 
     <div class="flex-grow-1">
-        
+
         <p class="m-0 fw-bold custom-small-font text-uppercase">Penugasan: <?= esc($currentKaurAssign['kaur_name'] ?? 'Petugas') ?></p>
         <div class="d-flex flex-wrap gap-2 mt-1 mb-2">
             <?php if ($sudahSelesaiKaur): ?>
@@ -60,23 +71,161 @@ $semuaSelesai = !empty($taskStaffOnKaur) && count(array_filter($taskStaffOnKaur,
                     <iconify-icon icon="ph:clock-countdown-bold"></iconify-icon>
                     Sedang berjalan... (Mulai: <?= format_datetime_indo($currentKaurAssign['started_at']) ?>)
                 </span>
+                <div class="mt-2">
+                    <?php if ($detail['tiket_status'] !== 'Closed'): ?>
+                        <button type="button" class="btn btn-outline-primary btn-add-log-note text-uppercase custom-small-font fw-bold py-2 px-3 shadow-sm border-2">
+                            <iconify-icon icon="ph:note-pencil-bold" class="me-1"></iconify-icon>Tambah Catatan Log Aktifitas
+                        </button>
+                    <?php endif; ?>
+                </div>
             <?php endif; ?>
         </div>
+        
+        <?php if (($currentKaurAssign['flag'] ?? '') === 'Revisi' && !empty($currentKaurAssign['catatan_revisi'] && !in_array('Selesai', array_column($taskStaffOnKaur, 'task_status')))): ?>
+            <div class="mt-2 p-3 rounded-3 border-start border-4 border-danger bg-danger bg-opacity-10 shadow-sm mb-3">
+                <div class="d-flex align-items-center gap-2 mb-2 text-danger">
+                    <iconify-icon icon="ph:warning-circle-bold" class="fs-5"></iconify-icon>
+                    <span class="fw-bold text-uppercase" style="font-size: .7rem; letter-spacing: 1px;">Catatan Revisi dari Kepala Bagian</span>
+                </div>
+                <p class="m-0 custom-text fw-bold text-dark italic">
+                    "<?= esc($currentKaurAssign['catatan_revisi']) ?>"
+                </p>
+                <small class="text-muted mt-2 d-block" style="font-size: 0.6rem;">* Mohon perbaiki pekerjaan dan selesaikan kembali untuk verifikasi ulang.</small>
+            </div>
+        <?php endif; ?>
 
         <?php if ($detail['tiket_status'] === 'Open' && !$sudahMulaiKaur): ?>
-            <button class="btn btn-approve-kaur btn-danger rounded-3 w-100 mt-2 text-uppercase fw-bold custom-small-font py-3" style="letter-spacing: 3px;">terima & mulai penugasan</button>
+            <div class="d-flex gap-3">
+                <button class="btn btn-acc-task btn-primary rounded-3 w-100 mt-2 text-uppercase fw-bold custom-small-font py-3" style="letter-spacing: 3px;">Terima Tugas</button>
+                <button class="btn btn-approve-kaur btn-danger rounded-3 w-100 mt-2 text-uppercase fw-bold custom-small-font py-3" style="letter-spacing: 3px;">Delegasi ke staff</button>
+            </div>
         <?php endif; ?>
 
         <!-- akan aktif kalau button sudah di klik -->
         <div class="delegasi-wrapper w-100" style="<?= (in_array($detail['tiket_status'], ['In Progress']) || ($detail['tiket_status'] === 'Open' && $sudahMulaiKaur)) ? 'display:block;' : 'display:none;' ?>">
             <?php if (in_array($detail['tiket_status'], ['Open', 'In Progress'])): ?>
-                <?php if (!$sudahSelesaiKaur && !$semuaSelesai): ?>
+                <?php if ($mySelfTask): ?>
+                    <!-- Tampilan Mandiri (Kaur mengerjakan sendiri) -->
+                    <?php
+                    $statusMapping = [
+                        'Selesai' => ['color' => 'success', 'icon' => 'ph:check-circle-fill'],
+                        'Menunggu Approve' => ['color' => 'warning', 'icon' => 'ph:clock-bold'],
+                        'Revisi' => ['color' => 'danger', 'icon' => 'ph:warning-circle-fill'],
+                        'Sedang Pengerjaan' => ['color' => 'primary', 'icon' => 'ph:play-circle-fill'],
+                    ];
+
+                    $currentStatus = $mySelfTask['task_status'] ?? 'Sedang Pengerjaan';
+                    $config = $statusMapping[$currentStatus] ?? ['color' => 'secondary', 'icon' => 'ph:dot-bold'];
+                    ?>
+                    <div class="rounded-3 w-100 d-flex flex-column gap-3 shadow-md border p-2 mt-2 bg-white">
+                        <div class="d-flex gap-3 align-items-center p-3 rounded">
+                            <iconify-icon icon="icon-park-outline:dot" class="text-warning fs-3"></iconify-icon>
+                            <div class="d-flex flex-column gap-2">
+                                <span class="custom-small-font fw-bold">Instruksi: <?= esc($mySelfTask['task_instruction'] ?: 'Mengerjakan tugas tiket secara mandiri.') ?></span>
+                                <div class="d-flex gap-2">
+                                    <span style="font-size: .65rem;" class="text-danger bg-danger bg-opacity-10 px-3 py-1 fw-bold text-center rounded-pill text-uppercase">
+                                        <iconify-icon icon="ph:user-bold" class="me-1"></iconify-icon>
+                                        <?= esc($mySelfTask['received_by']) ?>
+                                    </span>
+                                    <span style="font-size: .65rem;" class="text-<?= $config['color'] ?> bg-<?= $config['color'] ?> bg-opacity-10 px-3 py-1 fw-bold text-center rounded-pill text-uppercase">
+                                        <iconify-icon icon="<?= $config['icon'] ?>" class="me-1"></iconify-icon>
+                                        <?= esc($currentStatus) ?>
+                                    </span>
+                                </div>
+                                
+                                <?php if ($mySelfTask['task_status'] === 'Revisi' && !empty($mySelfTask['catatan_revisi'])): ?>
+                                    <div class="mt-2 p-2 rounded border-start border-4 border-danger bg-danger bg-opacity-10 shadow-sm">
+                                        <div class="d-flex align-items-center gap-1 mb-1 text-danger">
+                                            <iconify-icon icon="ph:warning-circle-bold" style="font-size: .8rem;"></iconify-icon>
+                                            <span class="fw-bold text-uppercase" style="font-size: .6rem; letter-spacing: 1px;">Catatan Revisi</span>
+                                        </div>
+                                        <p class="m-0 custom-small-font fw-bold text-dark">
+                                            "<?= esc($mySelfTask['catatan_revisi']) ?>"
+                                        </p>
+                                    </div>
+                                <?php endif; ?>
+
+                                <?php if (!empty($mySelfTask['catatan_laporan_penyelesaian'])): ?>
+                                    <div class="bg-light p-2 rounded-2 border-start border-4 border-<?= $config['color'] ?> mt-2 shadow-sm">
+                                        <div class="d-flex align-items-center gap-1 mb-1 text-muted">
+                                            <iconify-icon icon="ph:notebook-bold" style="font-size: .8rem;"></iconify-icon>
+                                            <span class="fw-bold text-uppercase" style="font-size: .6rem; letter-spacing: 1px;">Laporan Penyelesaian</span>
+                                        </div>
+                                        <p class="m-0 custom-small-font fst-italic text-dark">
+                                            "<?= esc($mySelfTask['catatan_laporan_penyelesaian']) ?>"
+                                        </p>
+                                        <?php if (!empty($mySelfTask['taks_dokumen'])): ?>
+                                            <hr class="my-2">
+                                            <a href="<?= base_url('tiket/file/admin/' . $mySelfTask['taks_dokumen']) ?>" target="_blank" class="py-1 px-3 rounded-2 border custom-small-font bg-white text-decoration-none text-dark d-inline-block">
+                                                <iconify-icon icon="hugeicons:file-01" class="text-danger"></iconify-icon>
+                                                <?= esc($mySelfTask['original_task_name'] ?: $mySelfTask['taks_dokumen']) ?>
+                                            </a>
+                                        <?php endif; ?>
+                                        <div class="d-flex flex-wrap gap-2 mt-2" style="font-size: 0.6rem;">
+                                            <span class="text-muted"><iconify-icon icon="ph:check-circle-fill" class="text-success"></iconify-icon> Selesai: <?= format_datetime_indo($mySelfTask['completed_at']) ?></span>
+                                            <span class="text-muted"><iconify-icon icon="ph:timer-bold" class="text-primary"></iconify-icon> Durasi: <?= format_duration($mySelfTask['started_at'], $mySelfTask['completed_at']) ?></span>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+
+                        <?php if ($mySelfTask['task_status'] !== 'Selesai'): ?>
+                            <div id="containerBtnSelesaikan" class="d-flex align-items-center justify-content-end flex-grow-1 p-2">
+                                <button id="btnSelesaikanTugas" type="button" class="btn btn-danger text-uppercase custom-small-font fw-medium py-2 px-4 me-3">Selesaikan Tugas</button>
+                            </div>
+
+                            <div id="wrapperPenyelesaian" class="smooth-collapse">
+                                <div class="smooth-collapse-inner">
+                                    <div id="formPenyelesaianTugas" class="bg-light flex-grow-1 p-3 rounded border border-2 mt-3 mx-1 mb-1">
+                                        <div class="row align-items-center">
+                                            <div class="col">
+                                                <p class="custom-small-font fw-bold m-0">Form penyelesaian tugas</p>
+                                            </div>
+                                            <div class="col-auto">
+                                                <p class="text-danger fw-bold m-0" style="font-size: .7rem;">* wajib diisi</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="mt-4">
+                                            <textarea class="form-control" rows="4" placeholder="Tuliskan detail pekerjaan yang telah Anda selesaikan..."></textarea>
+                                        </div>
+
+                                        <div class="mt-4 d-flex flex-wrap gap-2">
+                                            <div class="">
+                                                <input type="file" id="uploadBukti" class="d-none">
+                                                <label for="uploadBukti" class="border border-2 rounded bg-light d-flex align-items-center justify-content-center text-center fw-bold text-secondary p-1" style="width:160px;cursor:pointer;">
+                                                    <span class="custom-text">UNGGAH BUKTI (OPSIONAL)</span>
+                                                </label>
+                                                <p id="fileName" class="upload-filename custom-text text-center m-0"></p>
+                                            </div>
+
+                                            <div class="w-100 mt-2 px-1">
+                                                <div class="form-check form-switch d-flex align-items-center gap-3 p-0">
+                                                    <input class="form-check-input ms-0" type="checkbox" role="switch" id="isDownloadable" checked style="width: 2.5rem; height: 1.25rem; cursor: pointer;">
+                                                    <div class="d-flex flex-column">
+                                                        <label class="form-check-label fw-bold custom-small-font mb-0" for="isDownloadable" style="cursor: pointer;">Izinkan pemohon mengunduh file ini</label>
+                                                        <small class="text-muted custom-text" style="font-size: 0.65rem;">Nonaktifkan jika file hanya untuk internal</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <button class="flex-fill btn btn-success fw-bold custom-small-font" type="button" id="btnKirimLaporan">Kirim laporan</button>
+                                            <button type="button" id="btnBatalPenyelesaian" class="flex-fill btn btn-light border fw-bold custom-small-font">Batal</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                <?php elseif (!$sudahSelesaiKaur && !$semuaSelesai): ?>
+                    <!-- Tampilan Delegasi (Existing) -->
                     <div class="p-4 bg-light rounded-3 w-100 d-flex gap-3 flex-column shadow-md mt-2 border">
                         <p class="m-0 fw-medium custom-text">delegasi penugasan staff</p>
                         <div class="d-flex gap-2 flex-wrap">
-                            <?php if (!empty($staff)): 
+                            <?php if (!empty($staff)):
                                 // Ambil daftar NIP staf yang sudah ditugaskan
-                                $assignedNips = array_column($taskStaffOnKaur, 'nip_staff');
+                                $assignedNips = array_column($taskStaffOnKaur, 'nip_receive_task');
                                 $availableStaff = array_filter($staff, fn($stf) => !in_array($stf['nip_staff'], $assignedNips));
                             ?>
                                 <?php if (!empty($availableStaff)): ?>
@@ -102,6 +251,7 @@ $semuaSelesai = !empty($taskStaffOnKaur) && count(array_filter($taskStaffOnKaur,
 
                 <?php if (!empty($taskStaffOnKaur)): ?>
                     <?php foreach ($taskStaffOnKaur as $task): ?>
+                        <?php if ((int)$task['is_acc_from_kaur'] === 1) continue; ?>
                         <?php if ($task['task_status'] === 'Menunggu Approve' || $task['task_status'] === 'Selesai'): ?>
                             <!-- ini akan muncul jika staff telah mengerjakan dan menyerahkan tugas -->
                             <div class="p-4 w-100 d-flex gap-3 align-items-center shadow-sm p-3 my-4 rounded flex-grow-1 justify-content-between border">
@@ -117,19 +267,19 @@ $semuaSelesai = !empty($taskStaffOnKaur) && count(array_filter($taskStaffOnKaur,
                                                 <iconify-icon icon="ph:pencil-simple-line-bold"></iconify-icon>
                                             </button>
                                         </div>
-                                        <p style="font-size: .7rem;" class="text-danger bg-danger bg-opacity-10 px-2 py-1 fw-bold text-center rounded m-0 w-50"><?= esc($task['assign_task_to_staff']) ?></p>
-                                        
+                                        <p style="font-size: .7rem;" class="text-danger bg-danger bg-opacity-10 px-2 py-1 fw-bold text-center rounded m-0 w-50"><?= esc($task['received_by']) ?></p>
+
                                         <?php if (($task['task_status'] ?? '') === 'Selesai'): ?>
-                                        <div class="d-flex flex-wrap gap-2 my-2">
-                                            <span class="custom-text text-muted small d-flex align-items-center gap-1" style="font-size: 0.6rem;">
-                                                <iconify-icon icon="ph:clock-bold"></iconify-icon>
-                                                Selesai: <?= format_datetime_indo($task['completed_at']) ?>
-                                            </span>
-                                            <span class="custom-text text-muted small d-flex align-items-center gap-1" style="font-size: 0.6rem;">
-                                                <iconify-icon icon="ph:timer-bold" class="text-primary"></iconify-icon>
-                                                Durasi: <?= format_duration($task['started_at'], $task['completed_at']) ?>
-                                            </span>
-                                        </div>
+                                            <div class="d-flex flex-wrap gap-2 my-2">
+                                                <span class="custom-text text-muted small d-flex align-items-center gap-1" style="font-size: 0.6rem;">
+                                                    <iconify-icon icon="ph:clock-bold"></iconify-icon>
+                                                    Selesai: <?= format_datetime_indo($task['completed_at']) ?>
+                                                </span>
+                                                <span class="custom-text text-muted small d-flex align-items-center gap-1" style="font-size: 0.6rem;">
+                                                    <iconify-icon icon="ph:timer-bold" class="text-primary"></iconify-icon>
+                                                    Durasi: <?= format_duration($task['started_at'], $task['completed_at']) ?>
+                                                </span>
+                                            </div>
                                         <?php endif; ?>
 
                                         <div class="bg-light p-3 rounded border" style="min-width: 300px;">
@@ -139,10 +289,17 @@ $semuaSelesai = !empty($taskStaffOnKaur) && count(array_filter($taskStaffOnKaur,
                                                 <hr>
                                                 <a href="<?= base_url('tiket/file/admin/' . $task['taks_dokumen']) ?>" target="_blank" class="py-2 px-4 rounded-2 border custom-small-font bg-white text-decoration-none text-dark d-inline-block">
                                                     <iconify-icon icon="hugeicons:file-01" class="text-danger"></iconify-icon>
-                                                    <?= esc($task['taks_dokumen']) ?>
+                                                    <?= esc($task['original_task_name'] ?: $task['taks_dokumen']) ?>
                                                 </a>
                                             <?php endif; ?>
                                         </div>
+
+                                        <?php if (($task['task_status'] ?? '') === 'Revisi' && !empty($task['catatan_revisi'])): ?>
+                                            <div class="mt-2 p-3 rounded border border-warning bg-warning bg-opacity-10">
+                                                <p class="custom-text fw-bold text-warning mb-1">CATATAN REVISI:</p>
+                                                <p class="custom-small-font fw-medium mb-0 fst-italic">"<?= esc($task['catatan_revisi']) ?>"</p>
+                                            </div>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
 
@@ -167,7 +324,7 @@ $semuaSelesai = !empty($taskStaffOnKaur) && count(array_filter($taskStaffOnKaur,
                                             <iconify-icon icon="ph:pencil-simple-line-bold"></iconify-icon>
                                         </button>
                                     </div>
-                                    <span style="font-size: .7rem;" class="text-danger bg-danger bg-opacity-10 px-2 py-1 fw-bold text-center rounded"><?= esc($task['assign_task_to_staff']) ?></span>
+                                    <span style="font-size: .7rem;" class="text-danger bg-danger bg-opacity-10 px-2 py-1 fw-bold text-center rounded"><?= esc($task['received_by']) ?></span>
                                 </div>
                             </div>
                         <?php endif; ?>
@@ -188,10 +345,10 @@ $semuaSelesai = !empty($taskStaffOnKaur) && count(array_filter($taskStaffOnKaur,
 </div>
 <?php if (in_array($detail['tiket_status'], ['Waiting', 'Open', 'In Progress', 'Closed'])): ?>
     <div class="d-flex align-items-center gap-3">
-    <div class="timeline-icon-box <?= $detail['tiket_status'] === 'Closed' ? 'bg-success' : ($semuaSelesai ? 'bg-danger' : 'bg-secondary') ?> text-white">
-        <span class="step-num">4</span>
-        <iconify-icon icon="ph:flow-arrow"></iconify-icon>
-    </div>
+        <div class="timeline-icon-box <?= $detail['tiket_status'] === 'Closed' ? 'bg-success' : ($semuaSelesai ? 'bg-danger' : 'bg-secondary') ?> text-white">
+            <span class="step-num">4</span>
+            <iconify-icon icon="ph:flow-arrow"></iconify-icon>
+        </div>
         <div class="flex-grow-1 gap-2 d-flex flex-column">
             <p class="m-0 fw-bold custom-small-font">konfirmasi penyelesaian</p>
         </div>

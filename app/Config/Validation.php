@@ -91,7 +91,7 @@ class Validation extends BaseConfig
             'label' => 'Instruksi Tugas',
             'rules' => 'required|string|min_length[3]'
         ],
-        'assign_task_to_staff.*' => [
+        'received_by.*' => [
             'label' => 'Staff',
             'rules' => 'required|string'
         ],

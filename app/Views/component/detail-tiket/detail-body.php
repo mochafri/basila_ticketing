@@ -30,11 +30,10 @@
             <?php $step += 3; ?>
         <?php endif; ?>
 
-
         <!-- <p>-------------------------------end komponen bu fira-----------</p> -->
         <!-- status 3 -->
         <!-- <p>-------------------------------komponen pak bagas/bu farida (approval_kaur.php)--------------------------</p> -->
-        <?php if (session('role_name') === 'KEPALA URUSAN ADMINISTRASI AKADEMIK'): ?>
+        <?php if (session('role_name') === 'KEPALA URUSAN ADMINISTRASI AKADEMIK' || session('role_name') === 'ADMIN DATA MAHASISWA FAKULTAS'): ?>
             <?= $this->include('component/detail-tiket/approval_kaur', [
                 'staff' => $staff,
                 'detail' => $detail,

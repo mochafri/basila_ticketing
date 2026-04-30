@@ -51,7 +51,7 @@ class TicketSeeder extends Seeder
                 'original_dokumen_name' => 'printer_log.docx',
                 'is_escalated' => false,
                 'approve_by' => null,
-                'tiket_status' => 'In Progress',
+                'tiket_status' => 'Open',
                 'catatan' => null,
                 'created_at' => Time::now()->subHours(10)->toDateTimeString(),
                 'updated_at' => Time::now()->subHours(10)->toDateTimeString(),
@@ -83,7 +83,7 @@ class TicketSeeder extends Seeder
                 'original_dokumen_name' => 'sk_bem.pdf',
                 'is_escalated' => false,
                 'approve_by' => null,
-                'tiket_status' => 'Closed',
+                'tiket_status' => 'Open',
                 'catatan' => null,
                 'created_at' => Time::now()->toDateTimeString(),
                 'updated_at' => Time::now()->toDateTimeString(),
@@ -92,7 +92,7 @@ class TicketSeeder extends Seeder
             ]
         ];
 
-        // Tambahkan looping untuk generate 25 tiket tambahan
+        # Tambahkan looping untuk generate 25 tiket tambahan
         $statuses = ['Waiting', 'Open', 'In Progress', 'Closed', 'Rejected'];
         $categories = [
             1 => [1, 2],

@@ -17,7 +17,7 @@
             $config = $statusMapping[$currentStatus] ?? ['color' => 'secondary', 'icon' => 'ph:dot-bold'];
             ?>
             <div class="flex-grow-1">
-                <p class="m-0 fw-bold custom-small-font text-uppercase">penugasan : <?= esc($taskStaff['assign_task_to_staff']) ?></p>
+                <p class="m-0 fw-bold custom-small-font text-uppercase">penugasan : <?= esc($taskStaff['received_by']) ?></p>
                 <div class="d-flex flex-wrap gap-2 mt-1">
                     <?php if ($taskStaff['task_status'] === 'Selesai'): ?>
                         <span class="custom-text text-muted small d-flex align-items-center gap-1">
@@ -44,7 +44,7 @@
                         <div class="d-flex gap-2">
                             <span style="font-size: .65rem;" class="text-danger bg-danger bg-opacity-10 px-3 py-1 fw-bold text-center rounded-pill text-uppercase">
                                 <iconify-icon icon="ph:user-bold" class="me-1"></iconify-icon>
-                                <?= esc($taskStaff['assign_task_to_staff']) ?>
+                                <?= esc($taskStaff['received_by']) ?>
                             </span>
                             <span style="font-size: .65rem;" class="text-<?= $config['color'] ?> bg-<?= $config['color'] ?> bg-opacity-10 px-3 py-1 fw-bold text-center rounded-pill text-uppercase">
                                 <iconify-icon icon="<?= $config['icon'] ?>" class="me-1"></iconify-icon>
@@ -59,6 +59,18 @@
                                 </div>
                                 <p class="m-0 custom-small-font fst-italic text-dark">
                                     "<?= esc($taskStaff['catatan_laporan_penyelesaian']) ?>"
+                                </p>
+                            </div>
+                        <?php endif; ?>
+
+                        <?php if ($taskStaff['task_status'] === 'Revisi' && !empty($taskStaff['catatan_revisi'])): ?>
+                            <div class="mt-2 p-2 rounded border-start border-4 border-danger bg-danger bg-opacity-10 shadow-sm">
+                                <div class="d-flex align-items-center gap-1 mb-1 text-danger">
+                                    <iconify-icon icon="ph:warning-circle-bold" style="font-size: .8rem;"></iconify-icon>
+                                    <span class="fw-bold text-uppercase" style="font-size: .6rem; letter-spacing: 1px;">Catatan Revisi</span>
+                                </div>
+                                <p class="m-0 custom-small-font fw-bold text-dark">
+                                    "<?= esc($taskStaff['catatan_revisi']) ?>"
                                 </p>
                             </div>
                         <?php endif; ?>

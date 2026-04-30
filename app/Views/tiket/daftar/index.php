@@ -83,6 +83,7 @@
             <?php if (
                 session('role_name') === 'SUPERADMIN' ||
                 session('role_name') === 'KEPALA URUSAN ADMINISTRASI AKADEMIK' ||
+                session('role_name') === 'ADMIN DATA MAHASISWA FAKULTAS' ||
                 session('role_name') === 'PEGAWAI' ||
                 session('role_name') === 'ADMIN AKADEMIK' ||
                 session('role_name') === 'BAA'

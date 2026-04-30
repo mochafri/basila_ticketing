@@ -73,6 +73,8 @@ $routes->post('/upload-task/(:num)', 'TicketController::uploadTask/$1');
 $routes->post('/verifikasi-tugas/(:num)', 'TicketController::verifikasiTask/$1');
 $routes->post('/revisi-tugas/(:num)', 'TicketController::revisiTask/$1');
 $routes->post('/selesaikan-tugas-kaur/(:num)', 'TicketController::selesaikanTugasKaur/$1');
+$routes->post('/accept-task/(:num)', 'TicketController::acceptTask/$1');
+$routes->post('/add-log-note/(:num)', 'TicketController::addLogNote/$1');
 
 # End point layanan
 $routes->post('/layanan/(:num)', 'MasterController:getLayanan/$1');

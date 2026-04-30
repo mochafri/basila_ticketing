@@ -178,6 +178,14 @@ class TicketController extends BaseController
         return response()->setStatusCode($statusCode)->setJSON($result);
     }
 
+    public function acceptTask($slug)
+    {
+        $nip = session('user_identifier');
+        $result = $this->kaurService->acceptTask($slug, $nip);
+        $statusCode = $result['status'] === 'success' ? 200 : 422;
+        return response()->setStatusCode($statusCode)->setJSON($result);
+    }
+
     public function assignTiket($slug)
     {
         $data = $this->request->getJSON(true);
@@ -226,7 +234,10 @@ class TicketController extends BaseController
 
     public function revisiTask($taskId)
     {
-        $result = $this->kaurService->revisiTask($taskId);
+        $payload = $this->request->getJSON(true);
+        $catatan = $payload['catatan'] ?? 'Mohon revisi pekerjaan Anda.';
+
+        $result = $this->kaurService->revisiTask($taskId, $catatan);
         $statusCode = $result['status'] === 'success' ? 200 : 500;
 
         return $this->response->setStatusCode($statusCode)->setJSON($result);
@@ -274,7 +285,7 @@ class TicketController extends BaseController
         $catatan = $payload['catatan'] ?? null;
 
         if (!$id) {
-             return $this->response->setStatusCode(400)->setJSON([
+            return $this->response->setStatusCode(400)->setJSON([
                 'status' => 'fail',
                 'message' => 'ID penugasan tidak ditemukan'
             ]);
@@ -309,5 +320,31 @@ class TicketController extends BaseController
         $statusCode = $result['status'] === 'success' ? 200 : 400;
 
         return $this->response->setStatusCode($statusCode)->setJSON($result);
+    }
+    public function addLogNote($id)
+    {
+        $data = $this->request->getJSON(true);
+        $note = $data['note'] ?? '';
+
+        if (empty($note)) {
+            return $this->response->setStatusCode(400)->setJSON([
+                'status' => 'fail',
+                'message' => 'Catatan tidak boleh kosong'
+            ]);
+        }
+
+        $result = $this->kaurService->addLogNote($id, $note);
+
+        if ($result) {
+            return $this->response->setStatusCode(200)->setJSON([
+                'status' => 'success',
+                'message' => 'Catatan log berhasil ditambahkan'
+            ]);
+        }
+
+        return $this->response->setStatusCode(500)->setJSON([
+            'status' => 'fail',
+            'message' => 'Gagal menambahkan catatan log'
+        ]);
     }
 }

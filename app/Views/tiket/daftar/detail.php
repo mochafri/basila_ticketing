@@ -30,7 +30,7 @@
 <?php elseif ($role === 'BAA'): ?>
     <script type="module" src="<?= base_url('assets/js/approveEskalasi.js') ?>"></script>
     <script type="module" src="<?= base_url('assets/js/approveKabag.js') ?>"></script>
-<?php elseif ($role === 'KEPALA URUSAN ADMINISTRASI AKADEMIK'): ?>
+<?php elseif ($role === 'KEPALA URUSAN ADMINISTRASI AKADEMIK' || $role === 'ADMIN DATA MAHASISWA FAKULTAS'): ?>
     <script type="module" src="<?= base_url('assets/js/approveKaur.js') ?>"></script>
 <?php elseif (in_array($role, ['PEGAWAI', 'ADMIN AKADEMIK'])): ?>
     <script type="module" src="<?= base_url('assets/js/staff.js') ?>"></script>

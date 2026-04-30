@@ -133,8 +133,10 @@
                                     <span class="custom-text text-muted" style="font-size: 0.65rem;">
                                         ⏱️ <?= format_duration($kr['started_at'], $kr['completed_at']) ?>
                                     </span>
-                                <?php elseif ($hasStaffProgress): ?>
-                                    <span class="badge bg-danger-subtle text-danger border border-danger me-2" style="font-size: 0.6rem;">SEDANG DIKERJAKAN STAFF</span>
+                                <?php elseif ($hasStaffProgress): 
+                                    $isMandiri = !empty(array_filter($kaurStaffTasks, fn($t) => (int)($t['is_acc_from_kaur'] ?? 0) === 1));
+                                ?>
+                                    <span class="badge bg-danger-subtle text-danger border border-danger me-2" style="font-size: 0.6rem;"><?= $isMandiri ? 'DIKERJAKAN KAUR' : 'SEDANG DIKERJAKAN STAFF' ?></span>
                                 <?php else: ?>
                                     <span class="badge bg-secondary-subtle text-secondary border border-secondary me-2" style="font-size: 0.6rem;">MENUNGGU PROSES KAUR</span>
                                 <?php endif; ?>
@@ -147,7 +149,7 @@
                                             <div class="d-flex align-items-center gap-2">
                                                 <div class="<?= $tsk['task_status'] === 'Selesai' ? 'text-success' : 'text-danger' ?> fw-bold text-uppercase" style="font-size: 0.7rem;">
                                                     <iconify-icon icon="<?= $tsk['task_status'] === 'Selesai' ? 'ph:check-circle-bold' : 'ph:clock-countdown-bold' ?>"></iconify-icon>
-                                                    <?= esc($tsk['assign_task_to_staff']) ?>
+                                                    <?= esc($tsk['received_by']) ?>
                                                 </div>
                                                 <?php if ($tsk['task_status'] === 'Selesai'): ?>
                                                     <span class="text-muted" style="font-size: 0.6rem;">(⏱️ <?= format_duration($tsk['started_at'], $tsk['completed_at']) ?>)</span>
@@ -161,7 +163,7 @@
                                                     <a href="<?= base_url('/tiket/file/admin/' . $tsk['taks_dokumen']) ?>" target="_blank" class="text-decoration-none fw-bold small text-info"><iconify-icon icon="ph:paperclip-bold" class="align-middle"></iconify-icon> Dokumen</a>
                                                 <?php endif; ?>
                                             <?php else: ?>
-                                                <p class="text-muted m-0 small mt-1 italic opacity-75">Staf sedang mengerjakan instruksi kaur...</p>
+                                                <p class="text-muted m-0 small mt-1 italic opacity-75"><?= (int)($tsk['is_acc_from_kaur'] ?? 0) === 1 ? 'Kaur mengambil alih tugas tiket.' : 'Staf sedang mengerjakan instruksi kaur...' ?></p>
                                             <?php endif; ?>
                                         </div>
                                     <?php endforeach; ?>

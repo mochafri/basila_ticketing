@@ -62,16 +62,16 @@ class KaurService
         $staff_on_skip = [];
 
         $insertedCount = 0;
-        foreach ($data['assign_task_to_staff'] as $index => $staffName) {
+        foreach ($data['received_by'] as $index => $staffName) {
             $nip = $data['user_id'][$index] ?? null;
 
             if (!$nip)
                 continue;
 
-            // Cek apakah staff sudah ditugaskan sebelumnya untuk tiket ini
+            # Cek apakah staff sudah ditugaskan sebelumnya untuk tiket ini
             $existing = $this->assignTaskStaff
                 ->where('fk_assign_to_kaur', $idTiket['id'])
-                ->where('nip_staff', $nip)
+                ->where('nip_receive_task', $nip)
                 ->first();
 
             if ($existing) {
@@ -82,8 +82,8 @@ class KaurService
 
             $this->assignTaskStaff->insert([
                 'task_instruction' => $data['task_instruction'],
-                'assign_task_to_staff' => $staffName,
-                'nip_staff' => $nip,
+                'received_by' => $staffName,
+                'nip_receive_task' => $nip,
                 'fk_assign_to_kaur' => $idTiket['id'],
                 'started_at' => date('Y-m-d H:i:s')
             ]);
@@ -106,9 +106,11 @@ class KaurService
             ];
         }
 
-        $this->tiketModel->update($idTiket['fk_tiket'], [
-            'tiket_status' => 'In Progress'
-        ]);
+        $this->tiketModel->builder()
+            ->where('id', $idTiket['fk_tiket'])
+            ->update([
+                'tiket_status' => 'In Progress'
+            ]);
 
         $db->transComplete();
 
@@ -119,6 +121,72 @@ class KaurService
         ] : [
             'status' => 'failed',
             'message' => 'Gagal assign ke staff'
+        ];
+    }
+
+    # Assign pengerjaan tiket ke diri sendiri
+    public function acceptTask($idTiket, $nip)
+    {
+        $db = \Config\Database::connect();
+
+        $kaur = $this->assignTiket
+            ->select('id,fk_tiket,nip_kaur,kaur_name')
+            ->where('fk_tiket', $idTiket)
+            ->where('nip_kaur', $nip)
+            ->first();
+
+        if (!$kaur) {
+            return [
+                'status' => 'fail',
+                'message' => 'User tidak ditemukan'
+            ];
+        }
+
+        $db->transStart();
+
+        $update = $this->assignTiket->update($kaur['id'], [
+            'flag' => 'Progress',
+            'started_at' => date('Y-m-d H:i:s')
+        ]);
+
+        $this->tiketModel->builder()
+            ->where('id', $kaur['fk_tiket'])
+            ->update([
+                'tiket_status' => 'In Progress'
+            ]);
+
+        $this->assignTaskStaff->insert([
+            'task_instruction' => 'Kaur mengambil alih tugas.',
+            'received_by' => $kaur['kaur_name'],
+            'nip_receive_task' => $kaur['nip_kaur'],
+            'fk_assign_to_kaur' => $kaur['id'],
+            'started_at' => date('Y-m-d H:i:s'),
+            'is_acc_from_kaur' => true
+        ]);
+
+        if (!$update) {
+            $db->transRollback();
+            return [
+                'status' => 'fail',
+                'message' => 'Gagal update penugasan'
+            ];
+        }
+
+        $this->riwayatAktifitas->insert([
+            'activity_title' => 'Kaur mengambil tugas tiket',
+            'message' => 'Kepala Urusan mengambil tugas tiket.',
+            'created_by' => 'Kepala Urusan',
+            'fk_tiket' => $idTiket,
+        ]);
+
+        $db->transComplete();
+
+        return $db->transStatus() ? [
+            'status' => 'success',
+            'message' => 'Berhasil menerima tugas'
+        ] : [
+            'status' => 'fail',
+            'message' => 'Gagal menerima tugas'
         ];
     }
 
@@ -155,8 +223,8 @@ class KaurService
         }
 
         $this->riwayatAktifitas->insert([
-            'activity_title' => 'Penugasan',
-            'message' => 'Kepala Urusan menerima penugasan.',
+            'activity_title' => 'Delegasi penugasan ke staff',
+            'message' => 'Kepala Urusan menerima penugasan dan akan mendelegasi tugas kepada staff.',
             'created_by' => 'Kepala Urusan',
             'fk_tiket' => $idTiket,
         ]);
@@ -176,14 +244,14 @@ class KaurService
     {
         return $this->assignTaskStaff
             ->select('
-                assign_to_staff.id, assign_to_staff.task_instruction, assign_to_staff.task_status, 
-                assign_to_staff.taks_dokumen, assign_to_staff.catatan_laporan_penyelesaian,
-                assign_to_staff.assign_task_to_staff, assign_to_staff.nip_staff,assign_to_staff.fk_assign_to_kaur, assign_to_staff.is_downloadable,
-                assign_to_staff.started_at, assign_to_staff.completed_at,
+                tiket_on_progress.id, tiket_on_progress.task_instruction, tiket_on_progress.task_status, 
+                tiket_on_progress.taks_dokumen, tiket_on_progress.catatan_laporan_penyelesaian,
+                tiket_on_progress.received_by, tiket_on_progress.nip_receive_task,tiket_on_progress.fk_assign_to_kaur, tiket_on_progress.is_downloadable,
+                tiket_on_progress.started_at, tiket_on_progress.completed_at, tiket_on_progress.original_task_name, tiket_on_progress.catatan_revisi, tiket_on_progress.is_acc_from_kaur,
                 assign_to_kaur.kaur_name, assign_to_kaur.fk_tiket as id_tiket,
                 tikets.judul_permohonan, tikets.tiket_status
             ')
-            ->join('assign_to_kaur', 'assign_to_kaur.id = assign_to_staff.fk_assign_to_kaur')
+            ->join('assign_to_kaur', 'assign_to_kaur.id = tiket_on_progress.fk_assign_to_kaur')
             ->join('tikets', 'tikets.id = assign_to_kaur.fk_tiket')
             ->where('assign_to_kaur.fk_tiket', $idTiket)
             ->where('assign_to_kaur.nip_kaur', $nipKaur)
@@ -194,14 +262,14 @@ class KaurService
     {
         return $this->assignTaskStaff
             ->select('
-                assign_to_staff.id, assign_to_staff.task_instruction, assign_to_staff.task_status, assign_to_staff.is_downloadable,
-                assign_to_staff.taks_dokumen, assign_to_staff.catatan_laporan_penyelesaian,
-                assign_to_staff.assign_task_to_staff,assign_to_staff.fk_assign_to_kaur,
-                assign_to_staff.started_at, assign_to_staff.completed_at,
+                tiket_on_progress.id, tiket_on_progress.task_instruction, tiket_on_progress.task_status, tiket_on_progress.is_downloadable,
+                tiket_on_progress.taks_dokumen, tiket_on_progress.catatan_laporan_penyelesaian,
+                tiket_on_progress.received_by,tiket_on_progress.fk_assign_to_kaur,
+                tiket_on_progress.started_at, tiket_on_progress.completed_at, tiket_on_progress.original_task_name, tiket_on_progress.catatan_revisi, tiket_on_progress.is_acc_from_kaur,
                 assign_to_kaur.kaur_name, assign_to_kaur.fk_tiket as id_tiket,
                 tikets.judul_permohonan, tikets.tiket_status
             ')
-            ->join('assign_to_kaur', 'assign_to_kaur.id = assign_to_staff.fk_assign_to_kaur')
+            ->join('assign_to_kaur', 'assign_to_kaur.id = tiket_on_progress.fk_assign_to_kaur')
             ->join('tikets', 'tikets.id = assign_to_kaur.fk_tiket')
             ->where('assign_to_kaur.fk_tiket', $idTiket)
             ->findAll();
@@ -214,13 +282,15 @@ class KaurService
         $db->transStart();
 
         $task = $this->assignTaskStaff
-            ->join('assign_to_kaur', 'assign_to_kaur.id = assign_to_staff.fk_assign_to_kaur')
-            ->select('assign_to_staff.id, assign_to_kaur.fk_tiket')
+            ->join('assign_to_kaur', 'assign_to_kaur.id = tiket_on_progress.fk_assign_to_kaur')
+            ->select('tiket_on_progress.id, assign_to_kaur.fk_tiket')
             ->find($taskId);
 
-        $update = $this->assignTaskStaff->update($taskId, [
-            'task_status' => 'Selesai'
-        ]);
+        $update = $this->assignTaskStaff->builder()
+            ->where('id', $taskId)
+            ->update([
+                'task_status' => 'Selesai'
+            ]);
 
         if (!$update) {
             $db->transRollback();
@@ -248,13 +318,13 @@ class KaurService
         ];
     }
 
-    public function revisiTask($taskId)
+    public function revisiTask($taskId, $catatan)
     {
         $db = \Config\Database::connect();
 
         $task = $this->assignTaskStaff
-            ->join('assign_to_kaur', 'assign_to_kaur.id = assign_to_staff.fk_assign_to_kaur')
-            ->select('assign_to_staff.id, assign_to_kaur.fk_tiket')
+            ->join('assign_to_kaur', 'assign_to_kaur.id = tiket_on_progress.fk_assign_to_kaur')
+            ->select('tiket_on_progress.id, assign_to_kaur.fk_tiket')
             ->find($taskId);
 
         if (!$task) {
@@ -266,9 +336,12 @@ class KaurService
 
         $db->transStart();
 
-        $update = $this->assignTaskStaff->update($taskId, [
-            'task_status' => 'Revisi'
-        ]);
+        $update = $this->assignTaskStaff->builder()
+            ->where('id', $taskId)
+            ->update([
+                'task_status' => 'Revisi',
+                'catatan_revisi' => $catatan
+            ]);
 
         if (!$update) {
             $db->transRollback();
@@ -280,7 +353,7 @@ class KaurService
 
         $this->riwayatAktifitas->insert([
             'activity_title' => 'Revisi Tugas',
-            'message' => 'Tugas dikembalikan untuk direvisi oleh Kepala Urusan.',
+            'message' => 'Tugas dikembalikan untuk direvisi oleh Kepala Urusan dengan catatan: ' . $catatan,
             'created_by' => 'Kepala Urusan',
             'fk_tiket' => $task['fk_tiket'],
         ]);
@@ -373,8 +446,8 @@ class KaurService
 
         # Untuk mendapatkan id tiket 
         $task = $this->assignTaskStaff
-            ->join('assign_to_kaur', 'assign_to_kaur.id = assign_to_staff.fk_assign_to_kaur')
-            ->select('assign_to_staff.id, assign_to_kaur.fk_tiket')
+            ->join('assign_to_kaur', 'assign_to_kaur.id = tiket_on_progress.fk_assign_to_kaur')
+            ->select('tiket_on_progress.id, assign_to_kaur.fk_tiket')
             ->find($taskId);
 
         $db->transStart();
@@ -407,5 +480,15 @@ class KaurService
             'status' => 'fail',
             'message' => 'Gagal mengubah instruksi.'
         ];
+    }
+    public function addLogNote($idTiket, $note)
+    {
+        return $this->riwayatAktifitas->insert([
+            'activity_title' => 'Catatan Progress (Kaur)',
+            'message' => $note,
+            'created_by' => session('username') ?: 'Kepala Urusan',
+            'created_at' => date('Y-m-d H:i:s'),
+            'fk_tiket' => $idTiket,
+        ]);
     }
 }

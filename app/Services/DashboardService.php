@@ -27,13 +27,13 @@ class DashboardService
 
         // 3. STAFF & MAHASISWA (Pelapor): 
         // - Melihat tiket yang mereka buat sendiri (nip_creator) -> STATUS APA SAJA
-        // - Melihat tiket dimana mereka ditugaskan sebagai staff (nip_staff) -> HANYA JIKA BUKAN WAITING
+        // - Melihat tiket dimana mereka ditugaskan sebagai staff (nip_receive_task) -> HANYA JIKA BUKAN WAITING
         return $query->join('assign_to_kaur', 'assign_to_kaur.fk_tiket = tikets.id', 'left')
-            ->join('assign_to_staff', 'assign_to_staff.fk_assign_to_kaur = assign_to_kaur.id', 'left')
+            ->join('tiket_on_progress', 'tiket_on_progress.fk_assign_to_kaur = assign_to_kaur.id', 'left')
             ->groupStart()
                 ->where('tikets.nip_creator', $nip)
                 ->orGroupStart()
-                    ->where('assign_to_staff.nip_staff', $nip)
+                    ->where('tiket_on_progress.nip_receive_task', $nip)
                     ->where('tikets.tiket_status !=', 'Waiting')
                 ->groupEnd()
             ->groupEnd();
