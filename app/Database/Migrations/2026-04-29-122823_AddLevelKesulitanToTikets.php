@@ -13,7 +13,7 @@ class AddLevelKesulitanToTikets extends Migration
         $fields = [
             'level_kesulitan' => [
                 'type'       => 'ENUM',
-                'constraint' => ['mudah', 'sedang', 'sulit'],
+                'constraint' => ['low', 'medium', 'high'],
                 'null'       => true,
                 'after'      => 'tiket_status'
             ],

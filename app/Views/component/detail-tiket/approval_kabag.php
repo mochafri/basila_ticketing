@@ -29,12 +29,11 @@
                     <p class="m-0 fw-medium custom-text mb-2 text-uppercase">Level Kesulitan Tiket</p>
                     <select id="level_kesulitan" class="form-select p-3 rounded-3 fw-bold text-uppercase custom-small-font border-0 shadow-sm" style="cursor: pointer; background-color: #fff;">
                         <option value="" selected disabled>-- Pilih Level Kesulitan --</option>
-                        <option value="mudah">🟢 Mudah</option>
-                        <option value="sedang">🟡 Sedang</option>
-                        <option value="sulit">🔴 Sulit</option>
+                        <option value="low">🟢 Low</option>
+                        <option value="medium">🟡 Medium</option>
+                        <option value="high">🔴 High</option>
                     </select>
                 </div>
-
                 <div class="d-flex gap-2 flex-wrap mt-4">
                     <button type="button"
                         class="btn btn-approve btn-success flex-fill p-4 text-uppercase fw-bold rounded-4">DELEGASIKAN TUGAS</button>
@@ -184,7 +183,7 @@
     </div>
 <?php endif; ?>
 <div class="d-flex gap-3 w-100">
-    <div class="timeline-icon-box <?= $detail['tiket_status'] === 'Closed' ? 'bg-success' : ($detail['tiket_status'] === 'In Progress' ? 'bg-danger' : 'bg-secondary') ?> text-white">
+<div class="timeline-icon-box <?= $detail['tiket_status'] === 'Closed' ? 'bg-success' : ($detail['tiket_status'] === 'In Progress' ? (in_array('Finish', array_column($kaurByTiketOpen, 'flag')) ? 'bg-danger' : 'bg-secondary') : 'bg-secondary') ?> text-white">
         <span class="step-num"><?php if (!empty($kaurByTiketOpen)): ?>5<?php else: ?>4<?php endif; ?></span>
         <iconify-icon icon="<?= $detail['tiket_status'] === 'Closed' ? 'ph:check-bold' : 'ph:flow-arrow' ?>"></iconify-icon>
     </div>

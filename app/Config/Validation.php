@@ -75,7 +75,7 @@ class Validation extends BaseConfig
         ],
         'level_kesulitan' => [
             'label' => 'Level Kesulitan',
-            'rules' => 'permit_empty|in_list[mudah,sedang,sulit]'
+            'rules' => 'permit_empty|in_list[low,medium,high]'
         ]
     ];
 

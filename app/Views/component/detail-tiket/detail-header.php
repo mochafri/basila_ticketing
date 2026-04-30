@@ -19,9 +19,9 @@
             
             <?php if (!empty($detail['level_kesulitan'])): 
                 $levelColors = [
-                    'mudah' => 'success',
-                    'sedang' => 'warning',
-                    'sulit' => 'danger'
+                    'low' => 'success',
+                    'medium' => 'warning',
+                    'high' => 'danger'
                 ];
                 $lColor = $levelColors[$detail['level_kesulitan']] ?? 'secondary';
             ?>

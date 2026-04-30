@@ -31,9 +31,9 @@ $statusColors = [
                 foreach ($tiket['data'] as $data): 
                     $color = $statusColors[$data['tiket_status']] ?? 'secondary';
                     $levelColor = [
-                        'mudah' => 'success',
-                        'sedang' => 'warning',
-                        'sulit' => 'danger'
+                        'low' => 'success',
+                        'medium' => 'warning',
+                        'high' => 'danger'
                     ][$data['level_kesulitan'] ?? ''] ?? 'secondary';
                 ?>
                     <tr>
