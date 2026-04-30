@@ -81,6 +81,7 @@
             </li>
 
             <!-- MASTER DATA -->
+            <?php if (!in_array(session('role_name'), ['MAHASISWA', 'PEGAWAI', 'ADMIN AKADEMIK'])): ?>
             <li class="mb-2">
 
                 <div class="menu-item side-task p-2 rounded d-flex align-items-center" data-bs-toggle="collapse"
@@ -114,7 +115,9 @@
                 </ul>
 
             </li>
+            <?php endif; ?>
              <!-- LAPORAN -->
+            <?php if (!in_array(session('role_name'), ['MAHASISWA', 'PEGAWAI', 'ADMIN AKADEMIK'])): ?>
             <li class="mb-2">
                 <div class="menu-item side-task p-2 rounded d-flex align-items-center" data-bs-toggle="collapse"
                     data-bs-target="#kelolaLaporan" role="button">
@@ -132,6 +135,7 @@
                     </li>
                 </ul>
             </li>
+            <?php endif; ?>
             <!-- RIWAYAT -->
             <li class="mb-2">
                 <div class="menu-item p-2 rounded d-flex align-items-center gap-2">

@@ -73,9 +73,25 @@ $currentManual = $manualContent[$role] ?? '<p class="text-danger no-transform">P
             <div class="modal-body">
                 <div class="manual-container">
                     <h6 class="manual-heading">Panduan Kerja:</h6>
-                    <div class="no-transform">
                         <?= $currentManual ?>
-                    </div>
+
+                        <div class="manual-section border-top pt-3 mt-3">
+                            <span class="manual-subheading text-uppercase small fw-bold">Keterangan Warna Alur Kerja:</span>
+                            <div class="d-flex flex-column gap-2 mt-2">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div style="width: 12px; height: 12px; border-radius: 50%;" class="bg-success"></div>
+                                    <span class="manual-text m-0">Hijau = Selesai</span>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <div style="width: 12px; height: 12px; border-radius: 50%;" class="bg-danger"></div>
+                                    <span class="manual-text m-0">Merah = Sedang dikerjakan</span>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <div style="width: 12px; height: 12px; border-radius: 50%;" class="bg-secondary"></div>
+                                    <span class="manual-text m-0">Abu-abu = Menunggu tahap sebelumnya</span>
+                                </div>
+                            </div>
+                        </div>
                 </div>
             </div>
             <div class="modal-footer">

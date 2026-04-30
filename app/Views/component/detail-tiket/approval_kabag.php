@@ -126,6 +126,7 @@ if ($hasFinish): ?>
     if ($finishedKaurCount > 0): ?>
         <div class="d-flex gap-3 w-100">
             <div class="timeline-icon-box bg-success text-white">
+                <span class="step-num">4</span>
                 <iconify-icon icon="solar:clipboard-check-bold"></iconify-icon>
             </div>
             <div class="flex-grow-1">
@@ -185,7 +186,7 @@ if ($hasFinish): ?>
 <?php endif; ?>
 <div class="d-flex gap-3 w-100">
     <div class="timeline-icon-box <?= $detail['tiket_status'] === 'Closed' ? 'bg-success' : ($detail['tiket_status'] === 'In Progress' ? 'bg-danger' : 'bg-secondary') ?> text-white">
-        <span class="step-num"><?= ($step ?? 2) + 2 ?></span>
+        <span class="step-num">5</span>
         <iconify-icon icon="<?= $detail['tiket_status'] === 'Closed' ? 'ph:check-bold' : 'ph:flow-arrow' ?>"></iconify-icon>
     </div>
     <div class="flex-grow-1 gap-2 d-flex flex-column">
