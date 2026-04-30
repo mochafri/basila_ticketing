@@ -7,13 +7,22 @@
             <!-- nanti ini pakai pengkondisian sesuai role -->
             <?= $this->include('component/detail-tiket/detail-header', $detail); ?>
             <!-- detail kabag (default) -->
-            <?= $this->include('component/detail-tiket/detail-body', $detail); ?>
+            <?= $this->include('component/detail-tiket/detail-body', [
+                'detail' => $detail,
+                'kaur' => $kaur,
+                'staff' => $staff,
+                'taskStaff' => $taskStaff,
+                'taskStaffOnKaur' => $taskStaffOnKaur,
+                'allTaskStaffOnKaur' => $allTaskStaffOnKaur,
+                'kaurByTiketOpen' => $kaurByTiketOpen,
+                'riwayat' => $riwayat
+            ]); ?>
             <!-- detail kaur 1 (pak bagas) -->
             <!-- detail kaur 2 (pak bagas) -->
              <!-- detail staff (pak bagas) -->
         </div>
         <div class="col-4">
-            <?= $this->include('component/detail-tiket/riwayat', $riwayat); ?>
+            <?= $this->include('component/detail-tiket/riwayat', ['riwayat' => $riwayat, 'detail' => $detail]); ?>
         </div>
     </div>
 </div>

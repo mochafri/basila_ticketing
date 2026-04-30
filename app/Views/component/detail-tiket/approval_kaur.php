@@ -104,8 +104,8 @@ $semuaSelesai = !empty($taskStaffOnKaur) && count(array_filter($taskStaffOnKaur,
                     <?php foreach ($taskStaffOnKaur as $task): ?>
                         <?php if ($task['task_status'] === 'Menunggu Approve' || $task['task_status'] === 'Selesai'): ?>
                             <!-- ini akan muncul jika staff telah mengerjakan dan menyerahkan tugas -->
-                            <div class="p-4 w-100 d-flex gap-3 align-items-center shadow-sm p-3 my-4 rounded flex-grow-1 justify-content-between border">
-                                <div class="d-flex align-items-center gap-3">
+                            <div class="p-3 my-4 rounded border shadow-sm w-100 d-flex flex-column gap-3">
+                                <div class="d-flex align-items-center gap-3 px-2 pt-2">
                                     <iconify-icon icon="<?= $task['task_status'] === 'Selesai' ? 'ph:check-bold' : 'icon-park-outline:dot' ?>" class="<?= $task['task_status'] === 'Selesai' ? 'text-success' : 'text-warning' ?> fs-3"></iconify-icon>
                                     <div class="d-flex flex-column gap-2 flex-grow-1">
                                         <div class="d-flex align-items-center gap-2">
@@ -131,23 +131,63 @@ $semuaSelesai = !empty($taskStaffOnKaur) && count(array_filter($taskStaffOnKaur,
                                             </span>
                                         </div>
                                         <?php endif; ?>
+                                    </div>
+                                </div>
 
-                                        <div class="bg-light p-3 rounded border" style="min-width: 300px;">
-                                            <p class="custom-text fw-medium">laporan penyelesaian staff</p>
-                                            <p class="custom-small-font fw-semibold">"<?= esc($task['catatan_laporan_penyelesaian']) ?: 'Staf telah menyelesaikan tugas.' ?>"</p>
-                                            <?php if (!empty($task['taks_dokumen'])): ?>
-                                                <hr>
-                                                <a href="<?= base_url('tiket/file/admin/' . $task['taks_dokumen']) ?>" target="_blank" class="py-2 px-4 rounded-2 border custom-small-font bg-white text-decoration-none text-dark d-inline-block">
-                                                    <iconify-icon icon="hugeicons:file-01" class="text-danger"></iconify-icon>
-                                                    <?= esc($task['taks_dokumen']) ?>
-                                                </a>
-                                            <?php endif; ?>
+                                <?php 
+                                $workLogs = array_filter($riwayat, fn($r) => $r['activity_title'] === 'Catatan Pekerjaan');
+                                ?>
+                                <?php if (!empty($workLogs)): ?>
+                                    <div class="px-2">
+                                        <div class="table-responsive rounded-3 border bg-white">
+                                            <table class="table table-sm table-hover m-0" style="font-size: 0.7rem;">
+                                                <thead class="bg-light">
+                                                    <tr>
+                                                        <th class="ps-3 py-2 text-uppercase" style="width: 100px;">Waktu</th>
+                                                        <th class="py-2 text-uppercase" style="width: 120px;">Oleh</th>
+                                                        <th class="py-2 text-uppercase">Catatan Pekerjaan</th>
+                                                        <th class="pe-3 py-2 text-uppercase text-center" style="width: 80px;">Bukti</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php foreach ($workLogs as $log): ?>
+                                                        <tr>
+                                                            <td class="ps-3 py-2 text-muted"><?= time_ago($log['created_at']) ?></td>
+                                                            <td class="py-2 fw-bold text-danger"><?= esc($log['created_by']) ?></td>
+                                                            <td class="py-2"><?= esc($log['message']) ?></td>
+                                                            <td class="pe-3 py-2 text-center">
+                                                                <?php if (!empty($log['attachment'])): ?>
+                                                                    <a href="<?= base_url('tiket/file/admin/' . $log['attachment']) ?>" target="_blank" class="text-danger" title="<?= esc($log['original_attachment_name']) ?>">
+                                                                        <iconify-icon icon="ph:paperclip-bold" class="fs-5"></iconify-icon>
+                                                                    </a>
+                                                                <?php else: ?>
+                                                                    <span class="text-muted">-</span>
+                                                                <?php endif; ?>
+                                                            </td>
+                                                        </tr>
+                                                    <?php endforeach; ?>
+                                                </tbody>
+                                            </table>
                                         </div>
+                                    </div>
+                                <?php endif; ?>
+
+                                <div class="px-2">
+                                    <div class="bg-light p-3 rounded border">
+                                        <p class="custom-text fw-medium">laporan penyelesaian staff</p>
+                                        <p class="custom-small-font fw-semibold">"<?= esc($task['catatan_laporan_penyelesaian']) ?: 'Staf telah menyelesaikan tugas.' ?>"</p>
+                                        <?php if (!empty($task['taks_dokumen'])): ?>
+                                            <hr>
+                                            <a href="<?= base_url('tiket/file/admin/' . $task['taks_dokumen']) ?>" target="_blank" class="py-2 px-4 rounded-2 border custom-small-font bg-white text-decoration-none text-dark d-inline-block">
+                                                <iconify-icon icon="hugeicons:file-01" class="text-danger"></iconify-icon>
+                                                <?= esc($task['taks_dokumen']) ?>
+                                            </a>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
 
                                 <?php if ($task['task_status'] === 'Menunggu Approve'): ?>
-                                    <div class="d-flex flex-wrap gap-2">
+                                    <div class="d-flex flex-wrap gap-2 px-2 pb-2">
                                         <button class="btn btn-success flex-fill px-4 py-2 fw-semibold btn-verifikasi-task" data-id="<?= esc($task['id']) ?>">Verifikasi</button>
                                         <button class="btn btn-warning flex-fill px-4 py-2 fw-semibold text-white btn-revisi-task" data-id="<?= esc($task['id']) ?>">Revisi</button>
                                     </div>
@@ -155,20 +195,62 @@ $semuaSelesai = !empty($taskStaffOnKaur) && count(array_filter($taskStaffOnKaur,
                             </div>
                         <?php else: ?>
                             <!-- akan muncul setelah tugas diberikan kepada staff -->
-                            <div class="p-4 w-100 d-flex gap-3 align-items-center shadow-sm p-3 my-4 rounded border">
-                                <iconify-icon icon="icon-park-outline:dot" class="text-warning fs-3"></iconify-icon>
-                                <div class="d-flex flex-column gap-2">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <span class="custom-small-font fw-bold"><?= esc($task['task_instruction'] ?: $task['judul_permohonan']) ?></span>
-                                        <button class="btn btn-sm btn-outline-secondary border-0 p-1 btn-edit-instruction"
-                                            data-id="<?= esc($task['id']) ?>"
-                                            data-instruction="<?= esc($task['task_instruction'] ?: $task['judul_permohonan']) ?>"
-                                            title="Edit Instruksi">
-                                            <iconify-icon icon="ph:pencil-simple-line-bold"></iconify-icon>
-                                        </button>
+                            <div class="p-3 my-4 rounded border shadow-sm w-100 d-flex flex-column gap-3">
+                                <!-- Info Bar -->
+                                <div class="d-flex align-items-center gap-3 px-2 pt-2">
+                                    <iconify-icon icon="icon-park-outline:dot" class="text-warning fs-3"></iconify-icon>
+                                    <div class="d-flex flex-column gap-2 flex-grow-1">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <span class="custom-small-font fw-bold"><?= esc($task['task_instruction'] ?: $task['judul_permohonan']) ?></span>
+                                            <button class="btn btn-sm btn-outline-secondary border-0 p-1 btn-edit-instruction"
+                                                data-id="<?= esc($task['id']) ?>"
+                                                data-instruction="<?= esc($task['task_instruction'] ?: $task['judul_permohonan']) ?>"
+                                                title="Edit Instruksi">
+                                                <iconify-icon icon="ph:pencil-simple-line-bold"></iconify-icon>
+                                            </button>
+                                        </div>
+                                        <span style="font-size: .7rem;" class="text-danger bg-danger bg-opacity-10 px-2 py-1 fw-bold text-center rounded m-0 w-25"><?= esc($task['assign_task_to_staff']) ?></span>
                                     </div>
-                                    <span style="font-size: .7rem;" class="text-danger bg-danger bg-opacity-10 px-2 py-1 fw-bold text-center rounded"><?= esc($task['assign_task_to_staff']) ?></span>
                                 </div>
+                                
+                                <!-- Log Catatan Pekerjaan -->
+                                <?php 
+                                $workLogs = array_filter($riwayat, fn($r) => $r['activity_title'] === 'Catatan Pekerjaan');
+                                ?>
+                                <?php if (!empty($workLogs)): ?>
+                                    <div class="px-2">
+                                        <div class="table-responsive rounded-3 border bg-white">
+                                            <table class="table table-sm table-hover m-0" style="font-size: 0.7rem;">
+                                                <thead class="bg-light">
+                                                    <tr>
+                                                        <th class="ps-3 py-2 text-uppercase" style="width: 100px;">Waktu</th>
+                                                        <th class="py-2 text-uppercase" style="width: 120px;">Oleh</th>
+                                                        <th class="py-2 text-uppercase">Catatan Pekerjaan</th>
+                                                        <th class="pe-3 py-2 text-uppercase text-center" style="width: 80px;">Bukti</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php foreach ($workLogs as $log): ?>
+                                                        <tr>
+                                                            <td class="ps-3 py-2 text-muted"><?= time_ago($log['created_at']) ?></td>
+                                                            <td class="py-2 fw-bold text-danger"><?= esc($log['created_by']) ?></td>
+                                                            <td class="py-2"><?= esc($log['message']) ?></td>
+                                                            <td class="pe-3 py-2 text-center">
+                                                                <?php if (!empty($log['attachment'])): ?>
+                                                                    <a href="<?= base_url('tiket/file/admin/' . $log['attachment']) ?>" target="_blank" class="text-danger" title="<?= esc($log['original_attachment_name']) ?>">
+                                                                        <iconify-icon icon="ph:paperclip-bold" class="fs-5"></iconify-icon>
+                                                                    </a>
+                                                                <?php else: ?>
+                                                                    <span class="text-muted">-</span>
+                                                                <?php endif; ?>
+                                                            </td>
+                                                        </tr>
+                                                    <?php endforeach; ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                         <?php endif; ?>
                     <?php endforeach; ?>

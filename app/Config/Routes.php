@@ -70,6 +70,7 @@ $routes->post('/approve-task/(:num)', 'TicketController::approveTask/$1');
 $routes->post('/assign-staff/(:num)', 'TicketController::assignTiket/$1');
 $routes->post('/edit-instruction/(:num)', 'TicketController::updateTaskInstruction/$1');
 $routes->post('/upload-task/(:num)', 'TicketController::uploadTask/$1');
+$routes->post('tiket/log-pekerjaan/(:any)', 'TicketController::submitWorkLog/$1');
 $routes->post('/verifikasi-tugas/(:num)', 'TicketController::verifikasiTask/$1');
 $routes->post('/revisi-tugas/(:num)', 'TicketController::revisiTask/$1');
 $routes->post('/selesaikan-tugas-kaur/(:num)', 'TicketController::selesaikanTugasKaur/$1');

@@ -1,7 +1,7 @@
 <div class="d-flex gap-3 w-100">
-    <div class="timeline-icon-box bg-danger text-white">
+    <div class="timeline-icon-box <?= ($taskStaff['task_status'] ?? '') === 'Selesai' ? 'bg-success' : 'bg-danger' ?> text-white">
         <span class="step-num">2</span>
-        <iconify-icon icon="hugeicons:task-01"></iconify-icon>
+        <iconify-icon icon="<?= ($taskStaff['task_status'] ?? '') === 'Selesai' ? 'ph:check-bold' : 'hugeicons:task-01' ?>"></iconify-icon>
     </div>
     <div class="flex-grow-1">
         <?php if (!empty($taskStaff)): ?>
@@ -64,11 +64,96 @@
                         <?php endif; ?>
                     </div>
                 </div>
-                <!-- button selesaikan tugas -->
-                <div id="containerBtnSelesaikan" class="d-flex align-items-center justify-content-end flex-grow-1 p-2">
+
+                <?php 
+                $workLogs = array_filter($riwayat, fn($r) => $r['activity_title'] === 'Catatan Pekerjaan');
+                ?>
+                <?php if (!empty($workLogs)): ?>
+                    <div class="px-3 pb-2">
+                        <div class="table-responsive rounded-3 border bg-white">
+                            <table class="table table-sm table-hover m-0" style="font-size: 0.7rem;">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th class="ps-3 py-2 text-uppercase" style="width: 100px;">Waktu</th>
+                                        <th class="py-2 text-uppercase" style="width: 120px;">Oleh</th>
+                                        <th class="py-2 text-uppercase">Catatan Pekerjaan</th>
+                                        <th class="pe-3 py-2 text-uppercase text-center" style="width: 80px;">Bukti</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($workLogs as $log): ?>
+                                        <tr>
+                                            <td class="ps-3 py-2 text-muted"><?= time_ago($log['created_at']) ?></td>
+                                            <td class="py-2 fw-bold text-danger"><?= esc($log['created_by']) ?></td>
+                                            <td class="py-2"><?= esc($log['message']) ?></td>
+                                            <td class="pe-3 py-2 text-center">
+                                                <?php if (!empty($log['attachment'])): ?>
+                                                    <a href="<?= base_url('tiket/file/admin/' . $log['attachment']) ?>" target="_blank" class="text-danger" title="<?= esc($log['original_attachment_name']) ?>">
+                                                        <iconify-icon icon="ph:paperclip-bold" class="fs-5"></iconify-icon>
+                                                    </a>
+                                                <?php else: ?>
+                                                    <span class="text-muted">-</span>
+                                                <?php endif; ?>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
+                <!-- button selesaikan tugas & log catatan -->
+                <div id="containerBtnSelesaikan" class="d-flex align-items-center justify-content-end flex-wrap gap-2 p-2">
+                    <button id="btnLogPekerjaan" type="button" class="btn btn-outline-danger text-uppercase custom-small-font fw-medium py-2 px-4">
+                        <iconify-icon icon="ph:note-pencil-bold" class="me-1"></iconify-icon>
+                        Log Catatan Pekerjaan
+                    </button>
                     <?php if($taskStaff['task_status'] !== 'Selesai' && $taskStaff['task_status'] !== 'Menunggu Approve'): ?>
-                    <button id="btnSelesaikanTugas" type="button" class="btn btn-danger text-uppercase custom-small-font fw-medium py-2 px-4 me-3">Selesaikan Tugas</button>
+                    <button id="btnSelesaikanTugas" type="button" class="btn btn-danger text-uppercase custom-small-font fw-medium py-2 px-4">Selesaikan Tugas</button>
                     <?php endif; ?>
+                </div>
+
+                <!-- Form Log Catatan Pekerjaan -->
+                <div id="wrapperLogPekerjaan" class="smooth-collapse">
+                    <div class="smooth-collapse-inner">
+                        <form id="formLogPekerjaan" class="bg-light flex-grow-1 p-3 rounded border border-2 mt-3 mx-1 mb-1" enctype="multipart/form-data">
+                            <div class="row align-items-center mb-3">
+                                <div class="col">
+                                    <p class="custom-small-font fw-bold m-0 text-uppercase" style="letter-spacing: 0.5px;">
+                                        Tambah Catatan Pekerjaan
+                                    </p>
+                                </div>
+                                <div class="col-auto">
+                                    <p class="text-danger fw-bold m-0" style="font-size: .7rem;">
+                                        * wajib diisi
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <textarea name="deskripsi" class="form-control custom-small-font" rows="3"
+                                    placeholder="Jelaskan pekerjaan yang telah dilakukan..." required></textarea>
+                            </div>
+
+                            <div class="d-flex flex-wrap align-items-center gap-3">
+                                <div class="flex-grow-1">
+                                    <input type="file" name="bukti" id="uploadBuktiLog" class="d-none">
+                                    <label for="uploadBuktiLog"
+                                        class="btn btn-light border border-2 d-flex align-items-center justify-content-center gap-2 custom-small-font fw-bold text-secondary py-2"
+                                        style="cursor:pointer; width: 100%;">
+                                        <iconify-icon icon="ph:upload-simple-bold"></iconify-icon>
+                                        UNGGAH BUKTI (OPSIONAL)
+                                    </label>
+                                    <p id="fileNameLog" class="upload-filename custom-text text-center m-0 mt-1"></p>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button type="button" id="btnBatalLog" class="btn btn-light border custom-small-font fw-bold px-4">BATAL</button>
+                                    <button type="submit" id="btnSimpanLog" class="btn btn-danger custom-small-font fw-bold px-4">SIMPAN LOG</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
 
                 <!-- ini akan muncul setelah button "selesaikan tugas diklik" -->
@@ -146,7 +231,7 @@
 </div>
 
 <script>
-    // ini adalah script untuk menampilkan nama file yang diunggah pada label setelah user memilih file, bisa dipindahkan nanti
+    // ini adalah script untuk menampilkan nama file yang diunggah pada label setelah user memilih file
     const upload = document.getElementById("uploadBukti");
     const fileName = document.getElementById("fileName");
 
@@ -154,6 +239,16 @@
         upload.addEventListener("change", function() {
             if (this.files.length > 0) {
                 fileName.textContent = this.files[0].name;
+            }
+        });
+    }
+
+    const uploadLog = document.getElementById("uploadBuktiLog");
+    const fileNameLog = document.getElementById("fileNameLog");
+    if (uploadLog && fileNameLog) {
+        uploadLog.addEventListener("change", function() {
+            if (this.files.length > 0) {
+                fileNameLog.textContent = this.files[0].name;
             }
         });
     }
@@ -166,6 +261,7 @@
     if (btnSelesaikan && wrapperPenyelesaian && btnBatal) {
         btnSelesaikan.addEventListener("click", function() {
             wrapperPenyelesaian.classList.toggle("show");
+            if (typeof wrapperLogPekerjaan !== 'undefined' && wrapperLogPekerjaan) wrapperLogPekerjaan.classList.remove("show");
 
             if (wrapperPenyelesaian.classList.contains("show")) {
                 btnSelesaikan.textContent = "Tutup Form Penyelesaian";
@@ -188,6 +284,80 @@
             document.querySelector('#formPenyelesaianTugas textarea').value = '';
             if (upload) upload.value = '';
             if (fileName) fileName.textContent = '';
+        });
+    }
+
+    // Script toggle form log pekerjaan
+    const btnLogPekerjaan = document.getElementById("btnLogPekerjaan");
+    const wrapperLogPekerjaan = document.getElementById("wrapperLogPekerjaan");
+    const btnBatalLog = document.getElementById("btnBatalLog");
+
+    if (btnLogPekerjaan && wrapperLogPekerjaan && btnBatalLog) {
+        btnLogPekerjaan.addEventListener("click", function() {
+            wrapperLogPekerjaan.classList.toggle("show");
+            if (wrapperPenyelesaian) {
+                wrapperPenyelesaian.classList.remove("show");
+                if (btnSelesaikan) {
+                    btnSelesaikan.textContent = "Selesaikan Tugas";
+                    btnSelesaikan.classList.remove("btn-secondary");
+                    btnSelesaikan.classList.add("btn-danger");
+                }
+            }
+        });
+
+        btnBatalLog.addEventListener("click", function() {
+            wrapperLogPekerjaan.classList.remove("show");
+            document.getElementById('formLogPekerjaan').reset();
+            if (fileNameLog) fileNameLog.textContent = '';
+        });
+    }
+
+    // Form Log Submission AJAX
+    const formLog = document.getElementById('formLogPekerjaan');
+    if (formLog) {
+        formLog.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const btnSimpan = document.getElementById('btnSimpanLog');
+            btnSimpan.disabled = true;
+            btnSimpan.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Menyimpan...';
+
+            fetch('<?= base_url('tiket/log-pekerjaan/' . $detail['id']) ?>', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: data.message,
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal!',
+                        text: typeof data.message === 'object' ? Object.values(data.message).join('\n') : data.message
+                    });
+                    btnSimpan.disabled = false;
+                    btnSimpan.innerHTML = 'SIMPAN LOG';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Kesalahan!',
+                    text: 'Terjadi kesalahan sistem.'
+                });
+                btnSimpan.disabled = false;
+                btnSimpan.innerHTML = 'SIMPAN LOG';
+            });
         });
     }
 </script>

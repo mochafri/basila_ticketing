@@ -40,7 +40,8 @@
                 'detail' => $detail,
                 'taskStaffOnKaur' => $taskStaffOnKaur,
                 'kaurByTiketOpen' => $kaurByTiketOpen,
-                'step' => $step
+                'step' => $step,
+                'riwayat' => $riwayat
             ]); ?>
             <?php $step += 3; ?>
         <?php endif; ?>
@@ -50,7 +51,9 @@
         <?php if (session('role_name') === 'PEGAWAI' || session('role_name') === 'ADMIN AKADEMIK'): ?>
             <?= $this->include('component/detail-tiket/submission_staff', [
                 'taskStaff' => $taskStaff,
-                'step' => $step
+                'step' => $step,
+                'riwayat' => $riwayat,
+                'detail' => $detail
             ]); ?>
             <?php $step += 2; ?>
         <?php endif; ?>
