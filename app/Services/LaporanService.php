@@ -27,7 +27,7 @@ class LaporanService
                 THEN TIMESTAMPDIFF(MINUTE, tiket_on_progress.started_at, tiket_on_progress.completed_at) 
                 ELSE 0 
             END) as total_durasi_menit
-        ')->where('is_acc_from_kaur', false);
+        ')->where('is_kaur_accepted', false);
 
         if (!empty($filters['start_date'])) {
             $builder->where('tiket_on_progress.started_at >=', $filters['start_date'] . ' 00:00:00');

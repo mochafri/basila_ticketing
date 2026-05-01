@@ -1,11 +1,23 @@
-<?php if (($detail['tiket_status'] === 'Open' && empty($kaurByTiketOpen)) || $detail['tiket_status'] === 'Approve Escalated'): ?>
+<?php 
+    $titleKabag = ($detail['tiket_status'] === 'Escalated Process') ? 'PROSES ESKALASI OLEH DIREKTUR' : 'approval kepala bagian (bu fira)';
+?>
+<?php if (($detail['tiket_status'] === 'Open' && empty($kaurByTiketOpen)) || $detail['tiket_status'] === 'Approve Escalated' || $detail['tiket_status'] === 'Escalated Process'): ?>
     <div class="d-flex gap-3 w-100">
         <div class="timeline-icon-box bg-danger text-white">
             <span class="step-num"><?= $step ?? 2 ?></span>
             <iconify-icon icon="streamline-ultimate:task-list-approve"></iconify-icon>
         </div>
         <div class="flex-grow-1">
-            <p class="m-0 fw-bold mb-2 custom-small-font text-uppercase">approval kepala bagian (bu fira)</p>
+            <p class="m-0 fw-bold mb-2 custom-small-font text-uppercase"><?= $titleKabag ?></p>
+            <?php if ($detail['tiket_status'] === 'Escalated Process'): ?>
+                <div class="d-flex flex-wrap gap-2 mt-1 mb-2">
+                    <span class="custom-text text-warning small d-flex align-items-center gap-1">
+                        <iconify-icon icon="ph:clock-countdown-bold"></iconify-icon>
+                        Menunggu direktor menyetujui...
+                    </span>
+                </div>
+            <?php endif; ?>
+            <?php if ($detail['tiket_status'] !== 'Escalated Process'): ?>
             <div class="p-4 bg-light rounded-3 w-100 d-flex gap-3 flex-column shadow-md border">
                 <p class="m-0 fw-medium custom-text">Pilih delegasi kepala bagian</p>
                 <div class="d-flex gap-2 flex-wrap">
@@ -42,6 +54,7 @@
                     <button class="btn btn-reject btn-danger flex-fill p-4 text-uppercase fw-bold rounded-4">tolak</button>
                 </div>
             </div>
+            <?php endif; ?>
         </div>
     </div>
 <?php elseif (!empty($kaurByTiketOpen)): ?>
@@ -51,7 +64,7 @@
             <iconify-icon icon="ic:round-check"></iconify-icon>
         </div>
         <div class="flex-grow-1">
-            <p class="m-0 fw-bold custom-small-font text-uppercase">approval kepala bagian (bu fira)</p>
+            <p class="m-0 fw-bold custom-small-font text-uppercase"><?= $titleKabag ?></p>
             <div class="d-flex flex-wrap gap-2 mt-1">
                 <span class="custom-text text-muted small d-flex align-items-center gap-1">
                     <iconify-icon icon="ph:check-circle-bold" class="text-success"></iconify-icon>
@@ -134,7 +147,7 @@
                                         ⏱️ <?= format_duration($kr['started_at'], $kr['completed_at']) ?>
                                     </span>
                                 <?php elseif ($hasStaffProgress): 
-                                    $isMandiri = !empty(array_filter($kaurStaffTasks, fn($t) => (int)($t['is_acc_from_kaur'] ?? 0) === 1));
+                                    $isMandiri = !empty(array_filter($kaurStaffTasks, fn($t) => (int)($t['is_kaur_accepted'] ?? 0) === 1));
                                 ?>
                                     <span class="badge bg-danger-subtle text-danger border border-danger me-2" style="font-size: 0.6rem;"><?= $isMandiri ? 'DIKERJAKAN KAUR' : 'SEDANG DIKERJAKAN STAFF' ?></span>
                                 <?php else: ?>
@@ -163,7 +176,7 @@
                                                     <a href="<?= base_url('/tiket/file/admin/' . $tsk['taks_dokumen']) ?>" target="_blank" class="text-decoration-none fw-bold small text-info"><iconify-icon icon="ph:paperclip-bold" class="align-middle"></iconify-icon> Dokumen</a>
                                                 <?php endif; ?>
                                             <?php else: ?>
-                                                <p class="text-muted m-0 small mt-1 italic opacity-75"><?= (int)($tsk['is_acc_from_kaur'] ?? 0) === 1 ? 'Kaur mengambil alih tugas tiket.' : 'Staf sedang mengerjakan instruksi kaur...' ?></p>
+                                                <p class="text-muted m-0 small mt-1 italic opacity-75"><?= (int)($tsk['is_kaur_accepted'] ?? 0) === 1 ? 'Kaur mengambil alih tugas tiket.' : 'Staf sedang mengerjakan instruksi kaur...' ?></p>
                                             <?php endif; ?>
                                         </div>
                                     <?php endforeach; ?>

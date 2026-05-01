@@ -13,7 +13,7 @@ class AssignTask extends Model
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'task_instruction', 'received_by', 'task_status', 'taks_dokumen', 'is_downloadable', 'fk_assign_to_kaur', 'nip_receive_task', 'catatan_laporan_penyelesaian', 'started_at', 'completed_at', 'is_acc_from_kaur', 'original_task_name', 'catatan_revisi'
+        'task_instruction', 'received_by', 'task_status', 'taks_dokumen', 'is_downloadable', 'fk_assign_to_kaur', 'nip_receive_task', 'catatan_laporan_penyelesaian', 'started_at', 'completed_at', 'is_kaur_accepted', 'original_task_name', 'catatan_revisi'
     ];
 
     protected bool $allowEmptyInserts = false;

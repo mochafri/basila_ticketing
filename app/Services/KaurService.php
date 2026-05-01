@@ -161,7 +161,7 @@ class KaurService
             'nip_receive_task' => $kaur['nip_kaur'],
             'fk_assign_to_kaur' => $kaur['id'],
             'started_at' => date('Y-m-d H:i:s'),
-            'is_acc_from_kaur' => true
+            'is_kaur_accepted' => true
         ]);
 
         if (!$update) {
@@ -247,7 +247,7 @@ class KaurService
                 tiket_on_progress.id, tiket_on_progress.task_instruction, tiket_on_progress.task_status, 
                 tiket_on_progress.taks_dokumen, tiket_on_progress.catatan_laporan_penyelesaian,
                 tiket_on_progress.received_by, tiket_on_progress.nip_receive_task,tiket_on_progress.fk_assign_to_kaur, tiket_on_progress.is_downloadable,
-                tiket_on_progress.started_at, tiket_on_progress.completed_at, tiket_on_progress.original_task_name, tiket_on_progress.catatan_revisi, tiket_on_progress.is_acc_from_kaur,
+                tiket_on_progress.started_at, tiket_on_progress.completed_at, tiket_on_progress.original_task_name, tiket_on_progress.catatan_revisi, tiket_on_progress.is_kaur_accepted,
                 assign_to_kaur.kaur_name, assign_to_kaur.fk_tiket as id_tiket,
                 tikets.deskripsi_permohonan, tikets.tiket_status
             ')
@@ -265,7 +265,7 @@ class KaurService
                 tiket_on_progress.id, tiket_on_progress.task_instruction, tiket_on_progress.task_status, tiket_on_progress.is_downloadable,
                 tiket_on_progress.taks_dokumen, tiket_on_progress.catatan_laporan_penyelesaian,
                 tiket_on_progress.received_by,tiket_on_progress.fk_assign_to_kaur,
-                tiket_on_progress.started_at, tiket_on_progress.completed_at, tiket_on_progress.original_task_name, tiket_on_progress.catatan_revisi, tiket_on_progress.is_acc_from_kaur,
+                tiket_on_progress.started_at, tiket_on_progress.completed_at, tiket_on_progress.original_task_name, tiket_on_progress.catatan_revisi, tiket_on_progress.is_kaur_accepted,
                 assign_to_kaur.kaur_name, assign_to_kaur.fk_tiket as id_tiket,
                 tikets.deskripsi_permohonan, tikets.tiket_status
             ')

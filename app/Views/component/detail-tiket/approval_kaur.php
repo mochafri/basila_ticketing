@@ -39,7 +39,7 @@ $semuaSelesai = !empty($taskStaffOnKaur) && count(array_filter($taskStaffOnKaur,
 $mySelfTask = null;
 if (!empty($taskStaffOnKaur)) {
     foreach ($taskStaffOnKaur as $t) {
-        if ($t['is_acc_from_kaur'] == 1 && $t['nip_receive_task'] === $nipMe) {
+        if ($t['is_kaur_accepted'] == 1 && $t['nip_receive_task'] === $nipMe) {
             $mySelfTask = $t;
             break;
         }
@@ -322,7 +322,7 @@ if (!empty($taskStaffOnKaur)) {
 
                 <?php if (!empty($taskStaffOnKaur)): ?>
                     <?php foreach ($taskStaffOnKaur as $task): ?>
-                        <?php if ((int)$task['is_acc_from_kaur'] === 1) continue; ?>
+                        <?php if ((int)$task['is_kaur_accepted'] === 1) continue; ?>
                         <?php if ($task['task_status'] === 'Menunggu Approve' || $task['task_status'] === 'Selesai'): ?>
                             <!-- ini akan muncul jika staff telah mengerjakan dan menyerahkan tugas -->
                             <div class="p-3 my-4 rounded border shadow-sm w-100 d-flex flex-column gap-3">

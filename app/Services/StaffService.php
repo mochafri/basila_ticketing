@@ -39,7 +39,7 @@ class StaffService
         $db = \Config\Database::connect();
 
         $staffData = $this->assignTaskStaff
-            ->select('tiket_on_progress.id, tiket_on_progress.is_acc_from_kaur, tiket_on_progress.fk_assign_to_kaur')
+            ->select('tiket_on_progress.id, tiket_on_progress.is_kaur_accepted, tiket_on_progress.fk_assign_to_kaur')
             ->join('assign_to_kaur', 'assign_to_kaur.id = tiket_on_progress.fk_assign_to_kaur')
             ->where('assign_to_kaur.fk_tiket', $id)
             ->where('tiket_on_progress.nip_receive_task', $nip)
@@ -53,7 +53,7 @@ class StaffService
         }
 
         # Jika dikerjakan sendiri oleh kaur, status langsung Selesai. Jika staff, Menunggu Approve.
-        $isKaurMandiri = (isset($staffData['is_acc_from_kaur']) && (int)$staffData['is_acc_from_kaur'] === 1);
+        $isKaurMandiri = (isset($staffData['is_kaur_accepted']) && (int)$staffData['is_kaur_accepted'] === 1);
 
         $updateData = [
             'task_status' => $isKaurMandiri ? 'Selesai' : 'Menunggu Approve',
