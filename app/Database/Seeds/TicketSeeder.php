@@ -25,6 +25,8 @@ class TicketSeeder extends Seeder
                 'updated_at' => Time::now()->subDays(2)->toDateTimeString(),
                 'nip_creator' => '1987654321',
                 'nama_creator' => 'Muhammad Afrizal (Mahasiswa)',
+                'fakultas' => 'Fakultas Teknik',
+                'prodi' => 'Informatika',
             ],
             [
                 'id_kategori' => 2,
@@ -41,6 +43,8 @@ class TicketSeeder extends Seeder
                 'updated_at' => Time::now()->subHours(5)->toDateTimeString(),
                 'nip_creator' => '1987654321',
                 'nama_creator' => 'Muhammad Afrizal (Mahasiswa)',
+                'fakultas' => 'Fakultas Teknik',
+                'prodi' => 'Informatika',
             ],
             [
                 'id_kategori' => 3,
@@ -57,6 +61,8 @@ class TicketSeeder extends Seeder
                 'updated_at' => Time::now()->subHours(10)->toDateTimeString(),
                 'nip_creator' => '1987654322',
                 'nama_creator' => 'Budi Sudarsono',
+                'fakultas' => 'BAA',
+                'prodi' => 'Admin',
             ],
             [
                 'id_kategori' => 4,
@@ -73,6 +79,8 @@ class TicketSeeder extends Seeder
                 'updated_at' => Time::now()->subDays(4)->toDateTimeString(),
                 'nip_creator' => '1987654321',
                 'nama_creator' => 'Muhammad Afrizal (Mahasiswa)',
+                'fakultas' => 'Fakultas Teknik',
+                'prodi' => 'Informatika',
             ],
             [
                 'id_kategori' => 5,
@@ -89,6 +97,8 @@ class TicketSeeder extends Seeder
                 'updated_at' => Time::now()->toDateTimeString(),
                 'nip_creator' => '1987654321',
                 'nama_creator' => 'Muhammad Afrizal (Mahasiswa)',
+                'fakultas' => 'Fakultas Teknik',
+                'prodi' => 'Informatika',
             ]
         ];
 
@@ -107,6 +117,9 @@ class TicketSeeder extends Seeder
             'Permohonan Email', 'Update Berita Web', 'Reset Password', 'Backup Data',
             'Upgrade RAM', 'Virus Malware', 'Layar Monitor Mati', 'Mouse Rusak'
         ];
+
+        $faculties = ['Fakultas Teknik', 'Fakultas Ekonomi', 'Fakultas Hukum', 'BAA'];
+        $prodis = ['Informatika', 'Sistem Informasi', 'Akuntansi', 'Manajemen', 'Ilmu Hukum'];
 
         for ($i = 1; $i <= 25; $i++) {
             $catId = array_rand($categories);
@@ -129,6 +142,8 @@ class TicketSeeder extends Seeder
                 'updated_at'            => Time::now()->toDateTimeString(),
                 'nip_creator'           => '607062300081',
                 'nama_creator'          => 'Ilham Al Gojali (Mahasiswa)',
+                'fakultas'              => $faculties[array_rand($faculties)],
+                'prodi'                 => $prodis[array_rand($prodis)],
             ];
         }
         

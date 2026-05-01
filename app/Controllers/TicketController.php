@@ -30,7 +30,7 @@ class TicketController extends BaseController
         $roles = [session('role_name')];
         $nip = session('user_identifier');
         $kategori = $this->request->getGet('kategori');
-        $status = $this->request->getGet('status');
+        $status = $this->request->getGet('status') ?? 'Active';
         $search = $this->request->getGet('search');
 
         return view('tiket/daftar/index', [
@@ -105,6 +105,8 @@ class TicketController extends BaseController
     public function createTiket()
     {
         $data = $this->request->getPost();
+        $data['fakultas'] = session('fakultas');
+        $data['prodi'] = session('prodi');
         $username = session('username');
 
         if (!$this->validateData($data, 'tiketRule')) {

@@ -10,19 +10,50 @@ $statusColors = [
 ];
 ?>
 
-<div class="card border-0 shadow-sm rounded-4 overflow-hidden mt-2">
+<style>
+    .text-truncate-custom {
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    /* Max widths for columns to force truncation */
+    .col-kategori { max-width: 120px; }
+    .col-layanan { max-width: 150px; }
+    .col-pemohon { max-width: 130px; }
+    .col-nim { max-width: 100px; }
+    .col-fakultas { max-width: 150px; }
+    .col-prodi { max-width: 150px; }
+</style>
+
+<div class="card border-0 shadow-sm rounded-4 overflow-hidden mt-4">
     <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0">
+        <table class="table table-hover align-middle mb-0" style="table-layout: fixed; width: 100%;">
             <thead class="bg-light border-bottom">
                 <tr>
-                    <th class="ps-4 py-3 text-uppercase custom-small-font fw-bold text-secondary" style="width: 80px;">No</th>
-                    <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary">Kategori</th>
-                    <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary">Layanan</th>
-                    <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary">Pengaju</th>
-                    <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary">Tanggal</th>
-                    <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary text-center">Status</th>
-                    <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary text-center">Level</th>
-                    <th class="pe-4 py-3 text-uppercase custom-small-font fw-bold text-secondary text-end">Aksi</th>
+                    <th class="ps-4 py-3 text-uppercase custom-small-font fw-bold text-secondary" style="width: 60px;">No</th>
+                    <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary col-kategori" title="Kategori" data-bs-toggle="tooltip">
+                        <span class="text-truncate-custom">Kategori</span>
+                    </th>
+                    <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary col-layanan" title="Layanan" data-bs-toggle="tooltip">
+                        <span class="text-truncate-custom">Layanan</span>
+                    </th>
+                    <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary col-pemohon" title="Pemohon" data-bs-toggle="tooltip">
+                        <span class="text-truncate-custom">Pemohon</span>
+                    </th>
+                    <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary col-nim" title="NIM" data-bs-toggle="tooltip">
+                        <span class="text-truncate-custom">NIM</span>
+                    </th>
+                    <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary col-fakultas" title="Fakultas" data-bs-toggle="tooltip">
+                        <span class="text-truncate-custom">Fakultas</span>
+                    </th>
+                    <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary col-prodi" title="Prodi" data-bs-toggle="tooltip">
+                        <span class="text-truncate-custom">Prodi</span>
+                    </th>
+                    <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary" style="width: 100px;">Tanggal</th>
+                    <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary text-center" style="width: 120px;">Status</th>
+                    <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary text-center" style="width: 80px;">Level</th>
+                    <th class="pe-4 py-3 text-uppercase custom-small-font fw-bold text-secondary text-end" style="width: 70px;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -41,22 +72,32 @@ $statusColors = [
                             <span class="font-monospace fw-bold text-muted small"><?= $i++ ?></span>
                         </td>
 
-                        <td>
-                            <div class="d-flex align-items-center gap-1">
-                                <iconify-icon icon="ph:stack-duotone" class="text-danger fs-6"></iconify-icon>
-                                <span class="custom-small-font fw-bold text-dark text-uppercase"><?= esc($data['kategori_layanan']) ?></span>
+                        <td class="col-kategori">
+                            <div class="d-flex align-items-center gap-1" title="<?= esc($data['kategori_layanan']) ?>" data-bs-toggle="tooltip">
+                                <span class="custom-small-font fw-bold text-dark text-uppercase text-truncate-custom"><?= esc($data['kategori_layanan']) ?></span>
                             </div>
                         </td>
-                        <td>
-                            <div class="d-flex align-items-center gap-1">
-                                <iconify-icon icon="ph:briefcase-duotone" class="text-danger fs-6"></iconify-icon>
-                                <span class="custom-small-font fw-medium text-dark"><?= esc($data['per_kategori_layanan']) ?></span>
+                        <td class="col-layanan">
+                            <div class="d-flex align-items-center gap-1" title="<?= esc($data['per_kategori_layanan']) ?>" data-bs-toggle="tooltip">
+                                <span class="custom-small-font fw-medium text-dark text-truncate-custom"><?= esc($data['per_kategori_layanan']) ?></span>
                             </div>
                         </td>
-                        <td>
-                            <div class="d-flex align-items-center gap-1">
-                                <iconify-icon icon="ph:user-duotone" class="text-danger fs-6"></iconify-icon>
-                                <span class="custom-small-font fw-medium"><?= esc($data['nama_creator']) ?></span>
+                        <td class="col-pemohon">
+                            <div class="d-flex align-items-center gap-1" title="<?= esc($data['nama_creator']) ?>" data-bs-toggle="tooltip">
+                                <span class="custom-small-font fw-medium text-truncate-custom"><?= esc($data['nama_creator']) ?></span>
+                            </div>
+                        </td>
+                        <td class="col-nim">
+                            <span class="custom-small-font text-muted text-truncate-custom" title="<?= esc($data['nip_creator']) ?>" data-bs-toggle="tooltip"><?= esc($data['nip_creator']) ?></span>
+                        </td>
+                        <td class="col-fakultas">
+                            <div class="d-flex align-items-center gap-1 text-muted" title="<?= esc($data['fakultas'] ?? '-') ?>" data-bs-toggle="tooltip">
+                                <span class="custom-small-font text-truncate-custom"><?= esc($data['fakultas'] ?? '-') ?></span>
+                            </div>
+                        </td>
+                        <td class="col-prodi">
+                            <div class="d-flex align-items-center gap-1 text-muted" title="<?= esc($data['prodi'] ?? '-') ?>" data-bs-toggle="tooltip">
+                                <span class="custom-small-font text-truncate-custom"><?= esc($data['prodi'] ?? '-') ?></span>
                             </div>
                         </td>
                         <td>

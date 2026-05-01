@@ -106,6 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await getLayananById(idKategori);
 
             if (data.status === 'success' && Array.isArray(data.data) && layananSelect) {
+                layananSelect.innerHTML = '<option value="" selected disabled>-- Pilih Layanan --</option>';
                 data.data.forEach(layanan => {
                     const opt = document.createElement('option');
                     opt.value = layanan.id;

@@ -50,7 +50,8 @@
                 <!-- Status Dropdown -->
                 <div style="min-width: 180px;">
                     <select name="status" class="form-select custom-input bg-white border-0 shadow-sm rounded-pill px-4" style="height: 45px; font-size: 0.85rem; font-weight: 600;">
-                        <option value="" <?= empty($filter_status) ? 'selected' : '' ?>>SEMUA STATUS</option>
+                        <option value="All" <?= (isset($filter_status) && $filter_status == 'All') ? 'selected' : '' ?>>SEMUA STATUS</option>
+                        <option value="Active" <?= (isset($filter_status) && $filter_status == 'Active') ? 'selected' : '' ?>>BELUM SELESAI</option>
                         <?php 
                         $statuses = ['Open', 'Waiting', 'In Progress', 'Closed', 'Rejected', 'Approve Escalated'];
                         foreach($statuses as $s): ?>
@@ -67,7 +68,7 @@
                         <iconify-icon icon="solar:rounded-magnifer-bold-duotone" class="fs-6"></iconify-icon>
                         Terapkan
                     </button>
-                    <?php if (!empty($search) || !empty($filter_kategori) || !empty($filter_status)): ?>
+                    <?php if (!empty($search) || !empty($filter_kategori) || ($filter_status !== 'Active')): ?>
                         <a href="<?= site_url('tiket') ?>" class="btn btn-white shadow-sm rounded-pill px-4 fw-bold text-uppercase d-flex align-items-center justify-content-center bg-white border-0 text-muted" style="height: 45px; font-size: 0.85rem;">
                             Reset
                         </a>
@@ -99,3 +100,14 @@
 </div>
 
 <?= $this->endSection(); ?>
+
+<?= $this->section('script') ?>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    });
+</script>
+<?= $this->endSection() ?>

@@ -23,7 +23,7 @@ class TiketService
         $query = $this->tiketModel
             ->select(
                 'tikets.id, tikets.judul_permohonan, tikets.deskripsi_permohonan, tikets.tiket_status, 
-                tikets.created_at, tikets.nip_creator, tikets.nama_creator, tikets.level_kesulitan,
+                tikets.created_at, tikets.nip_creator, tikets.nama_creator, tikets.fakultas, tikets.prodi, tikets.level_kesulitan,
                 layanans.per_kategori_layanan,
                 kategoris.kategori_layanan'
             )
@@ -35,7 +35,9 @@ class TiketService
             $query->where('kategoris.id', $kategori);
         }
 
-        if ($status) {
+        if ($status === 'Active') {
+            $query->where('tikets.tiket_status !=', 'Closed');
+        } elseif ($status && $status !== 'All') {
             $query->where('tikets.tiket_status', $status);
         }
 
@@ -45,8 +47,11 @@ class TiketService
                 ->orLike('tikets.judul_permohonan', $search)
                 ->orLike('tikets.deskripsi_permohonan', $search)
                 ->orLike('tikets.nama_creator', $search)
+                ->orLike('tikets.nip_creator', $search)
                 ->orLike('kategoris.kategori_layanan', $search)
                 ->orLike('layanans.per_kategori_layanan', $search)
+                ->orLike('tikets.fakultas', $search)
+                ->orLike('tikets.prodi', $search)
                 ->groupEnd();
         }
 
@@ -91,7 +96,7 @@ class TiketService
                 tikets.id, tikets.judul_permohonan, tikets.deskripsi_permohonan, 
                 tikets.tiket_status, tikets.created_at, tikets.completed_at, tikets.dokumen_lampiran, 
                 tikets.original_dokumen_name,tikets.is_escalated, tikets.level_kesulitan,
-                tikets.nip_creator, tikets.nama_creator,
+                tikets.nip_creator, tikets.nama_creator, tikets.fakultas, tikets.prodi,
                 layanans.per_kategori_layanan,
                 kategoris.kategori_layanan,
                 layanans.per_kategori_layanan
@@ -139,6 +144,8 @@ class TiketService
             'original_dokumen_name' => $originalName,
             'nip_creator' => session('user_identifier'),
             'nama_creator' => session('username'),
+            'fakultas' => $data['fakultas'] ?? session('fakultas'),
+            'prodi' => $data['prodi'] ?? session('prodi'),
             'tiket_status' => 'Open'
         ]);
 

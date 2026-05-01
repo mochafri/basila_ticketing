@@ -42,6 +42,8 @@ class AuthController extends BaseController
                 'username' => $service['profile']['fullname'] ?? 'Admin',
                 'user_identifier' => $service['profile']['numberid'] ?? '1987654321',
                 'profilephoto' => $service['profile']['photo'] ?? null,
+                'fakultas' => $service['profile']['faculty'] ?? '-',
+                'prodi' => $service['profile']['studyprogram'] ?? '-',
                 'isLoggedIn' => true
             ]);
 
