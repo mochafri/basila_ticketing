@@ -95,7 +95,7 @@
                                 <tbody>
                                     <?php foreach ($workLogs as $log): ?>
                                         <tr>
-                                            <td class="ps-3 py-2 text-muted"><?= time_ago($log['created_at']) ?></td>
+                                            <td class="ps-3 py-2 text-muted"><?= format_datetime_indo($log['created_at']) ?></td>
                                             <td class="py-2 fw-bold text-danger"><?= esc($log['created_by']) ?></td>
                                             <td class="py-2"><?= esc($log['message']) ?></td>
                                             <td class="pe-3 py-2 text-center">

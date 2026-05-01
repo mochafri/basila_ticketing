@@ -14,7 +14,7 @@
                         <div class="timeline-marker"></div>
                         <div class="d-flex justify-content-between align-items-center mb-1">
                             <span class="text-danger fw-bold text-uppercase log-meta" style="font-size: 0.6rem;"><?= esc($r['created_by']) ?></span>
-                            <span class="text-muted log-meta" style="font-size: 0.6rem;" title="<?= format_datetime_indo($r['created_at']) ?>"><?= time_ago($r['created_at']) ?></span>
+                            <span class="text-muted log-meta" style="font-size: 0.6rem;"><?= format_datetime_indo($r['created_at']) ?></span>
                         </div>
                         <span class="fw-bold text-uppercase log-title" style="font-size: 0.7rem;"><?= esc($r['activity_title']) ?></span>
                         <div class="log-msg" style="font-size: 0.7rem;">

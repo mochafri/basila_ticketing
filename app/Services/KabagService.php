@@ -49,7 +49,6 @@ class KabagService
             'tiket_status' => 'Open',
             'approve_by' => $data['approve'],
             'level_kesulitan' => $data['level_kesulitan'] ?? null,
-            'completed_at' => $now
         ]);
 
         $insertedCount = 0;

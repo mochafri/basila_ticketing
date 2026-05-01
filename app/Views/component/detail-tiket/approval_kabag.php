@@ -1,5 +1,6 @@
 <?php 
     $titleKabag = ($detail['tiket_status'] === 'Escalated Process') ? 'PROSES ESKALASI OLEH DIREKTUR' : 'approval kepala bagian (bu fira)';
+    $kabagFinishedAt = !empty($kaurByTiketOpen) ? min(array_column($kaurByTiketOpen, 'started_at')) : null;
 ?>
 <?php if (($detail['tiket_status'] === 'Open' && empty($kaurByTiketOpen)) || $detail['tiket_status'] === 'Approve Escalated' || $detail['tiket_status'] === 'Escalated Process'): ?>
     <div class="d-flex gap-3 w-100">
@@ -68,11 +69,11 @@
             <div class="d-flex flex-wrap gap-2 mt-1">
                 <span class="custom-text text-muted small d-flex align-items-center gap-1">
                     <iconify-icon icon="ph:check-circle-bold" class="text-success"></iconify-icon>
-                    Selesai: <?= format_datetime_indo($detail['completed_at']) ?>
+                    Selesai: <?= format_datetime_indo($kabagFinishedAt) ?>
                 </span>
                 <span class="custom-text text-muted small d-flex align-items-center gap-1">
                     <iconify-icon icon="ph:timer-bold" class="text-primary"></iconify-icon>
-                    Durasi: <?= format_duration($detail['created_at'], $detail['completed_at']) ?>
+                    Durasi: <?= format_duration($detail['created_at'], $kabagFinishedAt) ?>
                 </span>
             </div>
         </div>
@@ -111,7 +112,7 @@
                 </span>
                 <span class="custom-text text-muted small d-flex align-items-center gap-1">
                     <iconify-icon icon="ph:timer-bold" class="text-primary"></iconify-icon>
-                    Durasi: <?= format_duration($detail['completed_at'], $maxCompleted) ?>
+                    Durasi: <?= format_duration($kabagFinishedAt, $maxCompleted) ?>
                 </span>
             <?php elseif (!empty($kaurByTiketOpen)): ?>
                 <span class="custom-text text-warning small d-flex align-items-center gap-1">
