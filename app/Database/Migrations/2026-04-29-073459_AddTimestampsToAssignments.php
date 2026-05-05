@@ -32,7 +32,7 @@ class AddTimestampsToAssignments extends Migration
         ]);
 
         // Add started_at and completed_at to assign_to_staff
-        $this->forge->addColumn('assign_to_staff', [
+        $this->forge->addColumn('tiket_on_progress', [
             'started_at' => [
                 'type' => 'DATETIME',
                 'null' => true,
@@ -49,7 +49,6 @@ class AddTimestampsToAssignments extends Migration
     public function down()
     {
         $this->forge->dropColumn('tikets', 'completed_at');
-        $this->forge->dropColumn('assign_to_kaur', ['started_at', 'completed_at']);
-        $this->forge->dropColumn('assign_to_staff', ['started_at', 'completed_at']);
+        $this->forge->dropColumn('tiket_on_progress', ['started_at', 'completed_at']);
     }
 }

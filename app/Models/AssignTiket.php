@@ -18,6 +18,7 @@ class AssignTiket extends Model
         'flag',
         'started_at',
         'completed_at',
+        'catatan_revisi',
         'fk_tiket'
     ];
 

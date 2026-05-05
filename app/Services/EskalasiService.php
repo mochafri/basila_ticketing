@@ -19,7 +19,7 @@ class EskalasiService
         $db->transStart();
 
         $this->tiketModel->update($id, [
-            'tiket_status' => 'Approve Escalated'
+            'tiket_status' => 'Open'
         ]);
 
         $this->riwayatAktifitas->insert([

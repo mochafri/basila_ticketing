@@ -20,45 +20,52 @@ class StaffService
         $getID = $this->assignTiket->where('fk_tiket', $id)->first();
 
         if (!isset($getID)) {
-            return null;
+            return [];
         }
 
         $data = $this->assignTaskStaff
-            ->where('fk_assign_to_kaur', $getID['id'])
-            ->where('nip_staff', $nip)
+            ->select('tiket_on_progress.*, assign_to_kaur.completed_at as kaur_completed_at, assign_to_kaur.started_at as kaur_started_at, assign_to_kaur.kaur_name, assign_to_kaur.flag as kaur_flag')
+            ->join('assign_to_kaur', 'assign_to_kaur.id = tiket_on_progress.fk_assign_to_kaur')
+            ->where('assign_to_kaur.fk_tiket', $id)
+            ->where('tiket_on_progress.nip_receive_task', $nip)
             ->first();
 
-        return $data ?? null;
+        return $data ?? [];
     }
 
+    # Update task juga berlaku untuk kaur meng update tugas yang dikerjakan nya,jika tiket dikerjakan sendiri
     public function updateTask($id, array $data, $file, $nip)
     {
         $db = \Config\Database::connect();
 
         $staffData = $this->assignTaskStaff
-            ->select('assign_to_staff.id')
-            ->join('assign_to_kaur', 'assign_to_kaur.id = assign_to_staff.fk_assign_to_kaur')
+            ->select('tiket_on_progress.id, tiket_on_progress.is_kaur_accepted, tiket_on_progress.fk_assign_to_kaur')
+            ->join('assign_to_kaur', 'assign_to_kaur.id = tiket_on_progress.fk_assign_to_kaur')
             ->where('assign_to_kaur.fk_tiket', $id)
-            ->where('assign_to_staff.nip_staff', $nip)
+            ->where('tiket_on_progress.nip_receive_task', $nip)
             ->first();
 
         if (!$staffData) {
             return [
                 'status' => 'fail',
-                'message' => 'Data penugasan staff tidak ditemukan'
+                'message' => 'Data penugasan tidak ditemukan'
             ];
         }
 
+        # Jika dikerjakan sendiri oleh kaur, status langsung Selesai. Jika staff, Menunggu Approve.
+        $isKaurMandiri = (isset($staffData['is_kaur_accepted']) && (int)$staffData['is_kaur_accepted'] === 1);
+
         $updateData = [
-            'task_status' => 'Menunggu Approve',
+            'task_status' => $isKaurMandiri ? 'Selesai' : 'Menunggu Approve',
             'catatan_laporan_penyelesaian' => $data['laporan_task'],
+            'catatan_revisi' => null,
             'is_downloadable' => $data['is_downloadable'] ?? 1,
             'completed_at' => date('Y-m-d H:i:s')
         ];
 
         if ($file && $file->isValid() && !$file->hasMoved()) {
             $updateData['taks_dokumen'] = $file->getRandomName();
-            $updateData['original_task_dokumen'] = $file;
+            $updateData['original_task_name'] = $file->getClientName();
             $file->move(WRITEPATH . 'uploads/tiket/admin/', $updateData['taks_dokumen']);
         }
 
@@ -74,18 +81,36 @@ class StaffService
             ];
         }
 
-        $this->riwayatAktifitas->insert([
-            'activity_title' => 'Laporan Tugas',
-            'message' => 'Staf telah mengunggah laporan penyelesaian tugas.',
-            'created_by' => 'Staf',
-            'fk_tiket' => $id
-        ]);
+        # Jika tiket dikerjakan oleh kaur, otomatis selesaikan juga penugasan Kaur-nya (flag = Finish)
+        if($isKaurMandiri){
+            
+            $this->assignTiket->builder()
+                ->where('id', $staffData['fk_assign_to_kaur'])
+                ->update([
+                    'flag' => 'Finish',
+                    'completed_at' => date('Y-m-d H:i:s')
+                ]);
+
+            $this->riwayatAktifitas->insert([
+                'activity_title' => 'Tugas Selesai',
+                'message' => 'Kepala Urusan telah menyelesaikan tugas mandiri dan mengunggah laporan penyelesaian.',
+                'created_by' => 'Kepala Urusan',
+                'fk_tiket' => $id
+            ]);
+        } else {
+            $this->riwayatAktifitas->insert([
+                'activity_title' => 'Laporan Tugas',
+                'message' => 'Staf telah mengunggah laporan penyelesaian tugas.',
+                'created_by' => 'Staf',
+                'fk_tiket' => $id
+            ]);
+        }
 
         $db->transComplete();
 
         return $db->transStatus() ? [
             'status' => 'success',
-            'message' => 'Berhasil upload tugas'
+            'message' => $isKaurMandiri ? 'Berhasil menyelesaikan tugas mandiri' : 'Berhasil upload tugas'
         ] : [
             'status' => 'fail',
             'message' => 'Gagal upload tugas'

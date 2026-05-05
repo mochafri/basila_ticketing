@@ -27,7 +27,7 @@ class LaporanController extends BaseController
         $data = [
             'title' => 'Laporan Kinerja Staff',
             'kinerja' => $this->laporanService->getKinerjaStaff($filters),
-            'staffList' => $this->kaurService->getStaff(null) ?? [], // Get all staff
+            'staffList' => $this->kaurService->getStaff(null) ?? [], 
             'filters' => $filters
         ];
 
@@ -49,7 +49,7 @@ class LaporanController extends BaseController
         $data = [
             'title' => 'Detail Kinerja Staff',
             'detail' => $detail,
-            'nama_staff' => $detail[0]['assign_task_to_staff'] ?? 'Staff',
+            'nama_staff' => $detail[0]['received_by'] ?? 'Staff',
             'nip_staff' => $nip
         ];
 

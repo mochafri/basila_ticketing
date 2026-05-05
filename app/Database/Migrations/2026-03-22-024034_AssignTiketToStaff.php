@@ -15,12 +15,12 @@ class AssignTiketToStaff extends Migration
                 'unsigned' => true,
                 'auto_increment' => true
             ],
-            'nip_staff' => [
+            'nip_receive_task' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255',
                 'null' => false
             ],
-            'assign_task_to_staff' => [
+            'received_by' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255',
                 'null' => true
@@ -38,37 +38,41 @@ class AssignTiketToStaff extends Migration
             'taks_dokumen' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255',
-                'null' => false
+                'null' => true
+            ],
+            'is_kaur_accepted' => [
+                'type'       => 'BOOLEAN',
+                'default'    => false,
             ],
             'original_task_name' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255',
-                'null' => false
+                'null' => true
             ],
             'catatan_revisi' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255',
-                'null' => false
+                'null' => true
             ],
             'catatan_laporan_penyelesaian' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255',
-                'null' => false
+                'null' => true
             ],
             'fk_assign_to_kaur' => [
                 'type' => 'INT',
                 'constraint' => 5,
                 'unsigned' => true
-            ]
+            ]   
         ]);
 
         $this->forge->addKey('id', true);
-        $this->forge->createTable('assign_to_staff');
+        $this->forge->createTable('tiket_on_progress');
         $this->forge->addForeignKey('fk_assign_to_kaur', 'assign_to_kaur', 'id', 'CASCADE', 'CASCADE');
     }
 
     public function down()
     {
-        $this->forge->dropTable('assign_to_staff');
+        $this->forge->dropTable('tiket_on_progress');
     }
 }

@@ -59,10 +59,10 @@
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
                                 <label class="form-check-label" for="invalidCheck">
-                                    Agree to terms and conditions
+                                    Menyatakan Bahwa Dokumen Ini Asli Dan Bertanggung Jawab Atas Kebenarannya
                                 </label>
                                 <div class="invalid-feedback">
-                                    You must agree before submitting.
+                                    Anda harus menyetujui pernyataan diatas sebelum mengirimkan tiket.
                                 </div>
                             </div>
                         </div>

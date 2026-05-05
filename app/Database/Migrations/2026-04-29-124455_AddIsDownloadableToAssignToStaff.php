@@ -11,15 +11,15 @@ class AddIsDownloadableToAssignToStaff extends Migration
         $fields = [
             'is_downloadable' => [
                 'type'       => 'BOOLEAN',
-                'default'    => false,
+                'default'    => true,
                 'after'      => 'taks_dokumen'
             ],
         ];
-        $this->forge->addColumn('assign_to_staff', $fields);
+        $this->forge->addColumn('tiket_on_progress', $fields);
     }
 
     public function down()
     {
-        $this->forge->dropColumn('assign_to_staff', 'is_downloadable');
+        $this->forge->dropColumn('tiket_on_progress', 'is_downloadable');
     }
 }

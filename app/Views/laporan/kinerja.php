@@ -75,8 +75,8 @@
                                         <?= strtoupper(substr($row['nama_staff'], 0, 1)) ?>
                                     </div>
                                     <div>
-                                        <div class="fw-extra-bold text-dark text-uppercase small"><?= esc($row['nama_staff']) ?></div>
-                                        <div class="text-muted" style="font-size: 0.65rem;">NIP: <?= esc($row['nip_staff']) ?></div>
+                                        <div class="fw-extra-bold text-dark text-uppercase small"><?= esc($row['received_by'] ?? null) ?></div>
+                                        <div class="text-muted" style="font-size: 0.65rem;">NIP: <?= esc($row['nip_receive_task']) ?></div>
                                     </div>
                                 </div>
                             </td>
@@ -101,7 +101,7 @@
                                 </div>
                             </td>
                             <td class="pe-4 text-end">
-                                <a href="<?= site_url('laporan/kinerja/detail/' . $row['nip_staff']) ?>" class="btn btn-sm btn-outline-danger rounded-3 px-3 py-1 fw-bold text-uppercase" style="font-size: 0.65rem;">
+                                <a href="<?= site_url('laporan/kinerja/detail/' . $row['nip_receive_task']) ?>" class="btn btn-sm btn-outline-danger rounded-3 px-3 py-1 fw-bold text-uppercase" style="font-size: 0.65rem;">
                                     Detail
                                 </a>
                             </td>

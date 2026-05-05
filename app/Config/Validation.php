@@ -91,7 +91,7 @@ class Validation extends BaseConfig
             'label' => 'Instruksi Tugas',
             'rules' => 'required|string|min_length[3]'
         ],
-        'assign_task_to_staff.*' => [
+        'received_by.*' => [
             'label' => 'Staff',
             'rules' => 'required|string'
         ],
@@ -102,10 +102,6 @@ class Validation extends BaseConfig
     ];
 
     public array $tiketRule = [
-        'judul' => [
-            'label' => 'Judul',
-            'rules' => 'permit_empty|string|max_length[255]'
-        ],
         'kategori' => [
             'label' => 'Kategori',
             'rules' => 'required|integer'
@@ -138,4 +134,14 @@ class Validation extends BaseConfig
     // --------------------------------------------------------------------
     // Rules
     // --------------------------------------------------------------------
+    public array $workLogRule = [
+        'deskripsi' => [
+            'label' => 'Deskripsi Pekerjaan',
+            'rules' => 'required|string|min_length[5]'
+        ],
+        'bukti' => [
+            'label' => 'Bukti Pekerjaan',
+            'rules' => 'permit_empty|uploaded[bukti]|mime_in[bukti,image/png,image/jpeg,application/pdf]|max_size[bukti,10240]'
+        ],
+    ];
 }

@@ -15,6 +15,8 @@ class RiwayatAktifitas extends Model
     protected $allowedFields = [
         'activity_title',
         'message',
+        'attachment',
+        'original_attachment_name',
         'created_by',
         'fk_tiket',
         'created_at',

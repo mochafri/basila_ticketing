@@ -49,7 +49,6 @@ class KabagService
             'tiket_status' => 'Open',
             'approve_by' => $data['approve'],
             'level_kesulitan' => $data['level_kesulitan'] ?? null,
-            'completed_at' => $now
         ]);
 
         $insertedCount = 0;
@@ -136,7 +135,8 @@ class KabagService
 
         $update = $this->tiketModel->update($id, [
             'is_escalated' => true,
-            'tiket_status' => 'Escalated Process'
+            'tiket_status' => 'Escalated Process',
+            'level_kesulitan' => 'high'
         ]);
 
         if (!$update) {
@@ -292,10 +292,11 @@ class KabagService
         ]);
 
         # Update status task
-        $this->assignTaskStaff
+        $this->assignTaskStaff->builder()
             ->where('fk_assign_to_kaur', $assignKaurId)
             ->update([
-                'task_status' => 'Revisi'
+                'task_status' => 'Revisi',
+                'catatan_revisi' => $catatan
             ]);
 
         if (!$update) {
@@ -306,10 +307,12 @@ class KabagService
             ];
         }
 
-        # Kembalikan status tiket menjadi In Progress
-        $this->tiketModel->update($assign['fk_tiket'], [
-            'tiket_status' => 'In Progress'
-        ]);
+        # Kembalikan status tiket menjadi In Progress (Gunakan builder agar tidak error jika status sudah In Progress)
+        $this->tiketModel->builder()
+            ->where('id', $assign['fk_tiket'])
+            ->update([
+                'tiket_status' => 'In Progress'
+            ]);
 
         $this->riwayatAktifitas->insert([
             'activity_title' => 'Revisi Hasil Pekerjaan',

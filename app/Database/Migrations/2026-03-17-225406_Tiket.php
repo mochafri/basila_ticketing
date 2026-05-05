@@ -27,11 +27,6 @@ class Tiket extends Migration
                 'unsigned' => true,
                 'null' => true
             ],
-            'judul_permohonan' => [
-                'type' => 'VARCHAR',
-                'constraint' => '255',
-                'null' => false
-            ],
             'deskripsi_permohonan' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255',
