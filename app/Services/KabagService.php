@@ -135,7 +135,8 @@ class KabagService
 
         $update = $this->tiketModel->update($id, [
             'is_escalated' => true,
-            'tiket_status' => 'Escalated Process'
+            'tiket_status' => 'Escalated Process',
+            'level_kesulitan' => 'high'
         ]);
 
         if (!$update) {
