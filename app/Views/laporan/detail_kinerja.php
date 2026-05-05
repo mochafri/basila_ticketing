@@ -7,7 +7,7 @@
             <a href="<?= site_url('laporan/kinerja') ?>" class="text-decoration-none text-muted small d-flex align-items-center gap-1 mb-2">
                 <iconify-icon icon="ph:arrow-left-bold"></iconify-icon> Kembali ke Laporan Utama
             </a>
-            <h4 class="fw-extra-bold text-dark text-uppercase mb-1" style="letter-spacing: -0.5px;">Detail Kinerja: <?= esc($nama_staff) ?></h4>
+            <h4 class="fw-bold text-dark text-uppercase mb-1" style="letter-spacing: -0.5px;">Detail Kinerja: <?= esc($nama_staff) ?></h4>
             <p class="text-muted small mb-0">Rincian seluruh tugas yang dikerjakan oleh staff (NIP: <?= esc($nip_staff) ?>)</p>
         </div>
     </div>

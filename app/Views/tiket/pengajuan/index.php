@@ -58,8 +58,8 @@
                         <div class="col-12">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
-                                <label class="form-check-label" for="invalidCheck">
-                                    Menyatakan Bahwa Dokumen Ini Asli Dan Bertanggung Jawab Atas Kebenarannya
+                                <label class="form-check-label custom-small-font" for="invalidCheck">
+                                    Menyatakan Bahwa Data Ini Asli Dan Siap Bertanggung Jawab Atas Kebenarannya
                                 </label>
                                 <div class="invalid-feedback">
                                     Anda harus menyetujui pernyataan diatas sebelum mengirimkan tiket.

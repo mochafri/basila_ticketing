@@ -4,7 +4,7 @@
 <div class="container-fluid py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h4 class="fw-extra-bold text-dark text-uppercase mb-1" style="letter-spacing: -0.5px;">Laporan Kinerja Staff</h4>
+            <h4 class="fw-bold text-dark text-uppercase mb-1" style="letter-spacing: -0.5px;">Laporan Kinerja Staff</h4>
             <p class="text-muted small mb-0">Monitor produktivitas dan kecepatan penyelesaian tugas staf</p>
         </div>
         <div class="d-flex gap-2">
@@ -52,7 +52,7 @@
     </div>
 
     <!-- Performance Table -->
-    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden p-4">
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
                 <thead class="bg-light border-bottom">
@@ -110,8 +110,10 @@
                     <?php if (empty($kinerja)): ?>
                         <tr>
                             <td colspan="7" class="text-center py-5 text-muted fst-italic">
-                                <iconify-icon icon="ph:users-three-duotone" class="fs-1 d-block mb-2 opacity-50"></iconify-icon>
-                                Belum ada data kinerja staff.
+                                <div class="d-flex flex-column justify-content-center align-items-center w-100">
+                                    <iconify-icon icon="ph:users-three-duotone" class="fs-1 mb-2 opacity-50"></iconify-icon>
+                                    <p class="mb-0">Belum ada data kinerja staff.</p>
+                                </div>
                             </td>
                         </tr>
                     <?php endif; ?>

@@ -6,20 +6,20 @@
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-5">
         <div>
-            <h2 class="fw-bold title-dashboard">DASHBOARD UTAMA</h2>
+            <h2 class="fw-bold title-dashboard">Dashboard Utama</h2>
             <span class="text-muted subtitle-dashboard">
                 Monitoring performa layanan dan progres tugas tim Anda.
             </span>
         </div>
 
-        <div class="d-flex align-items-center gap-3">
+        <div class="d-flex align-items-center gap-3 w-50">
             <select class="form-select semester-select">
-                <option>SEMESTER GANJIL 2024</option>
+                <option>Semester Ganjil 2024</option>
             </select>
 
-            <button class="btn btn-danger btn-set-periode">
+            <button class="btn btn-danger btn-set-periode w-50">
                 <iconify-icon icon="arcticons:ready-for"></iconify-icon>
-                SET PERIODE
+                Set Periode
             </button>
         </div>
     </div>
@@ -32,7 +32,7 @@
                     <div class="icon-box bg-light-danger">
                         <iconify-icon icon="mdi:layers-outline"></iconify-icon>
                     </div>
-                    <small>TOTAL TIKET</small>
+                    <small>Total Tiket</small>
                 </div>
                 <h1><?= $totalTiket ?? 0 ?></h1>
             </div>
@@ -44,7 +44,7 @@
                     <div class="icon-box bg-light-warning">
                         <iconify-icon icon="mdi:clock-outline"></iconify-icon>
                     </div>
-                    <small>DALAM PROSES</small>
+                    <small>Dalam Proses</small>
                 </div>
                 <div class="progress-center">
                     <div class="progress-row">
@@ -69,7 +69,7 @@
                     <div class="icon-box bg-light-success">
                         <iconify-icon icon="mdi:check-circle-outline"></iconify-icon>
                     </div>
-                    <small>TIKET SELESAI</small>
+                    <small>Tiket Selesai</small>
                 </div>
                 <h1><?= $closedTiket ?? 0 ?></h1>
             </div>
@@ -81,7 +81,7 @@
                     <div class="icon-box bg-light-dark">
                         <iconify-icon icon="mdi:close-circle-outline"></iconify-icon>
                     </div>
-                    <small>TIKET DITOLAK</small>
+                    <small>Tiket Ditolak</small>
                 </div>
                 <h1><?= $rejectTiket ?? 0 ?></h1>
             </div>
@@ -95,8 +95,8 @@
             <div class="card shadow border-0 rounded-4 p-4 h-100">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
-                        <h5 class="fw-bold mb-1">STATUS ALUR KERJA</h5>
-                        <small class="text-muted text-uppercase">
+                        <h5 class="fw-bold mb-1">Status Alur Kerja</h5>
+                        <small class="text-muted">
                             Visualisasi progres real-time
                         </small>
                     </div>
@@ -145,7 +145,7 @@
                 </div>
 
                 <button class="btn btn-lihat w-100 mt-4">
-                    LIHAT DAFTAR TUGAS
+                    Lihat Daftar Tugas
                 </button>
             </div>
         </div>
@@ -153,8 +153,8 @@
         <!-- Rangkuman Per Kategori-->
         <div class="col-md-6">
             <div class="card shadow border-0 rounded-4 p-4 h-100">
-                <h5 class="fw-bold mb-1">RANGKUMAN PER KATEGORI</h5>
-                <small class="text-muted text-uppercase">
+                <h5 class="fw-bold mb-1">Rangkuman Per Kategori</h5>
+                <small class="text-muted">
                     Distribusi Layanan Akademik
                 </small>
 
@@ -163,7 +163,7 @@
                     <!-- Registrasi -->
                     <div class="mb-4">
                         <div class="d-flex justify-content-between">
-                            <span class="fw-semibold text-uppercase small">
+                            <span class="fw-semibold small">
                                 Layanan Registrasi
                             </span>
                             <span class="small text-muted">1 Tiket</span>
@@ -176,7 +176,7 @@
                     <!-- Akademik -->
                     <div class="mb-4">
                         <div class="d-flex justify-content-between">
-                            <span class="fw-semibold text-uppercase small">
+                            <span class="fw-semibold small">
                                 Layanan Akademik
                             </span>
                             <span class="small text-muted">0 Tiket</span>
@@ -189,7 +189,7 @@
                     <!-- Keuangan -->
                     <div class="mb-4">
                         <div class="d-flex justify-content-between">
-                            <span class="fw-semibold text-uppercase small">
+                            <span class="fw-semibold small">
                                 Layanan Keuangan
                             </span>
                             <span class="small text-muted">0 Tiket</span>
@@ -202,7 +202,7 @@
                     <!-- Lainnya -->
                     <div>
                         <div class="d-flex justify-content-between">
-                            <span class="fw-semibold text-uppercase small">
+                            <span class="fw-semibold small">
                                 Lainnya
                             </span>
                             <span class="small text-muted">0 Tiket</span>
