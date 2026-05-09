@@ -31,11 +31,11 @@ class DashboardService
         return $query->join('assign_to_kaur', 'assign_to_kaur.fk_tiket = tikets.id', 'left')
             ->join('tiket_on_progress', 'tiket_on_progress.fk_assign_to_kaur = assign_to_kaur.id', 'left')
             ->groupStart()
-                ->where('tikets.nip_creator', $nip)
-                ->orGroupStart()
-                    ->where('tiket_on_progress.nip_receive_task', $nip)
-                    ->where('tikets.tiket_status !=', 'Waiting')
-                ->groupEnd()
+            ->where('tikets.nip_creator', $nip)
+            ->orGroupStart()
+            ->where('tiket_on_progress.nip_receive_task', $nip)
+            ->where('tikets.tiket_status !=', 'Waiting')
+            ->groupEnd()
             ->groupEnd();
     }
 
@@ -74,4 +74,23 @@ class DashboardService
         $query = $this->db->table('tikets')->where('tiket_status', 'Rejected');
         return $this->applyRoleFilters($query, $roles, $nip)->countAllResults();
     }
-}
+
+    public function getTiketByKategori()
+    {
+        $kategori = $this->db->table('kategoris')
+            ->select('id, kategori_layanan')
+            ->get()
+            ->getResultArray();
+
+        foreach ($kategori as $k) {
+            $data[] = [
+                'kategori' => $k['kategori_layanan'],
+                'total' => $this->db->table('tikets')
+                    ->where('id_layanan', $k['id'])
+                    ->countAllResults()
+            ];
+        }
+
+        return $data;
+    }
+}

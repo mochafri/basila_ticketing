@@ -18,6 +18,7 @@ class DashboardController extends BaseController
             'onOpen' => $dashboard->getTiketOnOpen($roles, $nip),
             'closedTiket' => $dashboard->getTiketClosed($roles, $nip),
             'rejectTiket' => $dashboard->getTiketReject($roles, $nip),
+            'totalTIketPerKategori' => $dashboard->getTiketByKategori(),
         ]);
     }
 }

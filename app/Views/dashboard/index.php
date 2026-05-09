@@ -1,6 +1,7 @@
 <?= $this->extend('layout/template'); ?>
 
 <?= $this->section('content'); ?>
+
 <div class="container-fluid py-4 px-4 dashboard-wrapper">
 
     <!-- Header -->
@@ -13,8 +14,49 @@
         </div>
 
         <div class="d-flex align-items-center gap-3 w-50">
+            <?php
+                $currentMonth = intval(date('n'));
+                $currentYear = intval(date('Y'));
+
+                if ($currentMonth >= 2 && $currentMonth <= 7) {
+                    $y = $currentYear;
+                    $semester = 'Genap';
+                } else {
+                    $y = ($currentMonth == 1) ? $currentYear - 1 : $currentYear;
+                    $semester = 'Ganjil';
+                }
+
+                $currentPeriodeKey = "$y - $semester";
+
+                if ($semester == 'Genap') {
+                    $y++; 
+                } else {
+                    $y++; 
+                }
+
+                $periode = [];
+                for ($i = 0; $i < 5; $i++) {
+                    if ($semester == 'Genap') {
+                        $key = "$y - Genap";
+                        $val = "Semester Genap " . ($y - 1) . "/" . $y;
+                        $periode[$key] = $val;
+                        $semester = 'Ganjil';
+                        $y--;
+                    } else {
+                        $key = "$y - Ganjil";
+                        $val = "Semester Ganjil " . $y . "/" . ($y + 1);
+                        $periode[$key] = $val;
+                        $semester = 'Genap';
+                    }
+                }
+
+                $opt = ['' => 'Pilih Periode'] + $periode;
+            ?>
+            
             <select class="form-select semester-select">
-                <option>Semester Ganjil 2024</option>
+                <?php foreach ($opt as $k => $v): ?>
+                    <option value="<?= $k ?>" <?= $k == $currentPeriodeKey ? 'selected' : '' ?>><?= $v ?></option>
+                <?php endforeach; ?>
             </select>
 
             <button class="btn btn-danger btn-set-periode w-50">
@@ -158,48 +200,32 @@
                     Distribusi Layanan Akademik
                 </small>
 
-                <div class="mt-4">
-
-                    <!-- Registrasi -->
-                    <div class="mb-4">
-                        <div class="d-flex justify-content-between">
-                            <span class="fw-semibold small">
-                                Layanan Registrasi
-                            </span>
-                            <span class="small text-muted">1 Tiket</span>
-                        </div>
-                        <div class="progress mt-2 progress-custom">
-                            <div class="progress-bar bg-danger" style="width:100%"></div>
-                        </div>
-                    </div>
-
-                    <!-- Akademik -->
-                    <div class="mb-4">
-                        <div class="d-flex justify-content-between">
-                            <span class="fw-semibold small">
-                                Layanan Akademik
-                            </span>
-                            <span class="small text-muted">0 Tiket</span>
-                        </div>
-                        <div class="progress mt-2 progress-custom">
-                            <div class="progress-bar bg-secondary" style="width:0%"></div>
+                <?php
+                $gradients = ['bg-gradient-danger', 'bg-gradient-primary', 'bg-gradient-success', 'bg-gradient-warning', 'bg-gradient-info', 'bg-gradient-purple'];
+                $i = 0;
+                foreach ($totalTIketPerKategori as $kat):
+                    $percent = min(($kat['total'] / 100) * 100, 100);
+                    $gradientClass = $gradients[$i % count($gradients)];
+                ?>
+                    <div class="mt-4">
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between">
+                                <span class="fw-semibold small">
+                                    <?= $kat['kategori'] ?>
+                                </span>
+                                <span class="small text-muted"><?= $kat['total'] ?> Tiket</span>
+                            </div>
+                            <div class="progress mt-2 progress-custom">
+                                <div class="progress-bar <?= $gradientClass ?>" style="width:<?= $percent ?>%"></div>
+                            </div>
                         </div>
                     </div>
-
-                    <!-- Keuangan -->
-                    <div class="mb-4">
-                        <div class="d-flex justify-content-between">
-                            <span class="fw-semibold small">
-                                Layanan Keuangan
-                            </span>
-                            <span class="small text-muted">0 Tiket</span>
-                        </div>
-                        <div class="progress mt-2 progress-custom">
-                            <div class="progress-bar bg-secondary" style="width:0%"></div>
-                        </div>
-                    </div>
-
-                    <!-- Lainnya -->
+                <?php
+                    $i++;
+                endforeach;
+                ?>
+                <!-- Lainnya -->
+                <?php if (empty($totalTIketPerKategori)): ?>
                     <div>
                         <div class="d-flex justify-content-between">
                             <span class="fw-semibold small">
@@ -211,10 +237,8 @@
                             <div class="progress-bar bg-secondary" style="width:0%"></div>
                         </div>
                     </div>
-
-                </div>
+                <?php endif; ?>
             </div>
-
         </div>
     </div>
 
