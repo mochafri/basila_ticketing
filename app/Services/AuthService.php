@@ -125,8 +125,8 @@ class AuthService
                     'fullname' => $user['username'],
                     'numberid' => $user['nip'] ?? null,
                     'photo' => null,
-                    'faculty' => 'ILMU TERAPAN',
-                    'studyprogram' => 'D3 Rekayasa Perangkat Lunak Aplikasi'
+                    'faculty' => null,
+                    'studyprogram' => null
                 ]
             ];
         }

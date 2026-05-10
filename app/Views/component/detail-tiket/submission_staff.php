@@ -77,7 +77,7 @@
                     </div>
                 </div>
 
-                <?php 
+                <?php
                 $workLogs = array_filter($riwayat, fn($r) => $r['activity_title'] === 'Catatan Pekerjaan');
                 ?>
                 <?php if (!empty($workLogs)): ?>
@@ -118,12 +118,20 @@
                 <!-- button selesaikan tugas & log catatan -->
                 <div id="containerBtnSelesaikan" class="d-flex align-items-center justify-content-end flex-wrap gap-2 p-2">
                     <?php if ($detail['tiket_status'] !== 'Closed'): ?>
-                        <button id="btnLogPekerjaan" type="button" class="btn btn-outline-danger text-uppercase custom-small-font fw-medium py-2 px-4">
-                            <iconify-icon icon="ph:note-pencil-bold" class="me-1"></iconify-icon>
-                            Log Catatan Pekerjaan
-                        </button>
-                        <?php if($taskStaff['task_status'] !== 'Selesai' && $taskStaff['task_status'] !== 'Menunggu Approve'): ?>
-                        <button id="btnSelesaikanTugas" type="button" class="btn btn-danger text-uppercase custom-small-font fw-medium py-2 px-4">Selesaikan Tugas</button>
+                        <?php if ($taskStaff['task_status'] !== 'Selesai' && $taskStaff['task_status'] !== 'Menunggu Approve'): ?>
+                            <button 
+                                id="btnLogPekerjaan" 
+                                type="button" 
+                                class="btn btn-outline-danger text-uppercase custom-small-font fw-medium py-2 px-4">
+                                <iconify-icon icon="ph:note-pencil-bold" class="me-1"></iconify-icon>
+                                Log Catatan Pekerjaan
+                            </button>
+                            <button 
+                                id="btnSelesaikanTugas" 
+                                type="button" 
+                                class="btn btn-danger text-uppercase custom-small-font fw-medium py-2 px-4">
+                                Selesaikan Tugas
+                            </button>
                         <?php endif; ?>
                     <?php endif; ?>
                 </div>
@@ -208,7 +216,7 @@
                                     </label>
                                     <p id="fileName" class="upload-filename custom-text text-center m-0"></p>
                                 </div>
-                                
+
                                 <!-- Toggle Izinkan Download -->
                                 <div class="w-100 mt-2 px-1">
                                     <div class="form-check form-switch d-flex align-items-center gap-3 p-0">
@@ -374,41 +382,41 @@
             btnSimpan.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Menyimpan...';
 
             fetch('<?= base_url('tiket/log-pekerjaan/' . $detail['id']) ?>', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Berhasil!',
-                        text: data.message,
-                        timer: 1500,
-                        showConfirmButton: false
-                    }).then(() => {
-                        window.location.reload();
-                    });
-                } else {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: data.message,
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: typeof data.message === 'object' ? Object.values(data.message).join('\n') : data.message
+                        });
+                        btnSimpan.disabled = false;
+                        btnSimpan.innerHTML = 'SIMPAN LOG';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
                     Swal.fire({
                         icon: 'error',
-                        title: 'Gagal!',
-                        text: typeof data.message === 'object' ? Object.values(data.message).join('\n') : data.message
+                        title: 'Kesalahan!',
+                        text: 'Terjadi kesalahan sistem.'
                     });
                     btnSimpan.disabled = false;
                     btnSimpan.innerHTML = 'SIMPAN LOG';
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Kesalahan!',
-                    text: 'Terjadi kesalahan sistem.'
                 });
-                btnSimpan.disabled = false;
-                btnSimpan.innerHTML = 'SIMPAN LOG';
-            });
         });
     }
 </script>

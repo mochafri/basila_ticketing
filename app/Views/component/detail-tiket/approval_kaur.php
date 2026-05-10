@@ -1,6 +1,6 @@
-<?php 
-    $titleKabag = ($detail['tiket_status'] === 'Escalated Process') ? 'PROSES ESKALASI OLEH DIREKTUR' : 'approval kepala bagian (bu fira)';
-    $kabagFinishedAt = !empty($kaurByTiketOpen) ? min(array_column($kaurByTiketOpen, 'started_at')) : null;
+<?php
+$titleKabag = ($detail['tiket_status'] === 'Escalated Process') ? 'PROSES ESKALASI OLEH DIREKTUR' : 'approval kepala bagian (bu fira)';
+$kabagFinishedAt = !empty($kaurByTiketOpen) ? min(array_column($kaurByTiketOpen, 'started_at')) : null;
 ?>
 <div class="d-flex align-items-center gap-3">
     <div class="timeline-icon-box <?= ($detail['tiket_status'] === 'Waiting') ? 'bg-secondary' : 'bg-success' ?> text-white">
@@ -78,7 +78,7 @@ if (!empty($taskStaffOnKaur)) {
                 <!-- Catatan Log Aktifitas dihapus sesuai request -->
             <?php endif; ?>
         </div>
-        
+
         <?php if (($currentKaurAssign['flag'] ?? '') === 'Revisi' && !empty($currentKaurAssign['catatan_revisi'] && !in_array('Selesai', array_column($taskStaffOnKaur, 'task_status')))): ?>
             <div class="mt-2 p-3 rounded-3 border-start border-4 border-danger bg-danger bg-opacity-10 shadow-sm mb-3">
                 <div class="d-flex align-items-center gap-2 mb-2 text-danger">
@@ -130,7 +130,7 @@ if (!empty($taskStaffOnKaur)) {
                                         <?= esc($currentStatus) ?>
                                     </span>
                                 </div>
-                                
+
                                 <?php if ($mySelfTask['task_status'] === 'Revisi' && !empty($mySelfTask['catatan_revisi'])): ?>
                                     <div class="mt-2 p-2 rounded border-start border-4 border-danger bg-danger bg-opacity-10 shadow-sm">
                                         <div class="d-flex align-items-center gap-1 mb-1 text-danger">
@@ -143,8 +143,8 @@ if (!empty($taskStaffOnKaur)) {
                                     </div>
                                 <?php endif; ?>
 
-                                <?php 
-                                $workLogs = array_filter($riwayat, fn($r) => $r['activity_title'] === 'Catatan Pekerjaan');
+                                <?php
+                                $workLogs = array_filter($riwayat, fn($r) => $r['activity_title'] === 'Catatan Pekerjaan' && (($r['created_by_id'] ?? null) === $mySelfTask['nip_receive_task'] || (empty($r['created_by_id']) && $r['created_by'] === $mySelfTask['received_by'])));
                                 ?>
                                 <?php if (!empty($workLogs)): ?>
                                     <div class="mt-3">
@@ -208,11 +208,15 @@ if (!empty($taskStaffOnKaur)) {
 
                         <?php if ($mySelfTask['task_status'] !== 'Selesai'): ?>
                             <div id="containerBtnSelesaikan" class="d-flex align-items-center justify-content-end flex-wrap gap-2 p-2">
-                                <button id="btnLogPekerjaan" type="button" class="btn btn-outline-danger text-uppercase custom-small-font fw-medium py-2 px-4">
-                                    <iconify-icon icon="ph:note-pencil-bold" class="me-1"></iconify-icon>
-                                    Log Catatan Pekerjaan
+                                <?php if ($mySelfTask['task_status'] !== 'Selesai'): ?>
+                                    <button id="btnLogPekerjaan" type="button" class="btn btn-outline-danger text-uppercase custom-small-font fw-medium py-2 px-4">
+                                        <iconify-icon icon="ph:note-pencil-bold" class="me-1"></iconify-icon>
+                                        Log Catatan Pekerjaan
+                                    </button>
+                                <button id="btnSelesaikanTugas" type="button" class="btn btn-danger text-uppercase custom-small-font fw-medium py-2 px-4 me-3">
+                                    Selesaikan Tugas
                                 </button>
-                                <button id="btnSelesaikanTugas" type="button" class="btn btn-danger text-uppercase custom-small-font fw-medium py-2 px-4 me-3">Selesaikan Tugas</button>
+                                <?php endif; ?>
                             </div>
 
                             <!-- Form Log Catatan Pekerjaan -->
@@ -359,8 +363,8 @@ if (!empty($taskStaffOnKaur)) {
                                     </div>
                                 </div>
 
-                                <?php 
-                                $workLogs = array_filter($riwayat, fn($r) => $r['activity_title'] === 'Catatan Pekerjaan');
+                                <?php
+                                $workLogs = array_filter($riwayat, fn($r) => $r['activity_title'] === 'Catatan Pekerjaan' && (($r['created_by_id'] ?? null) === $task['nip_receive_task'] || (empty($r['created_by_id']) && $r['created_by'] === $task['received_by'])));
                                 ?>
                                 <?php if (!empty($workLogs)): ?>
                                     <div class="px-2">
@@ -444,10 +448,10 @@ if (!empty($taskStaffOnKaur)) {
                                         <span style="font-size: .7rem;" class="text-danger bg-danger bg-opacity-10 px-2 py-1 fw-bold text-center rounded m-0 w-25"><?= esc($task['received_by']) ?></span>
                                     </div>
                                 </div>
-                                
+
                                 <!-- Log Catatan Pekerjaan -->
-                                <?php 
-                                $workLogs = array_filter($riwayat, fn($r) => $r['activity_title'] === 'Catatan Pekerjaan');
+                                <?php
+                                $workLogs = array_filter($riwayat, fn($r) => $r['activity_title'] === 'Catatan Pekerjaan' && (($r['created_by_id'] ?? null) === $task['nip_receive_task'] || (empty($r['created_by_id']) && $r['created_by'] === $task['received_by'])));
                                 ?>
                                 <?php if (!empty($workLogs)): ?>
                                     <div class="px-2">
@@ -540,7 +544,7 @@ if (!empty($taskStaffOnKaur)) {
     const btnLogPekerjaan = document.getElementById("btnLogPekerjaan");
     const wrapperLogPekerjaan = document.getElementById("wrapperLogPekerjaan");
     const btnBatalLog = document.getElementById("btnBatalLog");
-    
+
     // Note: btnSelesaikanTugas and wrapperPenyelesaian are handled in approveKaur.js
     const btnSelesaikanInline = document.getElementById("btnSelesaikanTugas");
     const wrapperPenyelesaianInline = document.getElementById("wrapperPenyelesaian");
@@ -548,7 +552,7 @@ if (!empty($taskStaffOnKaur)) {
     if (btnLogPekerjaan && wrapperLogPekerjaan) {
         btnLogPekerjaan.addEventListener("click", function() {
             wrapperLogPekerjaan.classList.toggle("show");
-            
+
             // Close the completion form if it's open (it's handled by IDs, so we can still access it)
             if (wrapperPenyelesaianInline) {
                 wrapperPenyelesaianInline.classList.remove("show");
@@ -580,41 +584,41 @@ if (!empty($taskStaffOnKaur)) {
             btnSimpan.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Menyimpan...';
 
             fetch('<?= base_url('tiket/log-pekerjaan/' . $detail['id']) ?>', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Berhasil!',
-                        text: data.message,
-                        timer: 1500,
-                        showConfirmButton: false
-                    }).then(() => {
-                        window.location.reload();
-                    });
-                } else {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: data.message,
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal!',
+                            text: typeof data.message === 'object' ? Object.values(data.message).join('\n') : data.message
+                        });
+                        btnSimpan.disabled = false;
+                        btnSimpan.innerHTML = 'SIMPAN LOG';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
                     Swal.fire({
                         icon: 'error',
-                        title: 'Gagal!',
-                        text: typeof data.message === 'object' ? Object.values(data.message).join('\n') : data.message
+                        title: 'Kesalahan!',
+                        text: 'Terjadi kesalahan sistem.'
                     });
                     btnSimpan.disabled = false;
                     btnSimpan.innerHTML = 'SIMPAN LOG';
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Kesalahan!',
-                    text: 'Terjadi kesalahan sistem.'
                 });
-                btnSimpan.disabled = false;
-                btnSimpan.innerHTML = 'SIMPAN LOG';
-            });
         });
     }
 </script>

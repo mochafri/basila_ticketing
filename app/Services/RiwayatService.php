@@ -26,13 +26,14 @@ class RiwayatService
         return $data;
     }
 
-    public function addLog($id, $title, $message, $createdBy, $file = null)
+    public function addLog($id, $title, $message, $createdBy, $createdById = null, $file = null)
     {
         $data = [
             'fk_tiket' => $id,
             'activity_title' => $title,
             'message' => $message,
-            'created_by' => $createdBy
+            'created_by' => $createdBy,
+            'created_by_id' => $createdById
         ];
 
         if ($file && $file->isValid() && !$file->hasMoved()) {

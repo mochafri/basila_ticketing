@@ -12,6 +12,8 @@ $routes->get('tiket/create', 'TicketController::create');
 $routes->get('tiket/(:num)', 'TicketController::show/$1');
 $routes->get('/user', 'MasterDataController::user');
 $routes->get('/kategori', 'MasterDataController::kategori');
+$routes->get('/riwayat-tiket', 'RiwayatTiketController::index');
+
 $routes->post('/create-kategori', 'MasterDataController::createKategori');
 $routes->post('/create-layanan', 'MasterDataController::createLayanan');
 $routes->get('/get-layanan/(:num)', 'TicketController::getLayananByID/$1');
@@ -32,6 +34,7 @@ $routes->post('/create-kategori', 'MasterDataController::createKategori');
 $routes->post('/create-layanan', 'MasterDataController::createLayanan');
 
 $routes->get('/get-layanan/(:num)', 'TicketController::getLayananByID/$1');
+$routes->get('/get-prodi/(:num)', 'TicketController::getProdi/$1');
 
 # Ambil file dari local server
 $routes->get('tiket/file/users/(:any)', 'TicketController::getFileUsers/$1');

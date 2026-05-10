@@ -59,15 +59,16 @@ class TiketService
                 ->groupEnd();
         }
 
-        // 1. KABAG (SUPERADMIN / BAA): Melihat semua tiket
+        # 1. KABAG (SUPERADMIN / BAA): Melihat semua tiket
         if (in_array('SUPERADMIN', $roles) || in_array('BAA', $roles)) {
             return [
-                'data' => $query->paginate(10),
+                'data' => $query
+                    ->paginate(10),
                 'pager' => $query->pager,
             ];
         }
 
-        // 2. KAUR: Melihat tiket yang didelegasikan kepadanya (Kecuali status Waiting)
+        # 2. KAUR: Melihat tiket yang didelegasikan kepadanya (Kecuali status Waiting)
         if (in_array('KEPALA URUSAN ADMINISTRASI AKADEMIK', $roles) || in_array('ADMIN DATA MAHASISWA FAKULTAS', $roles)) {
             return [
                 'data' => $query->join('assign_to_kaur', 'assign_to_kaur.fk_tiket = tikets.id')
@@ -76,7 +77,7 @@ class TiketService
                 'pager' => $query->pager,
             ];
         }
-        // 3. STAFF & MAHASISWA (Pelapor): 
+        # 3. STAFF & MAHASISWA (Pelapor): 
         return [
             'data' => $query->join('assign_to_kaur', 'assign_to_kaur.fk_tiket = tikets.id', 'left')
                 ->join('tiket_on_progress', 'tiket_on_progress.fk_assign_to_kaur = assign_to_kaur.id', 'left')
@@ -88,6 +89,59 @@ class TiketService
                 ->groupEnd()
                 ->distinct()
                 ->paginate(10),
+            'pager' => $query->pager
+        ];
+    }
+
+    # Bagian khusus untuk riwayat tiket (status Closed/Rejected)
+    public function getRiwayatTiket($roles = [], $nip = null, $kategori = null, $status = null, $search = null)
+    {
+        $query = $this->tiketModel
+            ->select('
+                tikets.id, 
+                tikets.deskripsi_permohonan, 
+                tikets.tiket_status, 
+                tikets.created_at, 
+                tikets.nip_creator, 
+                tikets.nama_creator, 
+                tikets.fakultas, tikets.prodi,
+                layanans.per_kategori_layanan,
+                kategoris.kategori_layanan
+            ')
+            ->join('layanans', 'layanans.id = tikets.id_layanan', 'left')
+            ->join('kategoris', 'kategoris.id = tikets.id_kategori', 'left')
+            ->orderBy('tikets.created_at', 'DESC');
+
+        # Jika status tidak ditentukan, ambil yang sudah final secara default
+        if ($status && $status !== 'All') {
+            $query->where('tikets.tiket_status', $status);
+        } else {
+            $query->whereIn('tikets.tiket_status', ['Closed', 'Rejected']);
+        }
+
+        if ($kategori) {
+            $query->where('kategoris.id', $kategori);
+        }
+
+        if ($search) {
+            $query->groupStart()
+                ->like('tikets.id', $search)
+                ->orLike('tikets.deskripsi_permohonan', $search)
+                ->groupEnd();
+        }
+
+        # Filter berdasarkan Role (Sama seperti getDataTiket tapi versi simple untuk riwayat)
+        if (in_array('SUPERADMIN', $roles) || in_array('BAA', $roles)) {
+            # No extra filter
+        } else if (in_array('KEPALA URUSAN ADMINISTRASI AKADEMIK', $roles) || in_array('ADMIN DATA MAHASISWA FAKULTAS', $roles)) {
+            $query->join('assign_to_kaur', 'assign_to_kaur.fk_tiket = tikets.id')
+                ->where('assign_to_kaur.nip_kaur', $nip);
+        } else {
+            $query->where('tikets.nip_creator', $nip);
+        }
+
+        return [
+            'data' => $query->paginate(10),
             'pager' => $query->pager
         ];
     }
@@ -105,6 +159,8 @@ class TiketService
                 tikets.dokumen_lampiran, 
                 tikets.original_dokumen_name,
                 tikets.is_escalated, 
+                tikets.notes_request_escalated, 
+                tikets.notes_after_escalated,
                 tikets.level_kesulitan,
                 tikets.nip_creator, 
                 tikets.nama_creator, tikets.fakultas, tikets.prodi,

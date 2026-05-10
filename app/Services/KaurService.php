@@ -487,6 +487,7 @@ class KaurService
             'activity_title' => 'Catatan Progress (Kaur)',
             'message' => $note,
             'created_by' => session('username') ?: 'Kepala Urusan',
+            'created_by_id' => session('user_identifier'),
             'created_at' => date('Y-m-d H:i:s'),
             'fk_tiket' => $idTiket,
         ]);

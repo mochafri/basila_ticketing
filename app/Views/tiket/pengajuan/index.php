@@ -13,6 +13,26 @@
                     </div>
                     <div class="row g-4 needs-validation">
 
+                        <?php if (session('fakultas') === null || session('prodi') === null): ?>
+                            <div class="col-md-6">
+                                <label class="form-label text-uppercase">Fakultas</label>
+                                <select class="form-select fakultas-select" name="fakultas" required>
+                                    <option selected disabled value="">Pilih Fakultas...</option>
+                                    <?php foreach ($fakultas as $f): ?>
+                                        <option value="<?= $f['id'] ?>">
+                                            <?= $f['nama_fakultas'] ?? $f['faculty'] ?? $f['name'] ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-uppercase">Program Studi</label>
+                                <select class="form-select prodi-select" name="prodi" required disabled>
+                                    <option selected disabled value="">Pilih Prodi...</option>
+                                </select>
+                            </div>
+                        <?php endif; ?>
+
                         <div class="col-md-6">
                             <label for="validationCustom04" class="form-label text-uppercase">kategori layanan</label>
                             <select class="form-select kategori" name="kategori" id="validationCustom04" required>

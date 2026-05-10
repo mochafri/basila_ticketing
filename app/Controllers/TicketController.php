@@ -25,12 +25,13 @@ class TicketController extends BaseController
         $this->eskalasiService = service('eskalasi');
     }
 
+    # List tiket yang ada di table setiap user
     public function index(): string
     {
         $roles = [session('role_name')];
         $nip = session('user_identifier');
         $kategori = $this->request->getGet('kategori');
-        $status = $this->request->getGet('status') ?? 'Active';
+        $status = $this->request->getGet('status') ?? 'All';
         $search = $this->request->getGet('search');
 
         return view('tiket/daftar/index', [
@@ -43,22 +44,7 @@ class TicketController extends BaseController
         ]);
     }
 
-    public function create(): string
-    {
-        return view('tiket/pengajuan/index', [
-            'title' => 'Pengajuan Tiket',
-            'kategori' => $this->kategoriService->getKategori(),
-        ]);
-    }
-
-    public function getLayananByID($slug)
-    {
-        $result = $this->layananService->getLayananById($slug);
-
-        $statusCode = $result['status'] === 'success' ? 201 : 422;
-        return response()->setStatusCode($statusCode)->setJSON($result);
-    }
-
+    # Detail tiket
     public function show($slug): string
     {
         $nip = session('user_identifier');
@@ -74,6 +60,63 @@ class TicketController extends BaseController
             'kaurByTiketOpen' => $this->kabagService->getKaurByTiketOpen($slug),
             'riwayat' => $this->riwayatService->getRiwayat($slug) ?? [],
         ]);
+    }
+
+    public function create(): string
+    {
+        $client = \Config\Services::curlrequest();
+
+        $fakultas = env("URL_FACULTY");
+
+        $getFakultas = $client->get($fakultas, [
+            'headers' => [
+                'Authorization' => 'Bearer ' . session()->get('token'),
+                'Content-Type' => 'application/json',
+            ],
+            'http_errors' => false
+        ]);
+
+        if ($getFakultas->getStatusCode(401) || $getFakultas->getStatusCode(403)) {
+            $data = [];
+        } else {
+            $data = json_decode($getFakultas->getBody(), true);
+        }
+
+        return view('tiket/pengajuan/index', [
+            'title' => 'Pengajuan Tiket',
+            'kategori' => $this->kategoriService->getKategori(),
+            'fakultas' => $data
+        ]);
+    }
+
+    public function getLayananByID($slug)
+    {
+        $result = $this->layananService->getLayananById($slug);
+
+        $statusCode = $result['status'] === 'success' ? 201 : 422;
+        return response()->setStatusCode($statusCode)->setJSON($result);
+    }
+
+    public function getProdi($id)
+    {
+        $client = \Config\Services::curlrequest();
+        $prodi = env("URL_PRODI");
+
+        $getProdi = $client->get($prodi . $id, [
+            'headers' => [
+                'Authorization' => 'Bearer ' . session()->get('token'),
+                'Content-Type' => 'application/json'
+            ],
+            'http_errors' => false
+        ]);
+
+        if ($getProdi->getStatusCode(401) || $getProdi->getStatusCode(403)) {
+            $data = [];
+        } else {
+            $data = json_decode($getProdi->getBody(), true);
+        }
+
+        return response()->setStatusCode(201)->setJSON($data);
     }
 
     public function getFileUsers($fileName)
@@ -105,8 +148,8 @@ class TicketController extends BaseController
     public function createTiket()
     {
         $data = $this->request->getPost();
-        $data['fakultas'] = session('fakultas');
-        $data['prodi'] = session('prodi');
+        $data['fakultas'] = (session('fakultas') === '-' || empty(session('fakultas'))) ? $this->request->getPost('fakultas') : session('fakultas');
+        $data['prodi'] = (session('prodi') === '-' || empty(session('prodi'))) ? $this->request->getPost('prodi') : session('prodi');
         $username = session('username');
 
         if (!$this->validateData($data, 'tiketRule')) {
@@ -165,7 +208,16 @@ class TicketController extends BaseController
 
     public function escalated($slug)
     {
-        $result = $this->kabagService->isEscalated($slug);
+        $data = $this->request->getJSON(true);
+
+        if (!$this->validateData($data, 'escalatedRule')) {
+            return $this->response->setStatusCode(422)->setJSON([
+                'status' => 'failed',
+                'message' => 'Gagal eskalasi tiket'
+            ]);
+        }
+
+        $result = $this->kabagService->isEscalated($slug, $data['notes_escalated']);
         $statusCode = $result['status'] === 'success' ? 200 : 422;
 
         return response()->setStatusCode($statusCode)->setJSON($result);
@@ -300,7 +352,16 @@ class TicketController extends BaseController
 
     public function approveEscalated($slug)
     {
-        $result = $this->eskalasiService->approveEscalated($slug);
+        $data = $this->request->getJSON(true);
+
+        if (!$this->validateData($data, 'escalatedRule')) {
+            return $this->response->setStatusCode(422)->setJSON([
+                'status' => 'failed',
+                'message' => 'Gagal dalam menerima eskalasi tiket'
+            ]);
+        }
+
+        $result = $this->eskalasiService->approveEscalated($slug, $data['notes_escalated']);
 
         $statusCode = $result['status'] === 'success' ? 200 : 400;
 
@@ -311,14 +372,14 @@ class TicketController extends BaseController
     {
         $data = $this->request->getJSON(true);
 
-        if (!$this->validateData($data, 'rejectRule')) {
+        if (!$this->validateData($data, 'escalatedRule')) {
             return $this->response->setStatusCode(422)->setJSON([
                 'status' => 'failed',
-                'message' => 'Gagal reject tiket'
+                'message' => 'Gagal menolak eskalasi tiket'
             ]);
         }
 
-        $result = $this->eskalasiService->rejectEscalated($slug, $data['catatan']);
+        $result = $this->eskalasiService->rejectEscalated($slug, $data['notes_escalated']);
         $statusCode = $result['status'] === 'success' ? 200 : 400;
         return $this->response->setStatusCode($statusCode)->setJSON($result);
     }
@@ -340,6 +401,7 @@ class TicketController extends BaseController
             'Catatan Pekerjaan',
             $data['deskripsi'],
             session('username') ?? 'Staff',
+            session('user_identifier'),
             $file
         );
 

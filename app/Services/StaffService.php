@@ -95,6 +95,7 @@ class StaffService
                 'activity_title' => 'Tugas Selesai',
                 'message' => 'Kepala Urusan telah menyelesaikan tugas mandiri dan mengunggah laporan penyelesaian.',
                 'created_by' => 'Kepala Urusan',
+                'created_by_id' => session('user_identifier'),
                 'fk_tiket' => $id
             ]);
         } else {
@@ -102,6 +103,7 @@ class StaffService
                 'activity_title' => 'Laporan Tugas',
                 'message' => 'Staf telah mengunggah laporan penyelesaian tugas.',
                 'created_by' => 'Staf',
+                'created_by_id' => session('user_identifier'),
                 'fk_tiket' => $id
             ]);
         }

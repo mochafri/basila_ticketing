@@ -8,12 +8,20 @@ async function getLayananById(id) {
     return data;
 }
 
-async function postTiket(judul, kategori, layanan, deskripsi, dokumenLampiran) {
+async function getProdiById(id) {
+    const res = await fetch(`/get-prodi/${id}`);
+    const data = await res.json();
+    return data;
+}
+
+async function postTiket(judul, kategori, layanan, deskripsi, dokumenLampiran, fakultas = null, prodi = null) {
     const formData = new FormData();
     formData.append('judul', judul);
     formData.append('kategori', kategori);
     formData.append('layanan', parseInt(layanan));
     formData.append('deskripsi', deskripsi);
+    if(fakultas) formData.append('fakultas', fakultas);
+    if(prodi) formData.append('prodi', prodi);
     if(dokumenLampiran) formData.append('lampiran_dokumen', dokumenLampiran);
 
     const res = await fetch('/create-tiket', {
@@ -40,14 +48,21 @@ document.addEventListener('DOMContentLoaded', () => {
             const kategori = document.querySelector('.kategori').value;
             const layanan = document.querySelector('.layanan').value;
             const deskripsi = document.querySelector('#validationTextarea').value;
+            const fakultasEl = document.querySelector('.fakultas-select');
+            const prodiEl = document.querySelector('.prodi-select');
+            
+            // Ambil TEXT dari fakultas jika yang dikirim ID, atau biarkan ID jika server bisa resolve
+            // Tapi biasanya di sistem ini simpan STRING nama fakultas.
+            const fakultas = fakultasEl ? fakultasEl.options[fakultasEl.selectedIndex].text : null;
+            const prodi = prodiEl ? prodiEl.value : null;
             const dokumenLampiran = document.querySelector('#inputGroupFile02');
             const file = dokumenLampiran.files ? dokumenLampiran.files[0] : null;
 
-            if (!kategori || !layanan || !deskripsi) {
+            if (!kategori || !layanan || !deskripsi || (fakultasEl && !fakultas) || (prodiEl && !prodi)) {
                 Swal.fire({
                     icon: "warning",
                     title: "Peringatan!",
-                    text: "Mohon lengkapi semua isian terlebih dahulu."
+                    text: "Mohon lengkapi semua isian termasuk Fakultas dan Prodi jika diminta."
                 });
                 btnSubmit.innerHTML = 'Submit form';
                 btnSubmit.disabled = false;
@@ -65,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 cancelButtonText: "Batal"
             }).then(async (result) => {
                 if (result.isConfirmed) {
-                    const res = await postTiket('', kategori, layanan, deskripsi, file);
+                    const res = await postTiket('', kategori, layanan, deskripsi, file, fakultas, prodi);
 
                     if (res.status === 'success') {
                         Swal.fire({
@@ -113,6 +128,36 @@ document.addEventListener('DOMContentLoaded', () => {
                     opt.text = layanan.per_kategori_layanan;
                     layananSelect.append(opt);
                 });
+            }
+        });
+    }
+
+    // --- DYNAMIC PRODI LOGIC ---
+    const fakultasSelect = document.querySelector('.fakultas-select');
+    const prodiSelect = document.querySelector('.prodi-select');
+
+    if (fakultasSelect && prodiSelect) {
+        fakultasSelect.addEventListener('change', async (e) => {
+            const idFakultas = e.target.value;
+            
+            prodiSelect.innerHTML = '<option selected disabled value="">Loading...</option>';
+            prodiSelect.disabled = true;
+
+            const data = await getProdiById(idFakultas);
+
+            if (data && Array.isArray(data)) {
+                prodiSelect.innerHTML = '<option selected disabled value="">Pilih Prodi...</option>';
+                data.forEach(p => {
+                    const opt = document.createElement('option');
+                    // Gunakan nama sebagai value agar konsisten dengan data session yang biasanya string
+                    const prodiName = p.nama_prodi ?? p.study_program ?? p.name;
+                    opt.value = prodiName;
+                    opt.text = prodiName;
+                    prodiSelect.add(opt);
+                });
+                prodiSelect.disabled = false;
+            } else {
+                prodiSelect.innerHTML = '<option selected disabled value="">Gagal memuat data</option>';
             }
         });
     }

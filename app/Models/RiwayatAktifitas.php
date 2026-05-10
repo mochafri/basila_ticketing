@@ -18,6 +18,7 @@ class RiwayatAktifitas extends Model
         'attachment',
         'original_attachment_name',
         'created_by',
+        'created_by_id',
         'fk_tiket',
         'created_at',
         'updated_at'

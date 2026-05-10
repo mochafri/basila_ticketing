@@ -25,6 +25,11 @@ class RiwayatAktifitas extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => 100
             ],
+            'created_by_id' => [
+                'type' => 'VARCHAR',
+                'constraint' => 50,
+                'null' => true
+            ],
             'created_at' => [
                 'type' => 'DATETIME',
                 'null' => true
