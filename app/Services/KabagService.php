@@ -118,7 +118,7 @@ class KabagService
     }
 
     # Escalated service
-    public function isEscalated($id)
+    public function isEscalated($id, $data)
     {
         $db = \Config\Database::connect();
 
@@ -136,14 +136,15 @@ class KabagService
         $update = $this->tiketModel->update($id, [
             'is_escalated' => true,
             'tiket_status' => 'Escalated Process',
-            'level_kesulitan' => 'high'
+            'level_kesulitan' => 'high',
+            'notes_request_escalated' => $data
         ]);
 
         if (!$update) {
             $db->transRollback();
             return [
                 'status' => 'fail',
-                'message' => 'Gagal update tiket'
+                'message' => 'Gagal melakukan eskalasi tiket'
             ];
         }
 

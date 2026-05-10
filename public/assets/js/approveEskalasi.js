@@ -2,12 +2,15 @@ const tokenCSRF = document.querySelector('meta[name="X-CSRF-TOKEN"]').getAttribu
 
 // --- ESKALASI SERVICE FUNCTIONS ---
 
-async function approveEscalated(id) {
+async function approveEscalated(id, catatan) {
     const res = await fetch(`/approve-eskalasi/${id}`, {
         method: 'POST',
         headers: {
             'X-CSRF-TOKEN': tokenCSRF
-        }
+        },
+        body: JSON.stringify({
+            notes_escalated: catatan
+        })
     });
     return await res.json();
 }
@@ -20,7 +23,7 @@ async function rejectEscalated(id, catatan) {
             'X-CSRF-TOKEN': tokenCSRF
         },
         body: JSON.stringify({
-            catatan: catatan
+            notes_escalated: catatan
         })
     });
 
@@ -43,6 +46,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 title: "Apakah Anda yakin?",
                 text: "Ingin menyetujui eskalasi tiket ini?",
                 icon: "question",
+                input: "textarea",
+                inputPlaceholder: "Ketik catatan menerima eskalasi tiket di sini...",
+                inputAttributes: {
+                    'aria-label': 'Ketik catatan menerima eskalasi tiket di sini'
+                },
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
@@ -50,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 cancelButtonText: "Batal"
             }).then(async (result) => {
                 if (result.isConfirmed) {
-                    const res = await approveEscalated(parseSlug);
+                    const res = await approveEscalated(parseSlug, result.value);
                     if (res.status === 'success') {
                         Swal.fire({
                             icon: 'success',
@@ -86,6 +94,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 title: "Apakah Anda yakin?",
                 text: "Ingin menolak eskalasi tiket ini?",
                 icon: "warning",
+                input: "textarea",
+                inputPlaceholder: 'Ketik catatan menolak eskalasi tiket di sini...',
+                inputAttributes: {
+                    'aria-label': 'Ketik catatan menolak eskalasi tiket di sini'
+                },
                 showCancelButton: true,
                 confirmButtonColor: "#f39c12",
                 cancelButtonColor: "#3085d6",

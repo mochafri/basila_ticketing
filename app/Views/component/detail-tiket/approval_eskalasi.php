@@ -8,6 +8,19 @@
             <p class="m-0 fw-bold mb-2 custom-small-font">approval eskalasi</p>
             <div class="p-4 bg-light rounded-3 w-100 d-flex gap-3 flex-column shadow-md border">
                 <p class="m-0 fw-medium custom-text text-danger italic">Tiket ini sedang dalam proses eskalasi dan membutuhkan persetujuan.</p>
+                
+                <?php if (!empty($detail['notes_request_escalated'])): ?>
+                    <div class="bg-white p-3 rounded-3 border-start border-4 border-warning shadow-sm">
+                        <div class="d-flex align-items-center gap-2 mb-2 text-warning">
+                            <iconify-icon icon="ph:info-bold"></iconify-icon>
+                            <span class="fw-bold text-uppercase" style="font-size: .65rem; letter-spacing: 1px;">Alasan Eskalasi (Kabag)</span>
+                        </div>
+                        <p class="m-0 custom-small-font fst-italic text-dark">
+                            "<?= esc($detail['notes_request_escalated']) ?>"
+                        </p>
+                    </div>
+                <?php endif; ?>
+
                 <?php if (session('role_name') === 'SUPERADMIN'): ?>
                     <div class="d-flex gap-2 flex-wrap mt-2">
                         <button type="button"
@@ -30,7 +43,30 @@
                 <span class="step-num"><?= $step ?? 2 ?></span>
                 <iconify-icon icon="ic:round-check"></iconify-icon>
             </div>
-            <p class="m-0 fw-bold custom-small-font">approval eskalasi (Selesai)</p>
+            <div class="flex-grow-1">
+                <p class="m-0 fw-bold mb-2 custom-small-font text-uppercase">approval eskalasi (Selesai)</p>
+                <div class="p-3 bg-light rounded-3 w-100 d-flex gap-3 flex-column border">
+                    <?php if (!empty($detail['notes_request_escalated'])): ?>
+                        <div class="bg-white p-3 rounded-2 border shadow-sm">
+                            <div class="d-flex align-items-center gap-1 mb-1 text-muted">
+                                <iconify-icon icon="ph:info-bold" style="font-size: .8rem;"></iconify-icon>
+                                <span class="fw-bold text-uppercase" style="font-size: .6rem; letter-spacing: 1px;">Alasan Eskalasi</span>
+                            </div>
+                            <p class="m-0 custom-small-font fst-italic">"<?= esc($detail['notes_request_escalated']) ?>"</p>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (!empty($detail['notes_after_escalated'])): ?>
+                        <div class="bg-white p-3 rounded-2 border-start border-4 border-success shadow-sm">
+                            <div class="d-flex align-items-center gap-1 mb-1 text-success">
+                                <iconify-icon icon="ph:check-circle-bold" style="font-size: .8rem;"></iconify-icon>
+                                <span class="fw-bold text-uppercase" style="font-size: .6rem; letter-spacing: 1px;">Keputusan Eskalasi</span>
+                            </div>
+                            <p class="m-0 custom-small-font fw-bold">"<?= esc($detail['notes_after_escalated']) ?>"</p>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
         </div>
     <?php endif; ?>
 <?php endif; ?>

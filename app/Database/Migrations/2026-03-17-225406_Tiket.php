@@ -46,6 +46,14 @@ class Tiket extends Migration
                 'type' => 'BOOLEAN',
                 'default' => false,
             ],
+            'notes_request_escalated' => [
+                'type' => 'TEXT',
+                'null' => false,
+            ],
+            'notes_after_escalated' => [
+                'type' => 'TEXT',
+                'null' => false,
+            ],
             'approve_by' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255',

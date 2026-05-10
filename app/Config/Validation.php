@@ -56,6 +56,13 @@ class Validation extends BaseConfig
         ]
     ];
 
+    public array $escalatedRule = [
+        'notes_escalated' => [
+            'label' => 'Alasan Eskalasi',
+            'rules' => 'required|string|min_length[3]'
+        ]
+    ];
+
     public array $approveRule = [
         'approve' => [
             'label' => 'Approve Oleh',
@@ -117,6 +124,14 @@ class Validation extends BaseConfig
         'lampiran_dokumen' => [
             'label' => 'Lampiran',
             'rules' => 'permit_empty|mime_in[lampiran_dokumen,image/png,image/jpeg,application/pdf]|max_size[lampiran_dokumen,10240]'
+        ],
+        'fakultas' => [
+            'label' => 'Fakultas',
+            'rules' => 'permit_empty|string|max_length[100]'
+        ],
+        'prodi' => [
+            'label' => 'Program Studi',
+            'rules' => 'permit_empty|string|max_length[100]'
         ]
     ];
 

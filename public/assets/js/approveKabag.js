@@ -10,7 +10,7 @@ async function approveTiket(id, userId, nama, levelKesulitan) {
             'X-CSRF-TOKEN': tokenCSRF
         },
         body: JSON.stringify({
-            user_id: userId, 
+            user_id: userId,
             assign_to_kaur: nama,
             approve: 'buk fira',
             level_kesulitan: levelKesulitan
@@ -33,13 +33,16 @@ async function reject(id, catatan) {
     return await res.json();
 }
 
-async function escalated(id) {
+async function escalated(id, catatan) {
     const res = await fetch(`/escalated-tiket/${id}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'Application/json',
             'X-CSRF-TOKEN': tokenCSRF
-        }
+        },
+        body: JSON.stringify({
+            notes_escalated: catatan
+        })
     });
     return await res.json();
 }
@@ -188,15 +191,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 title: "Apakah Anda yakin?",
                 text: "Ingin mengeskalasi tiket ini?",
                 icon: "question",
+                input: "textarea",
+                inputPlaceholder: 'Ketik catatan eskalasi di sini...',
+                inputAttributes: {
+                    'aria-label': 'Ketik catatan eskalasi di sini'
+                },
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
                 confirmButtonText: "Ya, eskalasi!",
-                cancelButtonText: "Batal"
+                cancelButtonText: "Batal",
+                preConfirm: (value) => {
+                    if (!value) {
+                        Swal.showValidationMessage('Catatan eskalasi wajib diisi!')
+                    }
+                    return value;
+                }
             }).then(async (result) => {
                 if (result.isConfirmed) {
-                    const res = await escalated(parseSlug);
-                    if (res.status === 'success' || res.status === 201 || res.status === 200) {
+                    const res = await escalated(parseSlug, result.value);
+                    if (res.status === 'success' || res.status === 200) {
                         Swal.fire({
                             icon: 'success',
                             title: 'Berhasil!',

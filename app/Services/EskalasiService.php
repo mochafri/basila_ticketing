@@ -13,13 +13,14 @@ class EskalasiService
         $this->riwayatAktifitas = model('RiwayatAktifitas');
     }
 
-    public function approveEscalated($id)
+    public function approveEscalated($id, $data)
     {
         $db = \Config\Database::connect();
         $db->transStart();
 
         $this->tiketModel->update($id, [
-            'tiket_status' => 'Open'
+            'tiket_status' => 'Approve Escalated',
+            'notes_after_escalated' => $data
         ]);
 
         $this->riwayatAktifitas->insert([
@@ -47,7 +48,7 @@ class EskalasiService
 
         $this->tiketModel->update($id, [
             'tiket_status' => 'Reject',
-            'catatan' => $data
+            'notes_after_escalated' => $data
         ]);
 
         $this->riwayatAktifitas->insert([

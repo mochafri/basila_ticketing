@@ -1,8 +1,8 @@
-<?php 
-    $titleKabag = ($detail['tiket_status'] === 'Escalated Process') ? 'PROSES ESKALASI OLEH DIREKTUR' : 'approval kepala bagian (bu fira)';
-    $kabagFinishedAt = !empty($kaurByTiketOpen) ? min(array_column($kaurByTiketOpen, 'started_at')) : null;
+<?php
+$titleKabag = ($detail['tiket_status'] === 'Escalated Process') ? 'PROSES ESKALASI OLEH DIREKTUR' : 'approval kepala bagian (bu fira)';
+$kabagFinishedAt = !empty($kaurByTiketOpen) ? min(array_column($kaurByTiketOpen, 'started_at')) : null;
 ?>
-<?php if (($detail['tiket_status'] === 'Open' && empty($kaurByTiketOpen)) || $detail['tiket_status'] === 'Approve Escalated' || $detail['tiket_status'] === 'Escalated Process'): ?>
+<?php if (($detail['tiket_status'] === 'Open' && empty($kaurByTiketOpen)) || $detail['tiket_status'] === 'Approve Escalated' || $detail['tiket_status'] === 'Escalated Process' || $detail['tiket_status'] === 'Reject'): ?>
     <div class="d-flex gap-3 w-100">
         <div class="timeline-icon-box bg-danger text-white">
             <span class="step-num"><?= $step ?? 2 ?></span>
@@ -14,47 +14,77 @@
                 <div class="d-flex flex-wrap gap-2 mt-1 mb-2">
                     <span class="custom-text text-warning small d-flex align-items-center gap-1">
                         <iconify-icon icon="ph:clock-countdown-bold"></iconify-icon>
-                        Menunggu direktor menyetujui...
+                        Menunggu direktor menyetujui eskalasi...
                     </span>
                 </div>
+                <?php if (!empty($detail['notes_request_escalated'])): ?>
+                    <div class="p-4 bg-white rounded-4 shadow-sm border mb-3">
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <iconify-icon icon="ph:info-bold" class="text-warning fs-5"></iconify-icon>
+                            <span class="fw-bold text-uppercase custom-small-font" style="letter-spacing: 0.5px;">Catatan Permintaan Eskalasi</span>
+                        </div>
+                        <div class="p-3 bg-light rounded-3 border-start border-4 border-warning">
+                            <p class="m-0 small text-dark" style="line-height: 1.6;"><?= esc($detail['notes_request_escalated']) ?></p>
+                        </div>
+                    </div>
+                <?php endif; ?>
             <?php endif; ?>
-            <?php if ($detail['tiket_status'] !== 'Escalated Process'): ?>
-            <div class="p-4 bg-light rounded-3 w-100 d-flex gap-3 flex-column shadow-md border">
-                <p class="m-0 fw-medium custom-text">Pilih delegasi kepala bagian</p>
-                <div class="d-flex gap-2 flex-wrap">
-                    <?php if (!empty($kaur)): ?>
-                        <?php foreach ($kaur as $kr): ?>
-                            <label
-                                class="flex-fill p-4 bg-white d-flex justify-content-between align-items-center rounded-3 shadow-sm"
-                                style="cursor: pointer;">
-                                <span class="text-uppercase fw-bold"><?= esc($kr['nama_kaur']); ?></span>
-                                <input type="checkbox" name="kaur_id[]" value="<?= esc($kr['nip_kaur']); ?>"
-                                    data-name="<?= esc($kr['nama_kaur']); ?>" class="form-check-input kabag-checkbox mb-0"
-                                    style="width: 1.25rem; height: 1.25rem;">
-                            </label>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <p class="text-muted mb-0 w-100">Data delegasi kepala urusan tidak tersedia.</p>
-                    <?php endif; ?>
-                </div>
 
-                <div class="mt-4">
-                    <p class="m-0 fw-medium custom-text mb-2 text-uppercase">Level Kesulitan Tiket</p>
-                    <select id="level_kesulitan" class="form-select p-3 rounded-3 fw-bold text-uppercase custom-small-font border-0 shadow-sm" style="cursor: pointer; background-color: #fff;">
-                        <option value="" selected disabled>-- Pilih Level Kesulitan --</option>
-                        <option value="low">🟢 Low</option>
-                        <option value="medium">🟡 Medium</option>
-                        <option value="high">🔴 High</option>
-                    </select>
+            <?php if ($detail['tiket_status'] === 'Approve Escalated' || $detail['tiket_status'] === 'Reject'): ?>
+                <?php if (!empty($detail['notes_after_escalated'])): ?>
+                    <div class="p-4 bg-white rounded-4 shadow-sm border mb-3">
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <iconify-icon icon="ph:chat-centered-dots-bold" class="<?= $detail['tiket_status'] === 'Approve Escalated' ? 'text-success' : 'text-danger' ?> fs-5"></iconify-icon>
+                            <span class="fw-bold text-uppercase custom-small-font" style="letter-spacing: 0.5px;">Respon Eskalasi (Direktur)</span>
+                        </div>
+                        <div class="p-3 <?= $detail['tiket_status'] === 'Approve Escalated' ? 'bg-success' : 'bg-danger' ?> bg-opacity-10 rounded-3 border-start border-4 <?= $detail['tiket_status'] === 'Approve Escalated' ? 'border-success' : 'border-danger' ?>">
+                            <p class="m-0 small text-dark fst-italic" style="line-height: 1.6;">"<?= esc($detail['notes_after_escalated']) ?>"</p>
+                        </div>
+                    </div>
+                <?php endif; ?>
+            <?php endif; ?>
+
+            <?php if ($detail['tiket_status'] !== 'Escalated Process'): ?>
+                <div class="p-4 bg-light rounded-3 w-100 d-flex gap-3 flex-column shadow-md border">
+                    <p class="m-0 fw-medium custom-text">Pilih delegasi kepala bagian</p>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <?php if (!empty($kaur)): ?>
+                            <?php foreach ($kaur as $kr): ?>
+                                <label
+                                    class="flex-fill p-4 bg-white d-flex justify-content-between align-items-center rounded-3 shadow-sm"
+                                    style="cursor: pointer;">
+                                    <span class="text-uppercase fw-bold"><?= esc($kr['nama_kaur']); ?></span>
+                                    <input type="checkbox" name="kaur_id[]" value="<?= esc($kr['nip_kaur']); ?>"
+                                        data-name="<?= esc($kr['nama_kaur']); ?>" class="form-check-input kabag-checkbox mb-0"
+                                        style="width: 1.25rem; height: 1.25rem;">
+                                </label>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <p class="text-muted mb-0 w-100">Data delegasi kepala urusan tidak tersedia.</p>
+                        <?php endif; ?>
+                    </div>
+
+                    <div class="mt-4">
+                        <p class="m-0 fw-medium custom-text mb-2 text-uppercase">Level Kesulitan Tiket</p>
+                        <select id="level_kesulitan" class="form-select p-3 rounded-3 fw-bold text-uppercase custom-small-font border-0 shadow-sm" style="cursor: pointer; background-color: #fff;">
+                            <?php if (!empty($detail['level_kesulitan'])): ?>
+                                <option value="<?= $detail['level_kesulitan'] ?>" selected>🔴 <?= $detail['level_kesulitan'] ?></option>
+                            <?php else: ?>
+                                <option value="" selected disabled>-- Pilih Level Kesulitan --</option>
+                                <option value="low">🟢 Low</option>
+                                <option value="medium">🟡 Medium</option>
+                                <option value="high">🔴 High</option>
+                            <?php endif; ?>
+                        </select>
+                    </div>
+                    <div class="d-flex gap-2 flex-wrap mt-4">
+                        <button type="button"
+                            class="btn btn-approve btn-success flex-fill p-4 text-uppercase fw-bold rounded-4">DELEGASIKAN TUGAS</button>
+                        <button type="button"
+                            class="btn btn-escalated btn-primary flex-fill p-4 text-uppercase fw-bold rounded-4">eskalasi</button>
+                        <button class="btn btn-reject btn-danger flex-fill p-4 text-uppercase fw-bold rounded-4">tolak</button>
+                    </div>
                 </div>
-                <div class="d-flex gap-2 flex-wrap mt-4">
-                    <button type="button"
-                        class="btn btn-approve btn-success flex-fill p-4 text-uppercase fw-bold rounded-4">DELEGASIKAN TUGAS</button>
-                    <button type="button"
-                        class="btn btn-escalated btn-primary flex-fill p-4 text-uppercase fw-bold rounded-4">eskalasi</button>
-                    <button class="btn btn-reject btn-danger flex-fill p-4 text-uppercase fw-bold rounded-4">tolak</button>
-                </div>
-            </div>
             <?php endif; ?>
         </div>
     </div>
@@ -79,10 +109,10 @@
         </div>
     </div>
 <?php endif; ?>
-<?php 
-    $kaurFinished = array_filter($kaurByTiketOpen, fn($k) => ($k['flag'] ?? '') === 'Finish');
-    $maxCompleted = !empty($kaurFinished) ? max(array_column($kaurFinished, 'completed_at')) : null;
-    $allFinished = !empty($kaurByTiketOpen) && count($kaurFinished) === count($kaurByTiketOpen);
+<?php
+$kaurFinished = array_filter($kaurByTiketOpen, fn($k) => ($k['flag'] ?? '') === 'Finish');
+$maxCompleted = !empty($kaurFinished) ? max(array_column($kaurFinished, 'completed_at')) : null;
+$allFinished = !empty($kaurByTiketOpen) && count($kaurFinished) === count($kaurByTiketOpen);
 ?>
 <div class="d-flex align-items-center gap-3">
     <div class="timeline-icon-box <?= empty($kaurByTiketOpen) ? 'bg-secondary' : ($allFinished ? 'bg-success' : 'bg-danger') ?> text-white">
@@ -132,7 +162,7 @@
         <div class="flex-grow-1">
             <p class="m-0 fw-bold custom-small-font mb-2 text-uppercase">Detail Pengerjaan Kaur & Staff</p>
             <div class="list-group list-group-flush border rounded-3 shadow-sm bg-white overflow-hidden">
-                <?php foreach ($kaurByTiketOpen as $kr): 
+                <?php foreach ($kaurByTiketOpen as $kr):
                     $isKaurFinished = ($kr['flag'] ?? '') === 'Finish';
                     $hasStaffProgress = false;
                     $kaurStaffTasks = array_filter($allTaskStaffOnKaur, fn($tsk) => $tsk['fk_assign_to_kaur'] == $kr['id']);
@@ -147,7 +177,7 @@
                                     <span class="custom-text text-muted" style="font-size: 0.65rem;">
                                         ⏱️ <?= format_duration($kr['started_at'], $kr['completed_at']) ?>
                                     </span>
-                                <?php elseif ($hasStaffProgress): 
+                                <?php elseif ($hasStaffProgress):
                                     $isMandiri = !empty(array_filter($kaurStaffTasks, fn($t) => (int)($t['is_kaur_accepted'] ?? 0) === 1));
                                 ?>
                                     <span class="badge bg-danger-subtle text-danger border border-danger me-2" style="font-size: 0.6rem;"><?= $isMandiri ? 'DIKERJAKAN KAUR' : 'SEDANG DIKERJAKAN STAFF' ?></span>
@@ -199,13 +229,13 @@
     </div>
 <?php endif; ?>
 <div class="d-flex gap-3 w-100">
-<div class="timeline-icon-box <?= $detail['tiket_status'] === 'Closed' ? 'bg-success' : ($detail['tiket_status'] === 'In Progress' ? (in_array('Finish', array_column($kaurByTiketOpen, 'flag')) ? 'bg-danger' : 'bg-secondary') : 'bg-secondary') ?> text-white">
+    <div class="timeline-icon-box <?= $detail['tiket_status'] === 'Closed' ? 'bg-success' : ($detail['tiket_status'] === 'In Progress' ? (in_array('Finish', array_column($kaurByTiketOpen, 'flag')) ? 'bg-danger' : 'bg-secondary') : 'bg-secondary') ?> text-white">
         <span class="step-num"><?php if (!empty($kaurByTiketOpen)): ?>5<?php else: ?>4<?php endif; ?></span>
         <iconify-icon icon="<?= $detail['tiket_status'] === 'Closed' ? 'ph:check-bold' : 'ph:flow-arrow' ?>"></iconify-icon>
     </div>
     <div class="flex-grow-1 gap-2 d-flex flex-column">
         <p class="m-0 fw-bold custom-small-font text-uppercase">konfirmasi penyelesaian</p>
-        
+
         <?php if ($detail['tiket_status'] === 'Closed' && !empty($detail['completed_at'])): ?>
             <div class="d-flex flex-wrap gap-3 mt-1">
                 <span class="custom-text text-muted small d-flex align-items-center gap-1">

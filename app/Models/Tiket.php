@@ -14,7 +14,7 @@ class Tiket extends Model
     protected $protectFields    = true;
     protected $allowedFields    = [
         'id_kategori', 'id_layanan', 'deskripsi_permohonan', 
-        'dokumen_lampiran', 'original_dokumen_name', 'is_escalated', 'tiket_status',
+        'dokumen_lampiran', 'original_dokumen_name', 'is_escalated', 'notes_request_escalated', 'notes_after_escalated', 'tiket_status',
         'level_kesulitan', 'approve_by', 'nip_creator', 'nama_creator', 'fakultas', 'prodi', 'completed_at'
     ];
 
