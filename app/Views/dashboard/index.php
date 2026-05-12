@@ -90,63 +90,52 @@
 
     <!-- Status & Rangkuman -->
     <div class="row g-4">
-        <!-- Status Alur -->
+        <!-- Status Alur Diganti Jadi Chart -->
         <div class="col-md-6">
             <div class="card shadow border-0 rounded-4 p-4 h-100">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
-                        <h5 class="fw-bold mb-1">Status Alur Kerja</h5>
+                        <h5 class="fw-bold mb-1">Distribusi Jenis Layanan</h5>
                         <small class="text-muted">
-                            Visualisasi progres real-time
+                            Statistik pengajuan berdasarkan jenis layanan
                         </small>
                     </div>
                 </div>
 
-                <!-- Workflow -->
-                <div class="workflow-wrapper text-center">
-
-                    <div class="workflow-line"></div>
-
-                    <div class="workflow-item">
-                        <div class="workflow-step bg-danger">
-                            <iconify-icon icon="mdi:plus"></iconify-icon>
-                        </div>
-                        <div class="workflow-label">Request</div>
+                <div class="row g-2 mb-4">
+                    <div class="col-12 <?= (session('role_name') !== 'MAHASISWA') ? 'col-md-4' : 'col-md-12' ?>">
+                        <select id="filterKategori" class="form-select form-select-sm w-100">
+                            <option value="">Semua Kategori</option>
+                            <?php foreach($kategoris ?? [] as $kat): ?>
+                                <option value="<?= $kat['id'] ?>"><?= esc($kat['kategori_layanan']) ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
 
-                    <div class="workflow-item">
-                        <div class="workflow-step bg-warning-custom">
-                            <iconify-icon icon="mdi:check"></iconify-icon>
-                        </div>
-                        <div class="workflow-label">Approve</div>
+                    <?php if (session('role_name') !== 'MAHASISWA'): ?>
+                    <div class="col-12 col-md-4">
+                        <select id="filterFakultas" class="form-select form-select-sm w-100">
+                            <option value="">Semua Fakultas</option>
+                            <?php foreach($fakultas ?? [] as $f): ?>
+                                <option value="<?= esc($f) ?>"><?= esc($f) ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
 
-                    <div class="workflow-item">
-                        <div class="workflow-step bg-blue-custom">
-                            <iconify-icon icon="mdi:briefcase-outline"></iconify-icon>
-                        </div>
-                        <div class="workflow-label">Task 1</div>
+                    <div class="col-12 col-md-4">
+                        <select id="filterProdi" class="form-select form-select-sm w-100">
+                            <option value="">Semua Prodi</option>
+                            <?php foreach($prodis ?? [] as $p): ?>
+                                <option value="<?= esc($p) ?>"><?= esc($p) ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
-
-                    <div class="workflow-item">
-                        <div class="workflow-step bg-purple">
-                            <iconify-icon icon="mdi:briefcase-outline"></iconify-icon>
-                        </div>
-                        <div class="workflow-label">Task 2</div>
-                    </div>
-
-                    <div class="workflow-item">
-                        <div class="workflow-step bg-success-custom">
-                            <iconify-icon icon="mdi:check-circle-outline"></iconify-icon>
-                        </div>
-                        <div class="workflow-label">Done</div>
-                    </div>
-
+                    <?php endif; ?>
                 </div>
 
-                <button class="btn btn-lihat w-100 mt-4">
-                    Lihat Daftar Tugas
-                </button>
+                <div class="chart-wrapper" style="position: relative; height: 300px; width: 100%;">
+                    <canvas id="layananChart"></canvas>
+                </div>
             </div>
         </div>
 
@@ -217,5 +206,133 @@
 
         </div>
     </div>
+
+    <!-- Script for Chart -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('layananChart').getContext('2d');
+            let layananChart;
+
+            function loadChartData() {
+                const kategori = document.getElementById('filterKategori') ? document.getElementById('filterKategori').value : '';
+                const fakultas = document.getElementById('filterFakultas') ? document.getElementById('filterFakultas').value : '';
+                const prodi = document.getElementById('filterProdi') ? document.getElementById('filterProdi').value : '';
+
+                const url = new URL('<?= base_url('dashboard/chart-data') ?>');
+                if (kategori) url.searchParams.append('kategori', kategori);
+                if (fakultas) url.searchParams.append('fakultas', fakultas);
+                if (prodi) url.searchParams.append('prodi', prodi);
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (layananChart) {
+                            layananChart.destroy();
+                        }
+                        
+                        // Create gradient for bars
+                        let gradient = ctx.createLinearGradient(0, 0, 0, 300);
+                        gradient.addColorStop(0, 'rgba(220, 53, 69, 0.85)'); // Red danger color
+                        gradient.addColorStop(1, 'rgba(220, 53, 69, 0.15)');
+
+                        layananChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: data.labels,
+                                datasets: [{
+                                    label: 'Total Pengajuan',
+                                    data: data.data,
+                                    backgroundColor: gradient,
+                                    borderColor: 'rgba(220, 53, 69, 1)',
+                                    borderWidth: 2,
+                                    borderRadius: 8,
+                                    borderSkipped: false,
+                                    barThickness: 'flex',
+                                    maxBarThickness: 45
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                animation: {
+                                    duration: 1200,
+                                    easing: 'easeOutQuart'
+                                },
+                                plugins: {
+                                    legend: {
+                                        display: false // Hide legend to look cleaner
+                                    },
+                                    tooltip: {
+                                        backgroundColor: '#1e293b',
+                                        titleColor: '#f8fafc',
+                                        bodyColor: '#cbd5e1',
+                                        padding: 12,
+                                        cornerRadius: 8,
+                                        titleFont: { size: 14, weight: 'bold' },
+                                        bodyFont: { size: 13 },
+                                        displayColors: false,
+                                        callbacks: {
+                                            label: function(context) {
+                                                return context.parsed.y + ' Tiket Pengajuan';
+                                            }
+                                        }
+                                    }
+                                },
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        border: { display: false },
+                                        grid: {
+                                            color: 'rgba(0, 0, 0, 0.05)',
+                                            borderDash: [5, 5]
+                                        },
+                                        ticks: {
+                                            stepSize: 1,
+                                            color: '#64748b',
+                                            padding: 10
+                                        }
+                                    },
+                                    x: {
+                                        border: { display: false },
+                                        grid: {
+                                            display: false
+                                        },
+                                        ticks: {
+                                            color: '#64748b',
+                                            padding: 10,
+                                            maxRotation: 45,
+                                            minRotation: 45,
+                                            callback: function(value) {
+                                                let label = this.getLabelForValue(value);
+                                                if (label.length > 13) {
+                                                    return label.substring(0, 13) + '...';
+                                                }
+                                                return label;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    })
+                    .catch(error => console.error('Error fetching chart data:', error));
+            }
+
+            // Load initial data
+            loadChartData();
+
+            // Add event listeners to filters
+            if (document.getElementById('filterKategori')) {
+                document.getElementById('filterKategori').addEventListener('change', loadChartData);
+            }
+            if (document.getElementById('filterFakultas')) {
+                document.getElementById('filterFakultas').addEventListener('change', loadChartData);
+            }
+            if (document.getElementById('filterProdi')) {
+                document.getElementById('filterProdi').addEventListener('change', loadChartData);
+            }
+        });
+    </script>
 
     <?= $this->endSection(); ?>
