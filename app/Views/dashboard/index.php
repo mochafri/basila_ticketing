@@ -175,7 +175,7 @@
                     <?php endif; ?>
                 </div>
 
-                <div class="chart-wrapper" style="position: relative; height: 300px; width: 100%;">
+                <div class="chart-wrapper" style="position: relative; height: 300px; width: 100%; transition: max-width 0.4s ease;">
                     <canvas id="layananChart"></canvas>
                 </div>
             </div>
@@ -251,10 +251,36 @@
                 fetch(url)
                     .then(response => response.json())
                     .then(data => {
+                        const chartWrapper = document.querySelector('.chart-wrapper');
+                        chartWrapper.style.maxWidth = '100%'; // Always full width
+
                         if (layananChart) {
                             layananChart.destroy();
                         }
+
+                        // Original data
+                        let labels = [...data.labels]; // Clone to avoid mutation issues
+                        let realData = [...data.data];
+                        let details = data.details ? [...data.details] : [];
+
+                        // Conditional Clump vs Distributed
+                        const dataCount = labels.length;
+                        let barThickness = 40; // Standardize to 40px
+
+                        if (dataCount > 0 && dataCount <= 4) {
+                            // Case: Mepet ke kiri (Grouped)
+                            const minSlots = 7; 
+                            const diff = minSlots - dataCount;
+                            for (let i = 0; i < diff; i++) {
+                                labels.push(""); 
+                                realData.push(null);
+                                if (details) details.push(null);
+                            }
+                        }
                         
+                        // Process data for visual tiny bars (only for non-null values)
+                        const processedData = realData.map(v => v === 0 ? 0.05 : v);
+
                         // Create gradient for bars
                         let gradient = ctx.createLinearGradient(0, 0, 0, 300);
                         gradient.addColorStop(0, 'rgba(220, 53, 69, 0.85)'); // Red danger color
@@ -263,17 +289,18 @@
                         layananChart = new Chart(ctx, {
                             type: 'bar',
                             data: {
-                                labels: data.labels,
+                                labels: labels,
                                 datasets: [{
                                     label: 'Total Pengajuan',
-                                    data: data.data,
+                                    data: processedData,
                                     backgroundColor: gradient,
                                     borderColor: 'rgba(220, 53, 69, 1)',
                                     borderWidth: 2,
                                     borderRadius: 8,
                                     borderSkipped: false,
-                                    barThickness: 'flex',
-                                    maxBarThickness: 45
+                                    barThickness: barThickness, 
+                                    details: details,
+                                    realValues: realData 
                                 }]
                             },
                             options: {
@@ -285,7 +312,7 @@
                                 },
                                 plugins: {
                                     legend: {
-                                        display: false // Hide legend to look cleaner
+                                        display: false
                                     },
                                     tooltip: {
                                         backgroundColor: '#1e293b',
@@ -294,11 +321,27 @@
                                         padding: 12,
                                         cornerRadius: 8,
                                         titleFont: { size: 14, weight: 'bold' },
-                                        bodyFont: { size: 13 },
+                                        bodyFont: { size: 12 },
                                         displayColors: false,
                                         callbacks: {
+                                            title: function(tooltipItems) {
+                                                return tooltipItems[0].label;
+                                            },
                                             label: function(context) {
-                                                return context.parsed.y + ' Tiket Pengajuan';
+                                                const realValue = context.dataset.realValues[context.dataIndex];
+                                                const details = context.dataset.details ? context.dataset.details[context.dataIndex] : null;
+                                                
+                                                let label = [realValue + ' Tiket Pengajuan'];
+                                                
+                                                if (details && details.length > 0) {
+                                                    label.push(''); 
+                                                    label.push('Detail Layanan:');
+                                                    details.forEach(d => {
+                                                        label.push('• ' + d);
+                                                    });
+                                                }
+                                                
+                                                return label;
                                             }
                                         }
                                     }
@@ -314,7 +357,12 @@
                                         ticks: {
                                             stepSize: 1,
                                             color: '#64748b',
-                                            padding: 10
+                                            padding: 10,
+                                            callback: function(value) {
+                                                if (Math.floor(value) === value) {
+                                                    return value;
+                                                }
+                                            }
                                         }
                                     },
                                     x: {
@@ -327,10 +375,11 @@
                                             padding: 10,
                                             maxRotation: 45,
                                             minRotation: 45,
+                                            autoSkip: false,
                                             callback: function(value) {
                                                 let label = this.getLabelForValue(value);
-                                                if (label.length > 13) {
-                                                    return label.substring(0, 13) + '...';
+                                                if (label.length > 15) {
+                                                    return label.substring(0, 15) + '...';
                                                 }
                                                 return label;
                                             }

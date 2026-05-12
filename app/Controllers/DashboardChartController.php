@@ -17,60 +17,120 @@ class DashboardChartController extends ResourceController
 
         $db = \Config\Database::connect();
         
-        // Build the query to count tickets per jenis layanan (id_layanan)
-        $builder = $db->table('tikets')
-            ->select('layanans.per_kategori_layanan, COUNT(tikets.id) as total')
-            ->join('layanans', 'layanans.id = tikets.id_layanan');
-
-        // Apply role filters just like the dashboard service
-        $dashboardService = service('dashboard');
-        // Since applyRoleFilters is private, I will just copy the logic or we can assume we only want to show statistics based on their access. 
-        // Actually, it's better to recreate the condition or change the service.
-        // For simplicity, let's just show global stats filtered by the requested filters, or we can use the same logic if we make it public.
-        
-        // Let's copy the logic temporarily for simplicity, or we can just show global stats for the chart as the user just wants the chart to replace the workflow status.
-        if (!in_array('SUPERADMIN', $roles) && !in_array('BAA', $roles)) {
-            if (in_array('KEPALA URUSAN ADMINISTRASI AKADEMIK', $roles)) {
-                $builder->join('assign_to_kaur', 'assign_to_kaur.fk_tiket = tikets.id', 'left')
-                    ->where('assign_to_kaur.nip_kaur', $nip)
-                    ->where('tikets.tiket_status !=', 'Waiting');
-            } else {
-                // STAFF & MAHASISWA
-                $builder->join('assign_to_kaur', 'assign_to_kaur.fk_tiket = tikets.id', 'left')
-                    ->join('tiket_on_progress', 'tiket_on_progress.fk_assign_to_kaur = assign_to_kaur.id', 'left')
-                    ->groupStart()
-                        ->where('tikets.nip_creator', $nip)
-                        ->orGroupStart()
-                            ->where('tiket_on_progress.nip_receive_task', $nip)
-                            ->where('tikets.tiket_status !=', 'Waiting')
-                        ->groupEnd()
-                    ->groupEnd();
-            }
-        }
-
-        if ($kategoriId) {
-            $builder->where('tikets.id_kategori', $kategoriId);
-        }
-        if ($fakultas) {
-            $builder->where('tikets.fakultas', $fakultas);
-        }
-        if ($prodi) {
-            $builder->where('tikets.prodi', $prodi);
-        }
-
-        $result = $builder->groupBy('tikets.id_layanan')->get()->getResultArray();
-
         $labels = [];
         $data = [];
+        $details = []; // For hovers
 
-        foreach ($result as $row) {
-            $labels[] = $row['per_kategori_layanan'];
-            $data[] = $row['total'];
+        if ($kategoriId) {
+            // Case 2: Specific category selected
+            // Show all layanans in this category (even with 0 tickets)
+            $layanans = $db->table('layanans')
+                ->where('fk_kategori', $kategoriId)
+                ->get()
+                ->getResultArray();
+
+            foreach ($layanans as $l) {
+                $builder = $db->table('tikets')->where('id_layanan', $l['id']);
+                
+                // Role Filters
+                if (!in_array('SUPERADMIN', $roles) && !in_array('BAA', $roles)) {
+                    if (in_array('KEPALA URUSAN ADMINISTRASI AKADEMIK', $roles)) {
+                        $builder->join('assign_to_kaur', 'assign_to_kaur.fk_tiket = tikets.id', 'left')
+                            ->where('assign_to_kaur.nip_kaur', $nip)
+                            ->where('tikets.tiket_status !=', 'Waiting');
+                    } else {
+                        $builder->join('assign_to_kaur', 'assign_to_kaur.fk_tiket = tikets.id', 'left')
+                            ->join('tiket_on_progress', 'tiket_on_progress.fk_assign_to_kaur = assign_to_kaur.id', 'left')
+                            ->groupStart()
+                                ->where('tikets.nip_creator', $nip)
+                                ->orGroupStart()
+                                    ->where('tiket_on_progress.nip_receive_task', $nip)
+                                    ->where('tikets.tiket_status !=', 'Waiting')
+                                ->groupEnd()
+                            ->groupEnd();
+                    }
+                }
+
+                if ($fakultas) $builder->where('tikets.fakultas', $fakultas);
+                if ($prodi) $builder->where('tikets.prodi', $prodi);
+
+                $total = $builder->countAllResults();
+                $labels[] = $l['per_kategori_layanan'];
+                $data[] = $total;
+            }
+        } else {
+            // Case 1: All categories
+            $kategoris = $db->table('kategoris')->get()->getResultArray();
+
+            foreach ($kategoris as $k) {
+                $builder = $db->table('tikets')->where('id_kategori', $k['id']);
+                
+                // Role Filters
+                if (!in_array('SUPERADMIN', $roles) && !in_array('BAA', $roles)) {
+                    if (in_array('KEPALA URUSAN ADMINISTRASI AKADEMIK', $roles)) {
+                        $builder->join('assign_to_kaur', 'assign_to_kaur.fk_tiket = tikets.id', 'left')
+                            ->where('assign_to_kaur.nip_kaur', $nip)
+                            ->where('tikets.tiket_status !=', 'Waiting');
+                    } else {
+                        $builder->join('assign_to_kaur', 'assign_to_kaur.fk_tiket = tikets.id', 'left')
+                            ->join('tiket_on_progress', 'tiket_on_progress.fk_assign_to_kaur = assign_to_kaur.id', 'left')
+                            ->groupStart()
+                                ->where('tikets.nip_creator', $nip)
+                                ->orGroupStart()
+                                    ->where('tiket_on_progress.nip_receive_task', $nip)
+                                    ->where('tikets.tiket_status !=', 'Waiting')
+                                ->groupEnd()
+                            ->groupEnd();
+                    }
+                }
+
+                if ($fakultas) $builder->where('tikets.fakultas', $fakultas);
+                if ($prodi) $builder->where('tikets.prodi', $prodi);
+
+                $total = $builder->countAllResults();
+                
+                // Get services breakdown for hover
+                $layanansDetail = $db->table('layanans')->where('fk_kategori', $k['id'])->get()->getResultArray();
+                $servicesHover = [];
+                foreach ($layanansDetail as $ld) {
+                    $bL = $db->table('tikets')->where('id_layanan', $ld['id']);
+                    // Same filters for services
+                    if (!in_array('SUPERADMIN', $roles) && !in_array('BAA', $roles)) {
+                        if (in_array('KEPALA URUSAN ADMINISTRASI AKADEMIK', $roles)) {
+                            $bL->join('assign_to_kaur', 'assign_to_kaur.fk_tiket = tikets.id', 'left')
+                                ->where('assign_to_kaur.nip_kaur', $nip)
+                                ->where('tikets.tiket_status !=', 'Waiting');
+                        } else {
+                            $bL->join('assign_to_kaur', 'assign_to_kaur.fk_tiket = tikets.id', 'left')
+                                ->join('tiket_on_progress', 'tiket_on_progress.fk_assign_to_kaur = assign_to_kaur.id', 'left')
+                                ->groupStart()
+                                    ->where('tikets.nip_creator', $nip)
+                                    ->orGroupStart()
+                                        ->where('tiket_on_progress.nip_receive_task', $nip)
+                                        ->where('tikets.tiket_status !=', 'Waiting')
+                                    ->groupEnd()
+                                ->groupEnd();
+                        }
+                    }
+                    if ($fakultas) $bL->where('tikets.fakultas', $fakultas);
+                    if ($prodi) $bL->where('tikets.prodi', $prodi);
+
+                    $c = $bL->countAllResults();
+                    if ($c > 0) {
+                        $servicesHover[] = $ld['per_kategori_layanan'] . ": " . $c;
+                    }
+                }
+
+                $labels[] = $k['kategori_layanan'];
+                $data[] = $total;
+                $details[] = $servicesHover;
+            }
         }
 
         return $this->response->setJSON([
             'labels' => $labels,
-            'data' => $data
+            'data' => $data,
+            'details' => $details
         ]);
     }
 }
