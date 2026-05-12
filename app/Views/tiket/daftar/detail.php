@@ -3,7 +3,7 @@
 <?= $this->section('content'); ?>
 <div class="container-fluid" id="detail-tiket">
     <div class="row">
-        <div class="col-8">
+        <div class="col-12 col-xl-8 mb-4">
             <!-- nanti ini pakai pengkondisian sesuai role -->
             <?= $this->include('component/detail-tiket/detail-header', $detail); ?>
             <!-- detail kabag (default) -->
@@ -17,11 +17,8 @@
                 'kaurByTiketOpen' => $kaurByTiketOpen,
                 'riwayat' => $riwayat
             ]); ?>
-            <!-- detail kaur 1 (pak bagas) -->
-            <!-- detail kaur 2 (pak bagas) -->
-             <!-- detail staff (pak bagas) -->
         </div>
-        <div class="col-4">
+        <div class="col-12 col-xl-4">
             <?= $this->include('component/detail-tiket/riwayat', ['riwayat' => $riwayat, 'detail' => $detail]); ?>
         </div>
     </div>

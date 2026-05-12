@@ -64,7 +64,13 @@
         <div class="col-12">
             <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
                 <div class="card-body p-0">
-                    <div class="table-responsive">
+                    <?php 
+                        $role = session('role_name');
+                        $isMahasiswa = ($role === 'MAHASISWA');
+                    ?>
+
+                    <!-- Desktop & Non-Mahasiswa Mobile View -->
+                    <div class="table-responsive <?= $isMahasiswa ? 'd-none d-md-block' : '' ?>">
                         <table class="table table-hover align-middle m-0">
                             <thead class="bg-light border-bottom">
                                 <tr>
@@ -132,20 +138,58 @@
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
-                                <?php else: ?>
-                                    <tr>
-                                        <td colspan="6" class="text-center py-5">
-                                            <div class="py-4">
-                                                <iconify-icon icon="solar:box-minimalistic-linear" class="text-muted mb-3" style="font-size: 60px;"></iconify-icon>
-                                                <h5 class="text-muted fw-bold">Tidak ada riwayat ditemukan</h5>
-                                                <p class="text-muted small">Coba ubah filter atau kata kunci pencarian Anda.</p>
-                                            </div>
-                                        </td>
-                                    </tr>
                                 <?php endif; ?>
                             </tbody>
                         </table>
                     </div>
+
+                    <?php if ($isMahasiswa): ?>
+                        <!-- Mobile Card View (Hanya Mahasiswa) -->
+                        <div class="d-md-none p-3">
+                            <?php if (!empty($tiket['data'])): ?>
+                                <?php foreach ($tiket['data'] as $row): ?>
+                                    <div class="card border-0 shadow-sm rounded-4 mb-3 p-3 position-relative overflow-hidden">
+                                        <div class="position-absolute top-0 start-0 h-100 bg-<?= $row['tiket_status'] === 'Closed' ? 'success' : ($row['tiket_status'] === 'Rejected' ? 'danger' : 'secondary') ?>" style="width: 4px; opacity: 0.6;"></div>
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <span class="badge bg-soft-danger text-danger text-uppercase px-2 py-1 rounded-pill fw-bold" style="font-size: 0.6rem;">
+                                                <?= esc($row['kategori_layanan']) ?>
+                                            </span>
+                                            <span class="text-muted" style="font-size: 0.7rem;"><?= date('d/m/y H:i', strtotime($row['created_at'])) ?></span>
+                                        </div>
+                                        <h6 class="fw-bold text-dark mb-1" style="font-size: 0.9rem; line-height: 1.4;">
+                                            <?= esc($row['deskripsi_permohonan']) ?>
+                                        </h6>
+                                        <div class="d-flex align-items-center gap-2 mb-3">
+                                            <iconify-icon icon="solar:user-bold-duotone" class="text-muted" style="font-size: 14px;"></iconify-icon>
+                                            <span class="text-muted" style="font-size: 0.75rem;"><?= esc($row['nama_creator']) ?></span>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                                            <?php if ($row['tiket_status'] === 'Closed'): ?>
+                                                <span class="text-success fw-bold small">SELESAI</span>
+                                            <?php elseif ($row['tiket_status'] === 'Rejected'): ?>
+                                                <span class="text-danger fw-bold small">DITOLAK</span>
+                                            <?php else: ?>
+                                                <span class="text-secondary fw-bold small"><?= strtoupper($row['tiket_status']) ?></span>
+                                            <?php endif; ?>
+                                            <a href="<?= site_url('tiket/' . $row['id']) ?>" class="btn btn-sm btn-danger rounded-pill px-3 fw-bold text-uppercase" style="font-size: 0.65rem;">
+                                                Detail
+                                            </a>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (empty($tiket['data'])): ?>
+                        <div class="text-center py-5">
+                            <div class="py-4">
+                                <iconify-icon icon="solar:box-minimalistic-linear" class="text-muted mb-3" style="font-size: 60px;"></iconify-icon>
+                                <h5 class="text-muted fw-bold">Tidak ada riwayat ditemukan</h5>
+                                <p class="text-muted small">Coba ubah filter atau kata kunci pencarian Anda.</p>
+                            </div>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
 

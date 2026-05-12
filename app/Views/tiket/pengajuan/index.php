@@ -3,7 +3,7 @@
 <?= $this->section('content'); ?>
 <div class="container-fluid" id="pengajuan-tiket">
     <div class="row">
-        <div class="col-10 mx-auto">
+        <div class="col-12 col-lg-10 mx-auto">
             <div class="card mt-4 border-0 shadow-lg rounded-4">
                 <div class="card-body p-5">
                     <div class="row header mb-5">

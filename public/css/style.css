@@ -1616,6 +1616,540 @@ li a {
         border-radius: 10px;
         font-size: 12px;
     }
+
+    /* ==========================================
+       DASHBOARD PAGE — MOBILE
+       ========================================== */
+
+    /* Header: stack vertical */
+    .dashboard-wrapper > .d-flex.justify-content-between {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 1rem !important;
+    }
+
+    .dashboard-wrapper > .d-flex.justify-content-between > .d-flex.align-items-center.gap-3 {
+        width: 100% !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+
+    .dashboard-wrapper > .d-flex.justify-content-between > .d-flex.align-items-center.gap-3 .semester-select {
+        width: 100% !important;
+    }
+
+    .dashboard-wrapper > .d-flex.justify-content-between > .d-flex.align-items-center.gap-3 .btn-set-periode {
+        width: 100% !important;
+    }
+
+    .dashboard-wrapper h2.title-dashboard {
+        font-size: 1.25rem !important;
+    }
+
+    .dashboard-wrapper .subtitle-dashboard {
+        font-size: 0.8rem !important;
+    }
+
+    /* Stat cards: 1 per row on very small, 2 per row on larger mobile */
+    .dashboard-wrapper > .row.g-4.mb-5 > .col-md-3 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+
+    @media (min-width: 480px) {
+        .dashboard-wrapper > .row.g-4.mb-5 > .col-md-3 {
+            flex: 0 0 50% !important;
+            max-width: 50% !important;
+        }
+    }
+
+    .dashboard-wrapper .stat-card {
+        padding: 1.25rem !important;
+        border-radius: 16px !important;
+        height: auto !important;
+        min-height: 120px !important;
+    }
+
+    .dashboard-wrapper .stat-card h1 {
+        font-size: 2rem !important;
+    }
+
+    .dashboard-wrapper .stat-card small {
+        font-size: 0.75rem !important;
+    }
+
+    /* Stat card progress — compact */
+    .dashboard-wrapper .stat-card-progress {
+        height: auto !important;
+        min-height: 120px !important;
+        padding: 1.25rem !important;
+        flex-direction: row !important;
+        gap: 10px !important;
+    }
+
+    .dashboard-wrapper .stat-card-progress .progress-center {
+        gap: 0.35rem !important;
+    }
+
+    .dashboard-wrapper .stat-card-progress .progress-row {
+        padding: 4px 8px !important;
+    }
+
+    .dashboard-wrapper .stat-card-progress .progress-row span,
+    .dashboard-wrapper .stat-card-progress .progress-row strong {
+        font-size: 0.7rem !important;
+    }
+
+    /* Workflow + Rangkuman: stack vertical */
+    .dashboard-wrapper > .row.g-4:last-child > .col-md-6 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+
+    .dashboard-wrapper .card.shadow .workflow-wrapper {
+        padding: 20px 15px !important;
+        gap: 10px !important;
+        justify-content: flex-start !important;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .dashboard-wrapper .workflow-item {
+        flex: 0 0 70px !important;
+        width: 70px !important;
+    }
+
+    .dashboard-wrapper .workflow-line {
+        display: none !important;
+    }
+
+    .dashboard-wrapper .card.shadow {
+        padding: 1rem !important;
+    }
+
+    .dashboard-wrapper .card.shadow h5 {
+        font-size: 0.9rem !important;
+    }
+
+    .dashboard-wrapper .container-fluid {
+        padding: 0.75rem !important;
+    }
+
+    /* ==========================================
+       PENGAJUAN TIKET — MOBILE
+       ========================================== */
+
+    #pengajuan-tiket .col-10 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    #pengajuan-tiket .card-body {
+        padding: 1.25rem !important;
+    }
+
+    #pengajuan-tiket .header .col-6 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+
+    #pengajuan-tiket .header h2 {
+        font-size: 1.15rem !important;
+    }
+
+    #pengajuan-tiket .header.mb-5 {
+        margin-bottom: 1.5rem !important;
+    }
+
+    #pengajuan-tiket .col-md-6 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+
+    #pengajuan-tiket .btn-submit {
+        width: 100%;
+    }
+
+    /* ==========================================
+       DETAIL TIKET HEADER — MOBILE
+       ========================================== */
+
+    /* Info grid: stack vertical */
+    #detail-tiket .card-body .bg-light .row.g-4 > .col-md-4 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+
+    #detail-tiket .card-body .bg-light .row.g-4 > .col-md-4.border-start {
+        border-left: none !important;
+        border-top: 1px solid #dee2e6 !important;
+        padding-top: 1rem !important;
+        padding-left: 0 !important;
+    }
+
+    #detail-tiket .card-body .bg-light .row.g-4 > .col-md-4 .ps-md-3 {
+        padding-left: 0 !important;
+    }
+
+    #detail-tiket .card-body {
+        padding: 1rem !important;
+    }
+
+    #detail-tiket .card-body .bg-light {
+        padding: 1rem !important;
+    }
+
+    /* Badges row compact */
+    #detail-tiket .card-body > .d-flex.align-items-center.gap-3 {
+        flex-wrap: wrap !important;
+        gap: 0.5rem !important;
+    }
+
+    /* Timeline cards compact */
+    #detail-tiket .timeline-step .card {
+        padding: 1rem !important;
+    }
+
+    #detail-tiket .timeline-step .row > .col-md-6,
+    #detail-tiket .timeline-step .row > .col-md-4,
+    #detail-tiket .timeline-step .row > .col-md-8 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* ==========================================
+       RIWAYAT TIKET — MOBILE
+       ========================================== */
+
+    #riwayat-tiket h2 {
+        font-size: 1.25rem !important;
+    }
+
+    /* Filter form: stack vertical */
+    #riwayat-tiket form.d-flex {
+        flex-direction: column !important;
+        gap: 0 !important;
+        padding: 0 !important;
+        border-radius: 1.25rem !important;
+        overflow: hidden;
+        background: #fff !important;
+        border: 1px solid #eef1f5 !important;
+    }
+
+    #riwayat-tiket form .input-group {
+        max-width: 100% !important;
+        width: 100% !important;
+        height: 50px !important;
+        border-radius: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+        background: #f8f9fb !important;
+        border-bottom: 1px solid #eef1f5 !important;
+    }
+
+    #riwayat-tiket form .vr {
+        display: none !important;
+    }
+
+    #riwayat-tiket form div[style*="min-width"] {
+        width: 100% !important;
+        min-width: 100% !important;
+        padding: 0.25rem 0.85rem;
+    }
+
+    #riwayat-tiket form div[style*="min-width"] select {
+        width: 100% !important;
+        height: 42px !important;
+        border-radius: 12px !important;
+        background-color: #f4f6f9 !important;
+        border: 1px solid #e8eaed !important;
+        box-shadow: none !important;
+        font-size: 0.78rem !important;
+        font-weight: 600 !important;
+        padding: 0 1rem !important;
+        margin-bottom: 0.25rem;
+    }
+
+    #riwayat-tiket form .d-flex.gap-2 {
+        width: 100%;
+        flex-direction: row !important;
+        padding: 0.5rem 0.85rem 0.85rem;
+        gap: 0.5rem !important;
+    }
+
+    #riwayat-tiket form .d-flex.gap-2 .btn,
+    #riwayat-tiket form .d-flex.gap-2 a {
+        flex: 1;
+        justify-content: center;
+        height: 44px !important;
+        border-radius: 12px !important;
+        font-size: 0.78rem !important;
+    }
+
+    #riwayat-tiket form .d-flex.gap-2 .btn-danger {
+        background: linear-gradient(135deg, var(--primaryColor), #b02a37) !important;
+        border: none !important;
+        box-shadow: 0 4px 12px rgba(220, 53, 69, 0.25) !important;
+    }
+
+    /* Table: horizontal scroll */
+    #riwayat-tiket .table {
+        min-width: 700px;
+    }
+
+    #riwayat-tiket .table th,
+    #riwayat-tiket .table td {
+        padding: 0.5rem 0.4rem !important;
+        font-size: 0.7rem !important;
+    }
+
+    /* Pagination: stack */
+    #riwayat-tiket .d-flex.justify-content-between.align-items-center {
+        flex-direction: column !important;
+        gap: 0.75rem;
+        text-align: center;
+    }
+
+    #riwayat-tiket .custom-pagination ul {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    /* ==========================================
+       MASTER KATEGORI — MOBILE
+       ========================================== */
+
+    /* Input section: stack vertical */
+    .dashboard-wrapper .master-card .row.g-5 > .col-md-6 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+
+    .dashboard-wrapper .master-card .row.g-5 > .col-md-6.border-end {
+        border-right: none !important;
+        border-bottom: 1px solid #dee2e6 !important;
+        padding-bottom: 1.5rem !important;
+        margin-bottom: 0.5rem;
+    }
+
+    .dashboard-wrapper .master-card {
+        padding: 1.25rem !important;
+    }
+
+    .dashboard-wrapper .master-card h5 {
+        font-size: 0.95rem !important;
+    }
+
+    /* Input + button rows: stack on small */
+    .dashboard-wrapper .master-card .d-flex.gap-3 {
+        flex-direction: column !important;
+        gap: 0.5rem !important;
+    }
+
+    .dashboard-wrapper .master-card .btn-master {
+        width: 100% !important;
+        justify-content: center;
+    }
+
+    /* Category cards: single column */
+    .dashboard-wrapper .row-cols-md-2.row-cols-lg-3 {
+        --bs-gutter-x: 0.75rem;
+    }
+
+    .dashboard-wrapper .row-cols-md-2.row-cols-lg-3 > .col {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+
+    .dashboard-wrapper .category-box-card {
+        padding: 1rem !important;
+    }
+
+    /* List section header */
+    .dashboard-wrapper .d-flex.justify-content-between.align-items-end {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 0.5rem;
+    }
+
+    /* ==========================================
+       MASTER USER — MOBILE
+       ========================================== */
+
+    /* Input section: stack vertical */
+    .dashboard-wrapper .row.g-4 > .col-md-4,
+    .dashboard-wrapper .row.g-4 > .col-md-8 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* Mapping multiselect cols: full width */
+    .dashboard-wrapper .row.g-3 > .col-md-7,
+    .dashboard-wrapper .row.g-3 > .col-md-5 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* Filter row in mapping */
+    .dashboard-wrapper form.row.g-3 > .col-md-5,
+    .dashboard-wrapper form.row.g-3 > .col-md-4,
+    .dashboard-wrapper form.row.g-3 > .col-md-3 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* Mapping table horizontal scroll */
+    .dashboard-wrapper .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .dashboard-wrapper .table-responsive .table {
+        min-width: 500px;
+    }
+
+    /* ==========================================
+       LAPORAN KINERJA — MOBILE
+       ========================================== */
+
+    /* Header: stack */
+    .container-fluid > .d-flex.justify-content-between.align-items-center.mb-4 {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 1rem !important;
+    }
+
+    .container-fluid > .d-flex.justify-content-between.align-items-center.mb-4 h4 {
+        font-size: 1.1rem !important;
+    }
+
+    .container-fluid > .d-flex.justify-content-between.align-items-center.mb-4 > .d-flex.gap-2 {
+        width: 100%;
+    }
+
+    .container-fluid > .d-flex.justify-content-between.align-items-center.mb-4 > .d-flex.gap-2 .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Filter form: stack */
+    .container-fluid .card .row.g-3.align-items-end > [class^="col-md"] {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* Performance table: horizontal scroll */
+    .container-fluid > .card .table-responsive .table {
+        min-width: 700px;
+    }
+
+    .container-fluid > .card .table th,
+    .container-fluid > .card .table td {
+        padding: 0.5rem 0.35rem !important;
+        font-size: 0.7rem !important;
+    }
+
+    /* Date range inputs: stack on small mobile */
+    .container-fluid .card .row.g-3.align-items-end .col-md-3 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+
+    @media (min-width: 480px) {
+        .container-fluid .card .row.g-3.align-items-end .col-md-3 {
+            flex: 0 0 50% !important;
+            max-width: 50% !important;
+        }
+    }
+
+    @media (min-width: 768px) {
+        .container-fluid .card .row.g-3.align-items-end .col-md-3 {
+            flex: 0 0 25% !important;
+            max-width: 25% !important;
+        }
+    }
+
+    /* ==========================================
+       DETAIL KINERJA — MOBILE
+       ========================================== */
+
+    /* Stat cards: stack */
+    .container-fluid > .row.g-4.mb-4 > .col-md-4 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+
+    .container-fluid > .row.g-4.mb-4 .card h2 {
+        font-size: 1.4rem !important;
+    }
+
+    /* Detail table: horizontal scroll */
+    .container-fluid > .card.border-0.shadow-sm.rounded-4.overflow-hidden .table {
+        min-width: 900px;
+    }
+
+    /* ==========================================
+       GLOBAL MOBILE HELPERS
+       ========================================== */
+
+    /* All container-fluid pages: compact padding */
+    .container-fluid.py-4.px-4,
+    .container-fluid.py-4,
+    .container-fluid.p-4,
+    .container-fluid.p-2 {
+        padding: 0.5rem !important;
+    }
+
+    .main-content {
+        padding: 0.5rem !important;
+    }
+
+    .navbar .gap-3 {
+        gap: 0.5rem !important;
+    }
+
+    .navbar .px-3 {
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+    }
+
+    /* Touch-friendly buttons */
+    .btn {
+        min-height: 40px;
+    }
+
+    /* Mapping table horizontal scroll */
+    .dashboard-wrapper .table-responsive .table {
+        min-width: 600px !important;
+    }
+
+    /* Card borders round less on small */
+    .rounded-4 {
+        border-radius: 1rem !important;
+    }
+
+    /* Role Option: stack vertical */
+    .role-card {
+        flex-direction: column !important;
+        text-align: center !important;
+        padding: 1.5rem !important;
+        gap: 1rem !important;
+    }
+
+    .role-icon {
+        margin: 0 auto !important;
+    }
+
+    .role-title {
+        font-size: 0.9rem !important;
+    }
+
+    .subtitle-role {
+        font-size: 0.85rem !important;
+        padding: 0 1rem;
+    }
 }
 
 /* ============================
@@ -1713,6 +2247,51 @@ li a {
     .col-pemohon { max-width: 110px; }
     .col-fakultas { max-width: 120px; }
     .col-prodi { max-width: 120px; }
+
+    /* --- Pagination --- */
+    /* --- Riwayat Tiket: Tablet --- */
+    #riwayat-tiket form.d-flex {
+        flex-wrap: wrap !important;
+        flex-direction: row !important;
+        gap: 0.75rem !important;
+    }
+
+    #riwayat-tiket form .input-group {
+        flex: 1 1 100% !important;
+    }
+
+    #riwayat-tiket form div[style*="min-width"] {
+        flex: 1 1 calc(50% - 0.5rem);
+        min-width: 0 !important;
+    }
+
+    /* --- Dashboard: Tablet --- */
+    .dashboard-wrapper > .row.g-4.mb-5 > .col-md-3 {
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
+    }
+
+    /* --- Master Kategori/User: Tablet --- */
+    .dashboard-wrapper .master-card .row.g-5 > .col-md-6 {
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
+    }
+
+    .dashboard-wrapper .row-cols-md-2.row-cols-lg-3 > .col {
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
+    }
+
+    /* --- Laporan Kinerja: Tablet --- */
+    .container-fluid .card .row.g-3.align-items-end > .col-md-3 {
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
+    }
+
+    .container-fluid .card .row.g-3.align-items-end > .col-md-2 {
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
+    }
 
     /* --- Pagination --- */
     .pagination-premium {
