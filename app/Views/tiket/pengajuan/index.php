@@ -15,17 +15,28 @@
 
                         <?php if (session('fakultas') === null || session('prodi') === null): ?>
                             <div class="col-md-6">
-                                <label class="form-label text-uppercase">Fakultas</label>
+                                <label class="form-label text-uppercase">Fakultas / Unit</label>
                                 <select class="form-select fakultas-select" name="fakultas" required>
                                     <option selected disabled value="">Pilih Fakultas...</option>
-                                    <?php foreach ($fakultas as $f): ?>
-                                        <option value="<?= $f['id'] ?>">
-                                            <?= $f['nama_fakultas'] ?? $f['faculty'] ?? $f['name'] ?>
-                                        </option>
-                                    <?php endforeach; ?>
+                                    <?php if (is_array($fakultas)): ?>
+                                        <?php foreach ($fakultas as $f): ?>
+                                            <?php if (is_array($f)): ?>
+                                                <option value="<?= $f['facultyid'] ?? $f['id'] ?? $f['ID'] ?? $f['id_fakultas'] ?? '' ?>">
+                                                    <?= $f['facultyname'] ?? $f['nama_fakultas'] ?? $f['faculty'] ?? $f['name'] ?? 'Unknown' ?>
+                                                </option>
+                                            <?php endif; ?>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
+                                    <option value="lainnya">Lainnya (Unit/Direktorat)</option>
                                 </select>
                             </div>
-                            <div class="col-md-6">
+
+                            <div class="col-md-6" id="direktorat-container" style="display: none;">
+                                <label class="form-label text-uppercase">Nama Unit / Direktorat</label>
+                                <input type="text" class="form-control" name="direktorat_nama" id="direktorat_nama" placeholder="Masukkan nama unit atau direktorat">
+                            </div>
+
+                            <div class="col-md-6" id="prodi-container">
                                 <label class="form-label text-uppercase">Program Studi</label>
                                 <select class="form-select prodi-select" name="prodi" required disabled>
                                     <option selected disabled value="">Pilih Prodi...</option>

@@ -25,6 +25,22 @@ $statusColors = [
     .col-fakultas { max-width: 150px; }
     .col-prodi { max-width: 150px; }
     .col-status { max-width: 120px; }
+
+    @media (max-width: 639px) {
+        .table-responsive table {
+            table-layout: auto !important;
+        }
+        .text-truncate-custom {
+            white-space: normal !important;
+            overflow: visible !important;
+            text-overflow: clip !important;
+            display: inline-block !important; /* Allow wrapping */
+        }
+        .col-kategori, .col-layanan, .col-pemohon, .col-nim, .col-fakultas, .col-prodi, .col-status {
+            max-width: none !important;
+            min-width: 100px; /* Prevent too narrow columns */
+        }
+    }
 </style>
 
 <div class="card border-0 shadow-sm rounded-4 overflow-hidden mt-4">
@@ -46,7 +62,7 @@ $statusColors = [
                         <span class="text-truncate-custom">NIM</span>
                     </th>
                     <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary col-fakultas" title="Fakultas" data-bs-toggle="tooltip">
-                        <span class="text-truncate-custom">Fakultas</span>
+                        <span class="text-truncate-custom">Fakultas/Unit</span>
                     </th>
                     <th class="py-3 text-uppercase custom-small-font fw-bold text-secondary col-prodi" title="Prodi" data-bs-toggle="tooltip">
                         <span class="text-truncate-custom">Prodi</span>

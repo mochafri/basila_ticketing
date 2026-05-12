@@ -51,18 +51,19 @@ document.addEventListener('DOMContentLoaded', () => {
             const fakultasEl = document.querySelector('.fakultas-select');
             const prodiEl = document.querySelector('.prodi-select');
             
-            // Ambil TEXT dari fakultas jika yang dikirim ID, atau biarkan ID jika server bisa resolve
-            // Tapi biasanya di sistem ini simpan STRING nama fakultas.
-            const fakultas = fakultasEl ? fakultasEl.options[fakultasEl.selectedIndex].text : null;
-            const prodi = prodiEl ? prodiEl.value : null;
+            const isLainnya = fakultasEl && fakultasEl.value === 'lainnya';
+            const direktoratNama = isLainnya ? document.querySelector('#direktorat_nama').value : null;
+
+            const fakultas = isLainnya ? direktoratNama : (fakultasEl ? fakultasEl.options[fakultasEl.selectedIndex].text : null);
+            const prodi = isLainnya ? '-' : (prodiEl ? prodiEl.value : null);
             const dokumenLampiran = document.querySelector('#inputGroupFile02');
             const file = dokumenLampiran.files ? dokumenLampiran.files[0] : null;
 
-            if (!kategori || !layanan || !deskripsi || (fakultasEl && !fakultas) || (prodiEl && !prodi)) {
+            if (!kategori || !layanan || !deskripsi || (fakultasEl && !fakultas) || (!isLainnya && prodiEl && !prodi)) {
                 Swal.fire({
                     icon: "warning",
                     title: "Peringatan!",
-                    text: "Mohon lengkapi semua isian termasuk Fakultas dan Prodi jika diminta."
+                    text: "Mohon lengkapi semua isian termasuk Fakultas/Unit dan Prodi jika diminta."
                 });
                 btnSubmit.innerHTML = 'Submit form';
                 btnSubmit.disabled = false;
@@ -139,6 +140,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (fakultasSelect && prodiSelect) {
         fakultasSelect.addEventListener('change', async (e) => {
             const idFakultas = e.target.value;
+            const direktoratContainer = document.getElementById('direktorat-container');
+            const prodiContainer = document.getElementById('prodi-container');
+
+            if (idFakultas === 'lainnya') {
+                direktoratContainer.style.display = 'block';
+                prodiContainer.style.display = 'none';
+                prodiSelect.innerHTML = '<option selected value="-">-</option>';
+                prodiSelect.disabled = true;
+                return;
+            } else {
+                direktoratContainer.style.display = 'none';
+                prodiContainer.style.display = 'block';
+            }
             
             prodiSelect.innerHTML = '<option selected disabled value="">Loading...</option>';
             prodiSelect.disabled = true;
@@ -150,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 data.forEach(p => {
                     const opt = document.createElement('option');
                     // Gunakan nama sebagai value agar konsisten dengan data session yang biasanya string
-                    const prodiName = p.nama_prodi ?? p.study_program ?? p.name;
+                    const prodiName = p.studyprogramname ?? p.nama_prodi ?? p.NAMA_PRODI ?? p.study_program ?? p.STUDY_PROGRAM ?? p.name ?? p.NAME;
                     opt.value = prodiName;
                     opt.text = prodiName;
                     prodiSelect.add(opt);

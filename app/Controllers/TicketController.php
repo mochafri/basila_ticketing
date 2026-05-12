@@ -70,16 +70,18 @@ class TicketController extends BaseController
 
         $getFakultas = $client->get($fakultas, [
             'headers' => [
-                'Authorization' => 'Bearer ' . session()->get('token'),
+                'Authorization' => 'Bearer ' . env('TOKEN'),
                 'Content-Type' => 'application/json',
             ],
             'http_errors' => false
         ]);
 
-        if ($getFakultas->getStatusCode(401) || $getFakultas->getStatusCode(403)) {
+        $statusCode = $getFakultas->getStatusCode();
+        if ($statusCode == 401 || $statusCode == 403) {
             $data = [];
         } else {
-            $data = json_decode($getFakultas->getBody(), true);
+            $response = json_decode($getFakultas->getBody(), true);
+            $data = $response['data'] ?? $response;
         }
 
         return view('tiket/pengajuan/index', [
@@ -100,20 +102,22 @@ class TicketController extends BaseController
     public function getProdi($id)
     {
         $client = \Config\Services::curlrequest();
-        $prodi = env("URL_PRODI");
+        $prodi = env("URL_PRODY");
 
         $getProdi = $client->get($prodi . $id, [
             'headers' => [
-                'Authorization' => 'Bearer ' . session()->get('token'),
+                'Authorization' => 'Bearer ' . env('TOKEN'),
                 'Content-Type' => 'application/json'
             ],
             'http_errors' => false
         ]);
 
-        if ($getProdi->getStatusCode(401) || $getProdi->getStatusCode(403)) {
+        $statusCode = $getProdi->getStatusCode();
+        if ($statusCode == 401 || $statusCode == 403) {
             $data = [];
         } else {
-            $data = json_decode($getProdi->getBody(), true);
+            $response = json_decode($getProdi->getBody(), true);
+            $data = $response['data'] ?? $response;
         }
 
         return response()->setStatusCode(201)->setJSON($data);
