@@ -79,7 +79,7 @@ $statusColors = [
         </div>
     <?php endforeach; ?>
     <div class="col-12">
-        <div class="d-flex justify-content-between align-items-center p-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center p-3 p-md-4 gap-2">
             <div class="pager-info d-none d-md-block">
                 <span class="text-secondary custom-small-font">
                     Showing <b><?= (($tiket['pager']->getCurrentPage() - 1) * $tiket['pager']->getPerPage()) + 1 ?></b>
@@ -87,7 +87,7 @@ $statusColors = [
                     of <b><?= $tiket['pager']->getTotal() ?></b> entries
                 </span>
             </div>
-            <div>
+            <div class="d-flex justify-content-center justify-content-md-end w-100 w-md-auto">
                 <?= $tiket['pager']->links('default', 'premium') ?>
             </div>
         </div>

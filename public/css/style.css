@@ -1289,3 +1289,505 @@ li a {
 .timeline-icon-box iconify-icon {
     font-size: 1.2rem;
 }
+
+/* ================= RESPONSIVE STYLES (Mobile-First) ================= */
+
+/* --- Sidebar Overlay Backdrop --- */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 1039;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+}
+
+.sidebar-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+/* --- Navbar Sticky --- */
+.navbar-header {
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+}
+
+/* --- Touch-friendly Buttons (all devices) --- */
+.btn {
+    min-height: 44px;
+}
+
+.btn-sm {
+    min-height: 36px;
+}
+
+/* --- Mobile hamburger button styling --- */
+.sidebar-hamburger {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    padding: 4px 8px;
+    cursor: pointer;
+    min-height: 44px;
+    min-width: 44px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+}
+
+.sidebar-hamburger:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* ============================
+   MOBILE: < 640px
+   ============================ */
+@media (max-width: 639px) {
+
+    /* --- Sidebar: Off-canvas slide --- */
+    .sidebar {
+        display: none !important;
+    }
+
+    .sidebar.sidebar-open {
+        display: block !important;
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        height: 100vh !important;
+        width: 280px !important;
+        max-width: 85vw !important;
+        z-index: 1040;
+        background-color: #fff;
+        box-shadow: 4px 0 25px rgba(0, 0, 0, 0.15);
+        animation: slideInLeft 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        overflow-y: auto;
+    }
+
+    /* Hide desktop sidebar toggle icon */
+    #sidebarToggleIcon {
+        display: none !important;
+    }
+
+    /* Show hamburger */
+    .sidebar-hamburger {
+        display: inline-flex;
+    }
+
+    /* Hide desktop-only sidebar toggle */
+    .navbar .sidebar-toggle.d-lg-none {
+        display: none !important;
+    }
+
+    /* Sidebar identity section compact */
+    .sidebar .sidebar-menu-area .text-center.my-4 {
+        margin-top: 1rem !important;
+        margin-bottom: 1rem !important;
+    }
+
+    .sidebar .sidebar-menu-area .text-center.my-4 img {
+        width: 80px !important;
+        height: 80px !important;
+    }
+
+    /* --- Main Content: Full width --- */
+    main {
+        width: 100% !important;
+        margin-left: 0 !important;
+        flex: 1 1 100% !important;
+        min-width: 0 !important;
+    }
+
+    .main-content {
+        padding: 1rem !important;
+    }
+
+    /* --- Daftar Tiket Header --- */
+    #daftar-tiket > .d-flex:first-child {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 0.75rem !important;
+    }
+
+    #daftar-tiket > .d-flex:first-child > div:last-child {
+        justify-content: stretch !important;
+    }
+
+    #daftar-tiket > .d-flex:first-child > div:last-child .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    #daftar-tiket h2 {
+        font-size: 1.25rem;
+    }
+
+    /* --- Filter Section: Premium Mobile --- */
+    #daftar-tiket form.d-flex {
+        flex-direction: column !important;
+        gap: 0 !important;
+        padding: 0 !important;
+        border-radius: 1.25rem !important;
+        overflow: hidden;
+        background: #fff !important;
+        border: 1px solid #eef1f5 !important;
+    }
+
+    /* Search area at top with colored background */
+    #daftar-tiket form .input-group {
+        max-width: 100% !important;
+        width: 100% !important;
+        height: 50px !important;
+        border-radius: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+        background: #f8f9fb !important;
+        border-bottom: 1px solid #eef1f5 !important;
+    }
+
+    #daftar-tiket form .input-group .input-group-text {
+        padding-left: 1rem;
+    }
+
+    #daftar-tiket form .input-group input {
+        font-size: 0.85rem !important;
+    }
+
+    /* Hide desktop vertical rule */
+    #daftar-tiket form .vr {
+        display: none !important;
+    }
+
+    /* Filter label row */
+    #daftar-tiket form > .d-flex.align-items-center.gap-2 {
+        padding: 0.75rem 1rem 0.25rem 1rem;
+        margin: 0;
+    }
+
+    #daftar-tiket form > .d-flex.align-items-center.gap-2 span {
+        font-size: 0.65rem !important;
+        letter-spacing: 1.5px !important;
+        color: #9ca3af !important;
+    }
+
+    #daftar-tiket form > .d-flex.align-items-center.gap-2 iconify-icon {
+        font-size: 16px !important;
+        color: var(--primaryColor) !important;
+    }
+
+    /* Dropdown wrappers */
+    #daftar-tiket form div[style*="min-width: 200px"],
+    #daftar-tiket form div[style*="min-width: 180px"] {
+        width: 100% !important;
+        min-width: 100% !important;
+        padding: 0 0.85rem;
+    }
+
+    /* Dropdown selects — compact and clean */
+    #daftar-tiket form div[style*="min-width: 200px"] select,
+    #daftar-tiket form div[style*="min-width: 180px"] select {
+        width: 100% !important;
+        height: 42px !important;
+        border-radius: 12px !important;
+        background-color: #f4f6f9 !important;
+        border: 1px solid #e8eaed !important;
+        box-shadow: none !important;
+        font-size: 0.78rem !important;
+        font-weight: 600 !important;
+        padding: 0 1rem !important;
+        color: #374151;
+        margin-bottom: 0.5rem;
+        transition: border-color 0.2s ease;
+    }
+
+    #daftar-tiket form div[style*="min-width: 200px"] select:focus,
+    #daftar-tiket form div[style*="min-width: 180px"] select:focus {
+        border-color: var(--primaryColor) !important;
+        background-color: #fff !important;
+    }
+
+    /* Action buttons row */
+    #daftar-tiket form .d-flex.gap-2 {
+        width: 100%;
+        flex-direction: row !important;
+        padding: 0.5rem 0.85rem 0.85rem 0.85rem;
+        gap: 0.5rem !important;
+    }
+
+    #daftar-tiket form .d-flex.gap-2 .btn,
+    #daftar-tiket form .d-flex.gap-2 a {
+        flex: 1;
+        justify-content: center;
+        height: 44px !important;
+        border-radius: 12px !important;
+        font-size: 0.78rem !important;
+        letter-spacing: 0.5px;
+    }
+
+    /* Terapkan button — gradient */
+    #daftar-tiket form .d-flex.gap-2 .btn-danger {
+        background: linear-gradient(135deg, var(--primaryColor), #b02a37) !important;
+        border: none !important;
+        box-shadow: 0 4px 12px rgba(220, 53, 69, 0.25) !important;
+    }
+
+    /* Reset button — outlined */
+    #daftar-tiket form .d-flex.gap-2 a {
+        background: #fff !important;
+        border: 1px solid #e5e7eb !important;
+        color: #6b7280 !important;
+    }
+
+    /* --- Admin Table: Compact with horizontal scroll --- */
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #daftar-tiket .table th,
+    #daftar-tiket .table td {
+        padding: 0.5rem 0.4rem !important;
+        font-size: 0.7rem !important;
+    }
+
+    #daftar-tiket .table {
+        min-width: 800px;
+    }
+
+    .col-kategori { max-width: 100px; }
+    .col-layanan { max-width: 120px; }
+    .col-pemohon { max-width: 100px; }
+    .col-nim { max-width: 80px; }
+    .col-fakultas { max-width: 100px; }
+    .col-prodi { max-width: 100px; }
+
+    /* --- User Card: Compact --- */
+    #daftar-tiket .card .card-body {
+        padding: 1rem !important;
+    }
+
+    #daftar-tiket .card .card-body .row {
+        flex-direction: column !important;
+    }
+
+    #daftar-tiket .card .card-body .col-md-4 {
+        text-align: left !important;
+        margin-top: 0.75rem !important;
+    }
+
+    #daftar-tiket .card .card-body .col-md-4 .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* --- Pagination: Center --- */
+    .d-flex.justify-content-between.align-items-center.p-4 {
+        flex-direction: column !important;
+        gap: 1rem;
+        padding: 1rem !important;
+        align-items: center !important;
+    }
+
+    .d-flex.justify-content-between.align-items-center.p-4 .pager-info {
+        display: block !important;
+        text-align: center;
+    }
+
+    .pagination-premium {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .pagination-premium li a {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        font-size: 12px;
+    }
+}
+
+/* ============================
+   TABLET: 640px - 1024px
+   ============================ */
+@media (min-width: 640px) and (max-width: 1024px) {
+
+    /* --- Sidebar: Off-canvas slide (same as mobile) --- */
+    .sidebar {
+        display: none !important;
+    }
+
+    .sidebar.sidebar-open {
+        display: block !important;
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        height: 100vh !important;
+        width: 280px !important;
+        max-width: 85vw !important;
+        z-index: 1040;
+        background-color: #fff;
+        box-shadow: 4px 0 25px rgba(0, 0, 0, 0.15);
+        animation: slideInLeft 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        overflow-y: auto;
+    }
+
+    /* Hide desktop sidebar toggle icon */
+    #sidebarToggleIcon {
+        display: none !important;
+    }
+
+    /* Show hamburger */
+    .sidebar-hamburger {
+        display: inline-flex;
+    }
+
+    /* Hide desktop-only sidebar toggle */
+    .navbar .sidebar-toggle.d-lg-none {
+        display: none !important;
+    }
+
+    /* --- Main Content: Full width --- */
+    main {
+        width: 100% !important;
+        margin-left: 0 !important;
+        flex: 1 1 100% !important;
+        min-width: 0 !important;
+    }
+
+    .main-content {
+        padding: 1.5rem !important;
+    }
+
+    /* --- Daftar Tiket Header --- */
+    #daftar-tiket h2 {
+        font-size: 1.4rem;
+    }
+
+    /* --- Filter Section --- */
+    #daftar-tiket form.d-flex {
+        flex-wrap: wrap !important;
+        gap: 0.75rem !important;
+    }
+
+    #daftar-tiket form .input-group {
+        max-width: 100% !important;
+        flex: 1 1 100% !important;
+    }
+
+    #daftar-tiket form .vr {
+        display: none !important;
+    }
+
+    #daftar-tiket form div[style*="min-width: 200px"],
+    #daftar-tiket form div[style*="min-width: 180px"] {
+        flex: 1 1 calc(50% - 0.5rem);
+        min-width: 0 !important;
+    }
+
+    /* --- Admin Table: Compact --- */
+    #daftar-tiket .table th,
+    #daftar-tiket .table td {
+        padding: 0.6rem 0.5rem !important;
+        font-size: 0.75rem !important;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .col-kategori { max-width: 110px; }
+    .col-layanan { max-width: 130px; }
+    .col-pemohon { max-width: 110px; }
+    .col-fakultas { max-width: 120px; }
+    .col-prodi { max-width: 120px; }
+
+    /* --- Pagination --- */
+    .pagination-premium {
+        gap: 6px;
+    }
+
+    .pagination-premium li a {
+        width: 36px;
+        height: 36px;
+        border-radius: 12px;
+        font-size: 13px;
+    }
+}
+
+/* ============================
+   DESKTOP: > 1024px
+   ============================ */
+@media (min-width: 1025px) {
+
+    /* Sidebar normal desktop behavior */
+    .sidebar {
+        position: relative;
+        transform: translateX(0);
+        transition: width 0.3s ease;
+    }
+
+    /* Hide hamburger on desktop */
+    .sidebar-hamburger {
+        display: none !important;
+    }
+
+    /* Sidebar overlay never shown on desktop */
+    .sidebar-overlay {
+        display: none !important;
+    }
+
+    /* Pagination right-aligned */
+    .d-flex.justify-content-between.align-items-center.p-4 {
+        justify-content: space-between !important;
+    }
+}
+
+/* ============================
+   SMOOTH TRANSITIONS
+   ============================ */
+.sidebar {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s ease;
+}
+
+#daftar-tiket form {
+    transition: all 0.3s ease;
+}
+
+#daftar-tiket .card {
+    transition: all 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Card hover shadow for user tickets */
+.hov-shadow {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hov-shadow:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Sidebar slide-in animation */
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+/* ================= END RESPONSIVE STYLES ================= */

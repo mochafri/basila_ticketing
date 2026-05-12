@@ -2,6 +2,11 @@
 
     <div class="container-fluid">
 
+        <!-- Hamburger Menu (Mobile/Tablet) -->
+        <button type="button" class="sidebar-hamburger" id="sidebarHamburger" aria-label="Toggle sidebar">
+            <iconify-icon icon="solar:hamburger-menu-linear"></iconify-icon>
+        </button>
+
         <iconify-icon id="sidebarToggleIcon" icon="material-symbols:arrow-back-rounded" class="me-3 sidebar-toggle"
             style="color: white;"></iconify-icon>
 
@@ -28,7 +33,7 @@
 
                 <!-- FOTO USER -->
                 <img src="<?= session()->get('profilephoto') ?? base_url('assets/images/user.png') ?>" width="35"
-                    height="35" class="rounded-circle d-none d-md-block" style="object-fit: cover; cursor: pointer;"
+                    height="35" class="rounded-circle" style="object-fit: cover; cursor: pointer;"
                     id="profileToggle">
 
                 <!-- DROPDOWN -->

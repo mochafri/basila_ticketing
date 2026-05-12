@@ -24,6 +24,7 @@ $statusColors = [
     .col-nim { max-width: 100px; }
     .col-fakultas { max-width: 150px; }
     .col-prodi { max-width: 150px; }
+    .col-status { max-width: 120px; }
 </style>
 
 <div class="card border-0 shadow-sm rounded-4 overflow-hidden mt-4">
@@ -106,10 +107,10 @@ $statusColors = [
                                 <span class="custom-small-font"><?= date('d/m/Y', strtotime($data['created_at'])) ?></span>
                             </div>
                         </td>
-                        <td class="text-center">
-                            <span class="badge bg-<?= $color ?> bg-opacity-10 text-<?= $color ?> px-3 py-1 rounded-pill fw-bold text-uppercase d-inline-flex align-items-center gap-1" style="font-size: 0.6rem; letter-spacing: 0.5px;">
-                                <iconify-icon icon="ph:dot-bold" class="fs-5"></iconify-icon>
-                                <?= $data['tiket_status'] ?>
+                        <td class="text-center col-status">
+                            <span class="badge bg-<?= $color ?> bg-opacity-10 text-<?= $color ?> px-2 py-1 rounded-pill fw-bold text-uppercase d-inline-flex align-items-center gap-1" style="font-size: 0.6rem; letter-spacing: 0.5px; max-width: 100%;" title="<?= $data['tiket_status'] ?>" data-bs-toggle="tooltip">
+                                <iconify-icon icon="ph:dot-bold" class="fs-5 flex-shrink-0"></iconify-icon>
+                                <span class="text-truncate-custom"><?= $data['tiket_status'] ?></span>
                             </span>
                         </td>
                         <td class="text-center">
@@ -152,7 +153,7 @@ $statusColors = [
         </table>
     </div>
     <!-- Pagination Footer -->
-    <div class="d-flex justify-content-between align-items-center p-4 pt-0">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center p-3 p-md-4 pt-0 gap-2">
         <div class="pager-info d-none d-md-block">
             <span class="text-secondary custom-small-font">
                 Showing <b><?= (($tiket['pager']->getCurrentPage() - 1) * $tiket['pager']->getPerPage()) + 1 ?></b>
@@ -160,7 +161,7 @@ $statusColors = [
                 of <b><?= $tiket['pager']->getTotal() ?></b> entries
             </span>
         </div>
-        <div>
+        <div class="d-flex justify-content-center justify-content-md-end w-100 w-md-auto">
             <?= $tiket['pager']->links('default', 'premium') ?>
         </div>
     </div>

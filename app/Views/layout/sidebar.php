@@ -1,4 +1,4 @@
-<aside class="sidebar text-dark vh-100 position-relative d-none d-md-block">
+<aside class="sidebar text-dark vh-100 position-relative" id="sidebarMenu">
     <div class="text-center border-bottom bg-danger d-flex align-items-center justify-content-center"
         style="height: 70px;">
         <a href="/" class="text-decoration-none text-white">

@@ -13,7 +13,8 @@
 <body>
     <div class="container-fluid d-flex p-0 m-0">
         <?= $this->include('layout/sidebar'); ?>
-        <main class="w-100" style="background-color: var(--bgColor); overflow: hidden;">
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+        <main class="w-100" style="background-color: var(--bgColor); overflow: hidden; min-width: 0;">
             <?= $this->include('layout/navbar'); ?>
             <div class="main-content p-4" style="overflow-y: auto; height: calc(100vh - 70px);">
                 <?= $this->renderSection('content'); ?>
