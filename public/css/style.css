@@ -682,6 +682,7 @@ li a {
     height: 10px;
     background: var(--primaryColor);
     border-radius: 50%;
+    flex-shrink: 0;
 }
 
 .badge-system {
@@ -1622,6 +1623,7 @@ li a {
        ========================================== */
 
     /* Header: stack vertical */
+    /* Dashboard Header: stack only the main header */
     .dashboard-wrapper > .d-flex.justify-content-between {
         flex-direction: column !important;
         align-items: stretch !important;
@@ -2128,6 +2130,74 @@ li a {
     /* Card borders round less on small */
     .rounded-4 {
         border-radius: 1rem !important;
+    }
+
+    /* Master Data: Role List Dot Icon Fix */
+    .list-item {
+        flex-direction: row !important; /* Force row to prevent stacking from other rules */
+        padding: 12px 15px !important;
+        gap: 10px !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+    }
+
+    .list-item .d-flex.align-items-center.gap-3 {
+        gap: 10px !important;
+        flex-direction: row !important;
+    }
+
+    .dot-red {
+        margin: 0 !important; /* Reset any centered margin */
+    }
+
+    /* Master Data: Mapping User Table Fix — ULTRA COMPACT */
+    .dashboard-wrapper .master-card .table-responsive .table {
+        min-width: 450px !important; /* Slightly smaller min-width */
+    }
+
+    .dashboard-wrapper .master-card .table th,
+    .dashboard-wrapper .master-card .table td {
+        padding: 0.5rem 0.35rem !important;
+        font-size: 0.7rem !important;
+    }
+
+    /* Reduce User Icon Box size on mobile */
+    .dashboard-wrapper .master-card .table .icon-box {
+        width: 30px !important;
+        height: 30px !important;
+    }
+
+    .dashboard-wrapper .master-card .table .icon-box iconify-icon {
+        font-size: 18px !important;
+    }
+
+    /* Reduce Name and NIP text size */
+    .dashboard-wrapper .master-card .table td div.fw-bold {
+        font-size: 0.8rem !important;
+    }
+
+    .dashboard-wrapper .master-card .table td small {
+        font-size: 0.6rem !important;
+    }
+
+    /* Compact Role Badges */
+    .role-badge-compact {
+        padding: 2px 6px !important;
+        font-size: 8px !important;
+    }
+
+    .dashboard-wrapper .master-card .table th:first-child,
+    .dashboard-wrapper .master-card .table td:first-child {
+        width: 50% !important;
+    }
+
+    .dashboard-wrapper .master-card .table th:last-child,
+    .dashboard-wrapper .master-card .table td:last-child {
+        width: 50% !important;
+    }
+
+    .dashboard-wrapper .master-card {
+        padding: 1rem !important;
     }
 
     /* Role Option: stack vertical */
