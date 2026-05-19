@@ -12,7 +12,7 @@ $btnClass = '';
         case 'In Progress':
             $statusText = 'Sedang diproses oleh Petugas Terkait';
             $icon = 'hugeicons:task-done-01';
-            $btnClass = 'btn-info';
+            $btnClass = 'btn-danger';
             break;
         case 'Closed':
             $statusText = 'Tiket telah selesai dan ditutup';
