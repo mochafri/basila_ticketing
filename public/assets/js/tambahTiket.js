@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 Swal.fire({
                     icon: "warning",
                     title: "Peringatan!",
-                    text: "Mohon lengkapi semua isian termasuk Fakultas/Unit dan Prodi jika diminta."
+                    text: "Mohon lengkapi semua field yang tersedia."
                 });
                 btnSubmit.innerHTML = 'Submit form';
                 btnSubmit.disabled = false;

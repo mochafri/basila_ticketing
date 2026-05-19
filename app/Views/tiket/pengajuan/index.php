@@ -15,7 +15,7 @@
 
                         <?php if (session('fakultas') === null || session('prodi') === null): ?>
                             <div class="col-md-6">
-                                <label class="form-label text-uppercase">Fakultas / Unit</label>
+                                <label class="form-label text-uppercase">Fakultas / Unit <span class="text-danger fs-6">*</span></label>
                                 <select class="form-select fakultas-select" name="fakultas" required>
                                     <option selected disabled value="">Pilih Fakultas...</option>
                                     <?php if (is_array($fakultas)): ?>
@@ -32,12 +32,12 @@
                             </div>
 
                             <div class="col-md-6" id="direktorat-container" style="display: none;">
-                                <label class="form-label text-uppercase">Nama Unit / Direktorat</label>
+                                <label class="form-label text-uppercase">Nama Unit / Direktorat <span class="text-danger fs-6">*</span></label>
                                 <input type="text" class="form-control" name="direktorat_nama" id="direktorat_nama" placeholder="Masukkan nama unit atau direktorat">
                             </div>
 
                             <div class="col-md-6" id="prodi-container">
-                                <label class="form-label text-uppercase">Program Studi</label>
+                                <label class="form-label text-uppercase">Program Studi <span class="text-danger fs-6">*</span></label>
                                 <select class="form-select prodi-select" name="prodi" required disabled>
                                     <option selected disabled value="">Pilih Prodi...</option>
                                 </select>
@@ -45,7 +45,7 @@
                         <?php endif; ?>
 
                         <div class="col-md-6">
-                            <label for="validationCustom04" class="form-label text-uppercase">kategori layanan</label>
+                            <label for="validationCustom04" class="form-label text-uppercase">kategori layanan <span class="text-danger fs-6">*</span></label>
                             <select class="form-select kategori" name="kategori" id="validationCustom04" required>
                                 <option selected disabled value="">Pilih...</option>
                                 <?php foreach ($kategori as $data): ?>
@@ -59,8 +59,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <label for="validationCustom04" class="form-label text-uppercase">spesifikasi
-                                layanan</label>
+                            <label for="validationCustom04" class="form-label text-uppercase">spesifikasi layanan <span class="text-danger fs-6">*</span></label>
                             <select class="form-select layanan" name="layanan" id="validationCustom04" required>
                                 <option selected disabled value="">Pilih...</option>
                             </select>
@@ -69,8 +68,7 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <label for="validationTextarea" class="form-label text-uppercase">
-                                deskripsi</label>
+                            <label for="validationTextarea" class="form-label text-uppercase">deskripsi <span class="text-danger fs-6">*</span></label>
                             <textarea class="form-control" name="deskripsi" id="validationTextarea"
                                 placeholder="Silahkan jelaskan secara detail kebutuhan layanan yang anda ajukan"
                                 required rows="5"></textarea>
