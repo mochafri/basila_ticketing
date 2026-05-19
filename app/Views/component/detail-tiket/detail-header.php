@@ -98,5 +98,19 @@
                 </div>
             </div>
         <?php endif; ?>
+
+        <!-- Catatan Penyelesaian (Tampil Jika Tiket Closed) -->
+        <?php if ($detail['tiket_status'] === 'Closed' && !empty($detail['catatan_penyelesaian'])): ?>
+            <div class="mt-4 p-4 rounded-4 border border-success bg-success bg-opacity-10 d-flex flex-column gap-2 shadow-sm">
+                <div class="d-flex align-items-center justify-content-between">
+                    <span class="custom-text fw-bold text-success mb-0 d-flex align-items-center gap-1 text-uppercase" style="letter-spacing: 0.5px;">
+                        <iconify-icon icon="ph:notebook-bold" class="fs-5"></iconify-icon> CATATAN PENYELESAIAN TIKET
+                    </span>
+                </div>
+                <div class="p-3 bg-white rounded-3 mt-2 border">
+                    <p class="custom-text fw-medium mb-0 text-dark fst-italic" style="line-height: 1.6;">"<?= esc($detail['catatan_penyelesaian']) ?>"</p>
+                </div>
+            </div>
+        <?php endif; ?>
     </div>
 </div>

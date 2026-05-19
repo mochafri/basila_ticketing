@@ -214,7 +214,7 @@ class KabagService
     }
 
     # Service closed tiket oleh kabag
-    public function tutupTiket($id)
+    public function tutupTiket($id, $catatanPenyelesaian = null)
     {
         $db = \Config\Database::connect();
 
@@ -240,10 +240,16 @@ class KabagService
 
         $db->transStart();
 
-        $update = $this->tiketModel->update($id, [
+        $updateData = [
             'tiket_status' => 'Closed',
             'completed_at'    => date('Y-m-d H:i:s')
-        ]);
+        ];
+        
+        if ($catatanPenyelesaian !== null) {
+            $updateData['catatan_penyelesaian'] = $catatanPenyelesaian;
+        }
+
+        $update = $this->tiketModel->update($id, $updateData);
 
         if (!$update) {
             $db->transRollback();

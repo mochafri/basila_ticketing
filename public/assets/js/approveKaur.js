@@ -76,12 +76,30 @@ async function revisiTugasTask(id, catatan) {
     return res;
 }
 
-async function selesaikanTugasKaur(id) {
+async function selesaikanTugasKaur(id, catatanPenyelesaian = null) {
     const res = await fetch(`/selesaikan-tugas-kaur/${id}`, {
         method: 'POST',
         headers: {
+            'Content-Type': 'Application/json',
             'X-CSRF-TOKEN': tokenCSRF
-        }
+        },
+        body: JSON.stringify({
+            catatan_penyelesaian: catatanPenyelesaian
+        })
+    });
+    return await res.json();
+}
+
+async function updateCatatanKaurAPI(id, catatan) {
+    const res = await fetch(`/update-catatan-kaur/${id}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'Application/json',
+            'X-CSRF-TOKEN': tokenCSRF
+        },
+        body: JSON.stringify({
+            catatan_penyelesaian: catatan
+        })
     });
     return await res.json();
 }
@@ -551,35 +569,86 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnSelesaiPenugasan = document.querySelector('.btn-selesaikan-penugasan');
     if (btnSelesaiPenugasan) {
         btnSelesaiPenugasan.addEventListener('click', async () => {
-            Swal.fire({
-                title: "Apakah Anda yakin?",
-                text: "Menyelesaikan seluruh bagian penugasan tiket ini?",
+            const { value: catatan } = await Swal.fire({
+                title: 'Catatan Penyelesaian',
+                text: "Berikan catatan penyelesaian (feedback) yang akan diteruskan ke Kabag dan Pengguna.",
+                input: 'textarea',
+                inputPlaceholder: 'Tulis catatan di sini...',
                 icon: "question",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
-                confirmButtonText: "Ya, selesaikan!",
-                cancelButtonText: "Batal"
-            }).then(async (result) => {
-                if (result.isConfirmed) {
-                    const res = await selesaikanTugasKaur(parseSlug);
-                    if (res.status === 'success') {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Berhasil!',
-                            text: res.message,
-                            timer: 1500,
-                            showConfirmButton: false
-                        }).then(() => location.reload());
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Gagal!',
-                            text: res.message
-                        });
+                confirmButtonText: "Selesaikan & Simpan",
+                cancelButtonText: "Batal",
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'Catatan tidak boleh kosong!'
                     }
                 }
             });
+
+            if (catatan) {
+                const res = await selesaikanTugasKaur(parseSlug, catatan.trim());
+                if (res.status === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: res.message,
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => location.reload());
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal!',
+                        text: res.message
+                    });
+                }
+            }
         });
     }
+
+    const btnEditCatatanKaur = document.querySelectorAll('.btn-edit-catatan-kaur');
+    btnEditCatatanKaur.forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            const taskId = e.target.closest('.btn-edit-catatan-kaur').getAttribute('data-id');
+            const oldCatatan = e.target.closest('.btn-edit-catatan-kaur').getAttribute('data-catatan');
+
+            const { value: newCatatan } = await Swal.fire({
+                title: 'Edit Catatan Penyelesaian',
+                input: 'textarea',
+                inputValue: oldCatatan,
+                inputPlaceholder: 'Tulis catatan di sini...',
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Simpan Perubahan",
+                cancelButtonText: "Batal",
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'Catatan tidak boleh kosong!'
+                    }
+                }
+            });
+
+            if (newCatatan) {
+                const res = await updateCatatanKaurAPI(taskId, newCatatan.trim());
+                if (res.status === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: res.message,
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => location.reload());
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal!',
+                        text: res.message
+                    });
+                }
+            }
+        });
+    });
 });

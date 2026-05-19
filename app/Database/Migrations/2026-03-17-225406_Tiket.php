@@ -68,7 +68,10 @@ class Tiket extends Migration
                 'type' => 'TEXT',
                 'null' => true
             ],
-
+            'catatan_penyelesaian' => [
+                'type' => 'TEXT',
+                'null' => true
+            ],
             'created_at' => [
                 'type' => 'DATETIME',
                 'null' => true,

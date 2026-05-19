@@ -253,7 +253,7 @@ $allFinished = !empty($kaurByTiketOpen) && count($kaurFinished) === count($kaurB
             <div class="d-flex flex-wrap gap-2">
                 <?php if (in_array('Finish', array_column($kaurByTiketOpen, 'flag'))): ?>
                     <button
-                        class="btn btn-tutup-tiket btn-success flex-fill text-uppercase fw-bold rounded-3 custom-small-font py-3 px-4">tutup
+                        class="btn btn-tutup-tiket btn-success flex-fill text-uppercase fw-bold rounded-3 custom-small-font py-3 px-4" data-catatan="<?= esc($detail['catatan_penyelesaian'] ?? '') ?>">tutup
                         tiket (selesai)</button>
                 <?php endif; ?>
             </div>

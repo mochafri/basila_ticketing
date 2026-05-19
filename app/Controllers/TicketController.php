@@ -304,7 +304,10 @@ class TicketController extends BaseController
     public function selesaikanTugasKaur($slug)
     {
         $nip = session('user_identifier');
-        $result = $this->kaurService->selesaikanTugasKaur($slug, $nip);
+        $payload = $this->request->getJSON(true);
+        $catatanPenyelesaian = $payload['catatan_penyelesaian'] ?? null;
+        
+        $result = $this->kaurService->selesaikanTugasKaur($slug, $nip, $catatanPenyelesaian);
 
         $statusCode = $result['status'] === 'success' ? 200 : 400;
         return $this->response->setStatusCode($statusCode)->setJSON($result);
@@ -312,7 +315,10 @@ class TicketController extends BaseController
 
     public function closeTicket($slug)
     {
-        $result = $this->kabagService->tutupTiket($slug);
+        $payload = $this->request->getJSON(true);
+        $catatanPenyelesaian = $payload['catatan_penyelesaian'] ?? null;
+        
+        $result = $this->kabagService->tutupTiket($slug, $catatanPenyelesaian);
         $statusCode = $result['status'] === 'success' ? 200 : 400;
 
         return $this->response->setStatusCode($statusCode)->setJSON($result);
@@ -446,5 +452,16 @@ class TicketController extends BaseController
             'status' => 'fail',
             'message' => 'Gagal menambahkan catatan log'
         ]);
+    }
+
+    public function updateCatatanKaur($slug)
+    {
+        $payload = $this->request->getJSON(true);
+        $catatan = $payload['catatan_penyelesaian'] ?? '';
+
+        $result = $this->kaurService->updateCatatanKaur($slug, $catatan);
+        
+        $statusCode = $result['status'] === 'success' ? 200 : 400;
+        return $this->response->setStatusCode($statusCode)->setJSON($result);
     }
 }

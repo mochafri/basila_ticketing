@@ -164,6 +164,7 @@ class TiketService
                 tikets.level_kesulitan,
                 tikets.nip_creator, 
                 tikets.nama_creator, tikets.fakultas, tikets.prodi,
+                tikets.catatan_penyelesaian,
                 layanans.per_kategori_layanan,
                 kategoris.kategori_layanan
             ')

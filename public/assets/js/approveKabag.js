@@ -62,12 +62,16 @@ async function revisiKaur(id, catatan) {
     return await res.json();
 }
 
-async function closeTicket(id) {
+async function closeTicket(id, catatanPenyelesaian = null) {
     const res = await fetch(`/tutup-tiket/${id}`, {
         method: 'POST',
         headers: {
+            'Content-Type': 'Application/json',
             'X-CSRF-TOKEN': tokenCSRF
-        }
+        },
+        body: JSON.stringify({
+            catatan_penyelesaian: catatanPenyelesaian
+        })
     });
     return await res.json();
 }
@@ -321,20 +325,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnClosed = document.querySelector('.btn-tutup-tiket');
     if (btnClosed) {
         btnClosed.addEventListener('click', async () => {
-            btnClosed.innerHTML = 'Loading...';
-            btnClosed.disabled = true;
+            const oldCatatan = btnClosed.getAttribute('data-catatan');
+            
             Swal.fire({
-                title: "Apakah Anda yakin?",
-                text: "Ingin menutup tiket ini (Selesai)?",
+                title: "Tutup Tiket (Selesai)?",
+                text: "Anda dapat memodifikasi catatan penyelesaian sebelum tiket ditutup.",
                 icon: "question",
+                input: 'textarea',
+                inputValue: oldCatatan,
+                inputPlaceholder: 'Tulis catatan penyelesaian di sini...',
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
                 confirmButtonText: "Ya, tutup tiket!",
-                cancelButtonText: "Batal"
+                cancelButtonText: "Batal",
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'Catatan penyelesaian tidak boleh kosong!'
+                    }
+                }
             }).then(async (result) => {
                 if (result.isConfirmed) {
-                    const res = await closeTicket(parseSlug);
+                    btnClosed.innerHTML = 'Loading...';
+                    btnClosed.disabled = true;
+                    
+                    const res = await closeTicket(parseSlug, result.value.trim());
                     if (res.status === 'success' || res.status === 200) {
                         Swal.fire({
                             icon: 'success',
@@ -352,9 +367,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         btnClosed.innerHTML = 'Tutup Tiket (Selesai)';
                         btnClosed.disabled = false;
                     }
-                } else {
-                    btnClosed.innerHTML = 'Tutup Tiket (Selesai)';
-                    btnClosed.disabled = false;
                 }
             });
         });

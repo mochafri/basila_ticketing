@@ -492,6 +492,25 @@ if (!empty($taskStaffOnKaur)) {
                     <?php endforeach; ?>
                 <?php endif; ?>
 
+                <?php if ($sudahSelesaiKaur && !empty($detail['catatan_penyelesaian'])): ?>
+                    <div class="mt-2 mb-3 p-3 rounded border border-success bg-success bg-opacity-10 d-flex flex-column gap-2">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="custom-text fw-bold text-success mb-0 d-flex align-items-center gap-1">
+                                <iconify-icon icon="ph:notebook-bold"></iconify-icon> CATATAN PENYELESAIAN TIKET (KAUR)
+                            </span>
+                            <?php if ($detail['tiket_status'] !== 'Closed'): ?>
+                            <button class="btn btn-sm btn-outline-success border-0 p-1 btn-edit-catatan-kaur" 
+                                data-id="<?= esc($detail['id']) ?>" 
+                                data-catatan="<?= esc($detail['catatan_penyelesaian']) ?>" 
+                                title="Edit Catatan">
+                                <iconify-icon icon="ph:pencil-simple-line-bold"></iconify-icon> Edit
+                            </button>
+                            <?php endif; ?>
+                        </div>
+                        <p class="custom-small-font fw-medium mb-0 text-dark fst-italic">"<?= esc($detail['catatan_penyelesaian']) ?>"</p>
+                    </div>
+                <?php endif; ?>
+
                 <?php if ($semuaSelesai && !$sudahSelesaiKaur): ?>
                     <button class="btn btn-success rounded-3 w-100 mt-2 text-uppercase fw-bold custom-small-font py-3 btn-selesaikan-penugasan">selesaikan bagian penugasan</button>
                 <?php elseif ($sudahSelesaiKaur): ?>

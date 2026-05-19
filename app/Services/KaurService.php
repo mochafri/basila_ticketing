@@ -370,7 +370,7 @@ class KaurService
     }
 
     # Service kaur menyelesaikan semua tugas staff
-    public function selesaikanTugasKaur($idTiket, $nipKaur)
+    public function selesaikanTugasKaur($idTiket, $nipKaur, $catatanPenyelesaian = null)
     {
         $db = \Config\Database::connect();
 
@@ -420,6 +420,13 @@ class KaurService
                 'status' => 'fail',
                 'message' => 'Gagal update penugasan'
             ];
+        }
+
+        // Update catatan_penyelesaian in tikets table
+        if ($catatanPenyelesaian !== null) {
+            $this->tiketModel->builder()
+                ->where('id', $idTiket)
+                ->update(['catatan_penyelesaian' => $catatanPenyelesaian]);
         }
 
         $this->riwayatAktifitas->insert([
@@ -491,5 +498,22 @@ class KaurService
             'created_at' => date('Y-m-d H:i:s'),
             'fk_tiket' => $idTiket,
         ]);
+    }
+
+    public function updateCatatanKaur($idTiket, $catatan)
+    {
+        $db = \Config\Database::connect();
+        
+        $update = $this->tiketModel->builder()
+            ->where('id', $idTiket)
+            ->update(['catatan_penyelesaian' => $catatan]);
+
+        return $update ? [
+            'status' => 'success',
+            'message' => 'Catatan berhasil diperbarui.'
+        ] : [
+            'status' => 'fail',
+            'message' => 'Gagal memperbarui catatan.'
+        ];
     }
 }
