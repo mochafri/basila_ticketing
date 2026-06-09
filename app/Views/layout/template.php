@@ -28,7 +28,7 @@
     <script src="<?= base_url('assets/js/sidebar.js') ?>"></script>
     <script src="<?= base_url('assets/bootstrap/bootstrap.bundle.min.js') ?>"></script>
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
-
+    <!-- <script type="module" src="http://localhost:5173/public/assets/js/app.js"></script> -->
     <?= $this->renderSection('script') ?>
 </body>
 </html>
