@@ -81,16 +81,8 @@ class StaffService
             ];
         }
 
-        # Jika tiket dikerjakan oleh kaur, otomatis selesaikan juga penugasan Kaur-nya (flag = Finish)
+        # Jika tiket dikerjakan oleh kaur, tambahkan ke riwayat aktivitas
         if($isKaurMandiri){
-            
-            $this->assignTiket->builder()
-                ->where('id', $staffData['fk_assign_to_kaur'])
-                ->update([
-                    'flag' => 'Finish',
-                    'completed_at' => date('Y-m-d H:i:s')
-                ]);
-
             $this->riwayatAktifitas->insert([
                 'activity_title' => 'Tugas Selesai',
                 'message' => 'Kepala Urusan telah menyelesaikan tugas mandiri dan mengunggah laporan penyelesaian.',

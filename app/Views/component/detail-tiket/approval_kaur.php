@@ -94,14 +94,19 @@ if (!empty($taskStaffOnKaur)) {
 
         <?php if ($detail['tiket_status'] === 'Open' && !$sudahMulaiKaur): ?>
             <div class="d-flex gap-3">
-                <button class="btn btn-acc-task btn-primary rounded-3 w-100 mt-2 text-uppercase fw-bold custom-small-font py-3" style="letter-spacing: 3px;">Terima Tugas</button>
-                <button class="btn btn-approve-kaur btn-danger rounded-3 w-100 mt-2 text-uppercase fw-bold custom-small-font py-3" style="letter-spacing: 3px;">Delegasi ke staff</button>
+                <button class="btn btn-approve-kaur btn-primary rounded-3 w-100 mt-2 text-uppercase fw-bold custom-small-font py-3" style="letter-spacing: 3px;">Terima Tugas</button>
             </div>
         <?php endif; ?>
 
         <!-- akan aktif kalau button sudah di klik -->
         <div class="delegasi-wrapper w-100" style="<?= (in_array($detail['tiket_status'], ['In Progress']) || ($detail['tiket_status'] === 'Open' && $sudahMulaiKaur)) ? 'display:block;' : 'display:none;' ?>">
             <?php if (in_array($detail['tiket_status'], ['Open', 'In Progress'])): ?>
+                <?php if (!$mySelfTask && !$sudahSelesaiKaur): ?>
+                    <button class="btn btn-acc-task btn-outline-primary rounded-3 w-100 mt-2 text-uppercase fw-bold custom-small-font py-2 mb-3" style="letter-spacing: 2px;">
+                        <iconify-icon icon="ph:user-plus-bold" class="me-1"></iconify-icon> Kerjakan Tiket Sendiri
+                    </button>
+                <?php endif; ?>
+
                 <?php if ($mySelfTask): ?>
                     <!-- Tampilan Mandiri (Kaur mengerjakan sendiri) -->
                     <?php
@@ -297,11 +302,19 @@ if (!empty($taskStaffOnKaur)) {
                             </div>
                         <?php endif; ?>
                     </div>
-                <?php elseif (!$sudahSelesaiKaur && !$semuaSelesai): ?>
+                <?php endif; ?>
+                
+                <?php if (!$sudahSelesaiKaur && !$semuaSelesai): ?>
                     <!-- Tampilan Delegasi (Existing) -->
-                    <div class="p-4 bg-light rounded-3 w-100 d-flex gap-3 flex-column shadow-md mt-2 border">
-                        <p class="m-0 fw-medium custom-text">delegasi penugasan staff</p>
-                        <div class="d-flex gap-2 flex-wrap">
+                    <button type="button" id="btnToggleDelegasi" class="btn btn-outline-danger w-100 rounded-3 mt-2 mb-2 text-uppercase fw-bold custom-small-font py-3" style="letter-spacing: 2px;">
+                        <iconify-icon icon="ph:users-three-bold" class="me-1"></iconify-icon> Delegasi Penugasan Staff
+                    </button>
+                    
+                    <div id="wrapperDelegasiStaff" class="smooth-collapse">
+                        <div class="smooth-collapse-inner">
+                            <div class="p-4 bg-light rounded-3 w-100 d-flex gap-3 flex-column shadow-md mt-2 border">
+                                <p class="m-0 fw-medium custom-text">delegasi penugasan staff</p>
+                                <div class="d-flex gap-2 flex-wrap">
                             <?php if (!empty($staff)):
                                 // Ambil daftar NIP staf yang sudah ditugaskan
                                 $assignedNips = array_column($taskStaffOnKaur, 'nip_receive_task');
@@ -324,6 +337,8 @@ if (!empty($taskStaffOnKaur)) {
                         <div class="d-flex gap-3 mt-4 align-items-stretch">
                             <input type="text" class="instruksi form-control text-uppercase custom-text p-3 rounded-4 fw-medium" placeholder="Instruksi pengerjaan staff">
                             <button type="button" class="btn btn-assign-staff btn-danger fw-bold">+</button>
+                        </div>
+                    </div>
                         </div>
                     </div>
                 <?php endif; ?>
@@ -590,6 +605,22 @@ if (!empty($taskStaffOnKaur)) {
             const form = document.getElementById('formLogPekerjaan');
             if (form) form.reset();
             if (fileNameLog) fileNameLog.textContent = '';
+        });
+    }
+
+    const btnToggleDelegasi = document.getElementById("btnToggleDelegasi");
+    const wrapperDelegasiStaff = document.getElementById("wrapperDelegasiStaff");
+
+    if (btnToggleDelegasi && wrapperDelegasiStaff) {
+        btnToggleDelegasi.addEventListener("click", function() {
+            wrapperDelegasiStaff.classList.toggle("show");
+            if (wrapperDelegasiStaff.classList.contains("show")) {
+                btnToggleDelegasi.classList.remove("btn-outline-danger");
+                btnToggleDelegasi.classList.add("btn-danger");
+            } else {
+                btnToggleDelegasi.classList.remove("btn-danger");
+                btnToggleDelegasi.classList.add("btn-outline-danger");
+            }
         });
     }
 

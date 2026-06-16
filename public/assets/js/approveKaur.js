@@ -317,13 +317,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnApproveKaur) {
         btnApproveKaur.addEventListener('click', async () => {
             Swal.fire({
-                title: "Konfirmasi Delegasi",
-                text: "Anda akan mendelegasikan tugas ini kepada staf?",
+                title: "Konfirmasi Terima Tugas",
+                text: "Anda akan menerima tugas ini?",
                 icon: "question",
                 showCancelButton: true,
-                confirmButtonColor: "#d33",
-                cancelButtonColor: "#3085d6",
-                confirmButtonText: "Ya, delegasikan!",
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya, terima!",
                 cancelButtonText: "Batal"
             }).then(async (result) => {
                 if (result.isConfirmed) {
@@ -346,7 +346,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             text: res.message || 'Gagal menerima penugasan'
                         });
                         btnApproveKaur.disabled = false;
-                        btnApproveKaur.innerHTML = 'Delegasi ke staff';
+                        btnApproveKaur.innerHTML = 'Terima Tugas';
                     }
                 }
             });
