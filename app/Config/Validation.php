@@ -137,7 +137,7 @@ class Validation extends BaseConfig
 
     public array $uploadTaskRule = [
         'dokumen_task' => [
-            'label' => 'File Task',
+            'label' => 'Dokumen Task',
             'rules' => 'permit_empty|mime_in[file_task,image/png,image/jpeg,application/pdf]|max_size[file_task,10240]'
         ],
         'laporan_task'=> [

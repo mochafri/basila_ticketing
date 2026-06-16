@@ -62,7 +62,7 @@ $routes->post('logout', 'AuthController::logout');
 $routes->get('logout', 'AuthController::logout');
 $routes->get('switch-role/(:any)', 'AuthController::switchRole/$1');
 
-# Coba endPoint approve reject sama eskalasi
+# EndPoint approve reject sama eskalasi
 $routes->post('/reject-tiket/(:num)', 'TicketController::rejectTiket/$1');
 $routes->post('/escalated-tiket/(:num)', 'TicketController::escalated/$1');
 $routes->post('/approve-tiket/(:num)', 'TicketController::approveTiket/$1');
@@ -85,6 +85,8 @@ $routes->post('/selesaikan-tugas-kaur/(:num)', 'TicketController::selesaikanTuga
 $routes->post('/update-catatan-kaur/(:num)', 'TicketController::updateCatatanKaur/$1');
 $routes->post('/accept-task/(:num)', 'TicketController::acceptTask/$1');
 $routes->post('/add-log-note/(:num)', 'TicketController::addLogNote/$1');
+
+$routes->post('/upload-task-kaur/(:num)', 'TicketController::uploadByKaur/$1');
 
 # End point layanan
 $routes->post('/layanan/(:num)', 'MasterController:getLayanan/$1');

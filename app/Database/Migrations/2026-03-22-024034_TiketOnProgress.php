@@ -4,7 +4,7 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class AssignTiketToStaff extends Migration
+class TiketOnProgress extends Migration
 {
     public function up()
     {

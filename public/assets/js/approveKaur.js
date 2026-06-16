@@ -104,22 +104,24 @@ async function updateCatatanKaurAPI(id, catatan) {
     return await res.json();
 }
 
-async function uploadTaskKaur(id, dokumenTask, laporanTask, isDownloadable) {
+async function uploadTaskKaur(id, dokumenTask, laporanTask, isDownloadable, note) {
     const formData = new FormData();
     formData.append('laporan_task', laporanTask);
     formData.append('is_downloadable', isDownloadable);
-    
+    formData.append('catatan_penyelesaian', note);
+
     if (dokumenTask) {
         formData.append('dokumen_task', dokumenTask);
     }
 
-    const res = await fetch(`/upload-task/${id}`, {
+    const res = await fetch(`/upload-task-kaur/${id}`, {
         method: 'POST',
         headers: {
             'X-CSRF-TOKEN': tokenCSRF
         },
         body: formData
     });
+
     return await res.json();
 }
 
@@ -185,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- SELF SUBMISSION LOGIC (KAUR WORKING ALONE) ---
+    // Logic kaur menyelesaikan tugas
     const btnSelesaikanMandiri = document.getElementById('btnSelesaikanTugas');
     const wrapperPenyelesaianMandiri = document.getElementById('wrapperPenyelesaian');
     const btnKirimLaporanMandiri = document.getElementById('btnKirimLaporan');
@@ -215,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
             btnSelesaikanMandiri.textContent = 'Selesaikan Tugas';
             btnSelesaikanMandiri.classList.remove('btn-secondary');
             btnSelesaikanMandiri.classList.add('btn-danger');
-            
+
             // Reset form
             document.querySelector('#formPenyelesaianTugas textarea').value = '';
             if (uploadInput) uploadInput.value = '';
@@ -249,23 +251,41 @@ document.addEventListener('DOMContentLoaded', () => {
             btnKirimLaporanMandiri.innerHTML = 'Kirim Laporan...';
             btnKirimLaporanMandiri.disabled = true;
 
-            const res = await uploadTaskKaur(parseSlug, file, laporan, isDownloadable);
-            if (res.status === 'success') {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Berhasil!',
-                    text: 'Berhasil menyelesaikan tugas mandiri',
-                    timer: 1500,
-                    showConfirmButton: false
-                }).then(() => location.reload());
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Gagal!',
-                    text: res.message || 'Gagal mengirim laporan'
-                });
-                btnKirimLaporanMandiri.innerHTML = 'KIRIM LAPORAN';
-                btnKirimLaporanMandiri.disabled = false;
+            const { value: noteKabag } = await Swal.fire({
+                title: 'Tambah feedback kepada pengaju',
+                input: 'textarea',
+                inputLabel: 'Tuliskan feedback penting untuk pengaju',
+                showCancelButton: true,
+                confirmButtonText: 'Simpan feedback',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#3085d6',
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'Feedback tidak boleh kosong'
+                    }
+                }
+            });
+
+            if (noteKabag) {
+                const res = await uploadTaskKaur(parseSlug, file, laporan, isDownloadable, noteKabag);
+                if (res.status === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Berhasil menyelesaikan tugas mandiri',
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => location.reload());
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal!',
+                        text: res.message || 'Gagal mengirim laporan'
+                    });
+
+                    btnKirimLaporanMandiri.innerHTML = 'KIRIM LAPORAN';
+                    btnKirimLaporanMandiri.disabled = false;
+                }
             }
         });
     }
@@ -417,7 +437,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 showConfirmButton: false
                             }).then(() => location.reload());
                         }
-                        
+
                         btnAssignStaff.innerHTML = '+';
                         btnAssignStaff.disabled = false;
                         document.querySelector('.instruksi').value = '';

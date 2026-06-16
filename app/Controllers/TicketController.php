@@ -230,7 +230,7 @@ class TicketController extends BaseController
     public function approveTask($slug)
     {
         $nip = session('user_identifier');
-        $result = $this->kaurService->approveTask($slug, $nip);
+        $result = $this->kaurService->acceptTask($slug, $nip);
 
         $statusCode = $result['status'] === 'success' ? 200 : 422;
         return response()->setStatusCode($statusCode)->setJSON($result);
@@ -239,7 +239,7 @@ class TicketController extends BaseController
     public function acceptTask($slug)
     {
         $nip = session('user_identifier');
-        $result = $this->kaurService->acceptTask($slug, $nip);
+        $result = $this->kaurService->takeTask($slug, $nip);
         $statusCode = $result['status'] === 'success' ? 200 : 422;
         return response()->setStatusCode($statusCode)->setJSON($result);
     }
@@ -271,12 +271,36 @@ class TicketController extends BaseController
         if (!$this->validateData($data, 'uploadTaskRule')) {
             return $this->response->setStatusCode(422)->setJSON([
                 'status' => 'failed',
-                'message' => $this->validator->getErrors()
+                'message' => 'Gagal mengupload tugas'
             ]);
         }
 
-        $nip = session('user_identifier');
         $result = $this->staffService->updateTask($slug, $data, $file, $nip);
+        $statusCode = $result['status'] === 'success' ? 200 : 500;
+
+        return $this->response->setStatusCode($statusCode)->setJSON($result);
+    }
+
+    public function uploadByKaur($slug)
+    {
+        $data = $this->request->getPost();
+        $file = $this->request->getFile('dokumen_task');
+        $nip = session('user_identifier');
+        $rules = config('Validation')->uploadTaskRule;
+    
+        $rules['catatan_penyelesaian'] = [
+            'label' => 'Catatan Penyelesaian',
+            'rules' => 'required|string|min_length[5]'
+        ];
+        
+        if(!$this->validateData($data, $rules)){
+            return $this->response->setStatusCode(422)->setJSON([
+                'status' => 'failed',
+                'message' => 'Gagal mengupload tugas'
+            ]);
+        }
+
+        $result = $this->kaurService->finishTask($slug, $data, $file, $nip);
         $statusCode = $result['status'] === 'success' ? 200 : 500;
 
         return $this->response->setStatusCode($statusCode)->setJSON($result);
