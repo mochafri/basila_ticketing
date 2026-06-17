@@ -1,1 +1,0 @@
-// app.js is now empty as functions have been moved to their respective logic files.
