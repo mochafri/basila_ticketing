@@ -99,16 +99,21 @@ class MasterDataController extends BaseController
 
     public function createLayanan()
     {
-        $request = $this->request->getJSON(true);
-        log_message('info', json_encode($request));
-
-        if (!$this->validateData($request, 'layananRule')) {
+        // validate automatically checks post and file data
+        if (!$this->validate('layananRule')) {
             return $this->response->setStatusCode(422)->setJSON([
-                'message' => 'Failed request'
+                'message' => 'Validasi gagal: ' . implode(', ', $this->validator->getErrors())
             ]);
         }
 
-        $result = service('layanan')->create($request);
+        $data = [
+            'nama_layanan' => $this->request->getPost('nama_layanan'),
+            'kategori_id' => $this->request->getPost('kategori_id'),
+            'kebutuhan_dokumen' => $this->request->getPost('kebutuhan_dokumen'),
+            'template_dokumen' => $this->request->getFile('template_dokumen')
+        ];
+
+        $result = service('layanan')->create($data);
 
         $statusCode = $result['status'] === 'success' ? 200 : 500;
 

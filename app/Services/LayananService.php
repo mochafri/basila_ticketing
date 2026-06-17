@@ -49,10 +49,20 @@ class LayananService
             ];
         }
 
+        $templateDokumenName = null;
+        $file = $data['template_dokumen'] ?? null;
+        if ($file && $file->isValid() && !$file->hasMoved()) {
+            $templateDokumenName = $file->getRandomName();
+            // Menyimpan file di public/uploads/templates
+            $file->move('uploads/templates', $templateDokumenName);
+        }
+
         $insertData = $this->layananModel
             ->insert([
                 'per_kategori_layanan' => $data['nama_layanan'],
-                'fk_kategori' => $data['kategori_id']
+                'fk_kategori' => $data['kategori_id'],
+                'kebutuhan_dokumen' => $data['kebutuhan_dokumen'] ?? null,
+                'template_dokumen' => $templateDokumenName
             ]);
 
         return $insertData ? [
