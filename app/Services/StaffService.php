@@ -33,7 +33,7 @@ class StaffService
         return $data ?? [];
     }
 
-    # Update task juga berlaku untuk kaur meng update tugas yang dikerjakan nya,jika tiket dikerjakan sendiri
+     # Update task juga berlaku untuk kaur meng update tugas yang dikerjakan nya,jika tiket dikerjakan sendiri
     public function updateTask($id, array $data, $file, $nip)
     {
         $db = \Config\Database::connect();
@@ -78,24 +78,15 @@ class StaffService
             ];
         }
 
-        # Jika tiket dikerjakan oleh kaur, tambahkan ke riwayat aktivitas
-        if($isKaurMandiri){
-            $this->riwayatAktifitas->insert([
-                'activity_title' => 'Tugas Selesai',
-                'message' => 'Kepala Urusan telah menyelesaikan tugas mandiri dan mengunggah laporan penyelesaian.',
-                'created_by' => 'Kepala Urusan',
-                'created_by_id' => session('user_identifier'),
-                'fk_tiket' => $id
-            ]);
-        } else {
-            $this->riwayatAktifitas->insert([
-                'activity_title' => 'Laporan Tugas',
-                'message' => 'Staf telah mengunggah laporan penyelesaian tugas.',
-                'created_by' => 'Staf',
-                'created_by_id' => session('user_identifier'),
-                'fk_tiket' => $id
-            ]);
-        }
+
+        $this->riwayatAktifitas->insert([
+            'activity_title' => 'Laporan Tugas',
+            'message' => 'Staf telah mengunggah laporan penyelesaian tugas.',
+            'created_by' => 'Staf',
+            'created_by_id' => session('user_identifier'),
+            'fk_tiket' => $id
+        ]);
+
 
         $db->transComplete();
 
@@ -107,4 +98,5 @@ class StaffService
             'message' => 'Gagal upload tugas'
         ];
     }
+
 }
