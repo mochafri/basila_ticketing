@@ -53,6 +53,14 @@ class Validation extends BaseConfig
         'kategori_id' => [
             'label' => 'Kategori',
             'rules' => 'required|integer'
+        ],
+        'kebutuhan_dokumen' => [
+            'label' => 'Kebutuhan Dokumen',
+            'rules' => 'permit_empty|string'
+        ],
+        'template_dokumen' => [
+            'label' => 'Template Dokumen',
+            'rules' => 'permit_empty|mime_in[template_dokumen,image/png,image/jpeg,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document]|max_size[template_dokumen,10240]'
         ]
     ];
 

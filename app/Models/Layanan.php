@@ -13,7 +13,7 @@ class Layanan extends Model
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'per_kategori_layanan', 'fk_kategori'
+        'per_kategori_layanan', 'fk_kategori', 'kebutuhan_dokumen', 'template_dokumen'
     ];
 
     protected bool $allowEmptyInserts = false;

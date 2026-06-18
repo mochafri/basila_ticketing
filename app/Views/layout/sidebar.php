@@ -12,7 +12,7 @@
         <!-- IDENTITAS (Hardcode) -->
         <div class="text-center my-4 d-flex flex-column align-items-center gap-2">
 
-            <img src="<?= session()->get('profilephoto') ?? base_url('assets/images/user.png') ?>"
+            <img src="<?= session()->get('profilephoto') ?? base_url('assets/img/user.png') ?>"
                 class="rounded-circle"
                 width="120"
                 height="120"

@@ -58,11 +58,20 @@
                                 <iconify-icon icon="solar:alt-arrow-down-outline" class="select-icon"></iconify-icon>
                             </div>
                         </div>
-                        <div class="d-flex gap-3">
+                        <div class="mb-3">
                             <input type="text" class="layanan form-control custom-input" id="inputLayanan" placeholder="NAMA LAYANAN BARU">
+                        </div>
+                        <div class="mb-3">
+                            <textarea class="form-control custom-input" id="inputKebutuhanDokumen" placeholder="KEBUTUHAN DOKUMEN (Opsional)" rows="2"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputTemplateDokumen" class="form-label small text-muted mb-1">Upload Template Dokumen (Opsional)</label>
+                            <input class="form-control custom-input" type="file" id="inputTemplateDokumen" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
+                        </div>
+                        <div class="d-flex justify-content-end">
                             <button class="btn-layanan btn btn-danger btn-master">
                                 <iconify-icon icon="mdi:plus"></iconify-icon>
-                                SIMPAN
+                                SIMPAN LAYANAN
                             </button>
                         </div>
                     </div>
@@ -109,6 +118,14 @@
                                 <?php foreach ($listLayanan as $ly): ?>
                                     <div class="layanan-tag d-flex align-items-center gap-2" style="background: #f8fafc; padding: 7px 14px; border-radius: 12px; font-size: 0.85rem; font-weight: 500; color: #475569; border: 1px solid #f1f5f9;">
                                         <?= esc($ly['per_kategori_layanan']) ?>
+                                        <?php if(!empty($ly['kebutuhan_dokumen']) || !empty($ly['template_dokumen'])): ?>
+                                            <iconify-icon icon="solar:info-circle-bold-duotone" 
+                                                class="text-info btn-info-layanan" 
+                                                data-nama="<?= esc($ly['per_kategori_layanan']) ?>"
+                                                data-kebutuhan="<?= esc($ly['kebutuhan_dokumen'] ?? '') ?>"
+                                                data-template="<?= esc($ly['template_dokumen'] ? base_url('uploads/templates/' . $ly['template_dokumen']) : '') ?>"
+                                                style="font-size: 16px; cursor: pointer;"></iconify-icon>
+                                        <?php endif; ?>
                                         <iconify-icon icon="mdi:close" class="btn-delete-layanan" data-id="<?= $ly['id'] ?>" style="font-size: 14px; color: #cbd5e1; cursor: pointer;"></iconify-icon>
                                     </div>
                                 <?php endforeach; ?>
